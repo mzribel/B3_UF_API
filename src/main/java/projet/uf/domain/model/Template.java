@@ -1,6 +1,6 @@
-package projet.uf.models;
+package projet.uf.domain.model;
 
-import projet.uf.entities.TemplateEntity;
+import projet.uf.adapters.out.persistence.TemplateEntity;
 
 public record Template(String name) {
 
@@ -8,4 +8,7 @@ public record Template(String name) {
         return new Template(templateEntity.getName());
     }
 
+    public String getName() {
+        return name;
+    }
 }

@@ -1,4 +1,4 @@
-package projet.uf;
+package projet.uf.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

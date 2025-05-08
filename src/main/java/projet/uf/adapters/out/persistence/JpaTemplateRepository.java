@@ -1,14 +1,13 @@
-package projet.uf.repositories;
+package projet.uf.adapters.out.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import projet.uf.entities.TemplateEntity;
 
 import java.util.List;
 
 @Repository
-public interface TemplateRepository extends JpaRepository<TemplateEntity, Long> {
+public interface JpaTemplateRepository extends JpaRepository<TemplateEntity, Long> {
 
     @Query("select template from TemplateEntity template where template.id in (select max(template.id) from TemplateEntity template where template.name = ?1 group by template.name)")
     List<TemplateEntity> findByName(String name);

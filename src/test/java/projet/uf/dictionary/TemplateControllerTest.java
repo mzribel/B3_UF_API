@@ -10,7 +10,7 @@
 //import org.testcontainers.containers.PostgreSQLContainer;
 //import org.testcontainers.junit.jupiter.Container;
 //import org.testcontainers.junit.jupiter.Testcontainers;
-//import projet.uf.controllers.TemplateController;
+//import projet.uf.adapters.in.rest.TemplateController;
 //
 //import java.util.ArrayList;
 //

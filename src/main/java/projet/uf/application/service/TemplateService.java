@@ -1,21 +1,21 @@
-package projet.uf.services;
+package projet.uf.application.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import projet.uf.entities.TemplateEntity;
+import projet.uf.adapters.out.persistence.TemplateEntity;
 import projet.uf.exceptions.TemplateException;
-import projet.uf.models.Template;
-import projet.uf.repositories.TemplateRepository;
+import projet.uf.domain.model.Template;
+import projet.uf.adapters.out.persistence.JpaTemplateRepository;
 import java.util.List;
 
 @Service
 public class TemplateService {
 
-    private final TemplateRepository templateRepository;
+    private final JpaTemplateRepository templateRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public TemplateService(final TemplateRepository templateRepository) {
+    public TemplateService(final JpaTemplateRepository templateRepository) {
         this.templateRepository = templateRepository;
     }
 

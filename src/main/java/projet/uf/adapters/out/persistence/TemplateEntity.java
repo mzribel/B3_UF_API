@@ -1,4 +1,4 @@
-package projet.uf.entities;
+package projet.uf.adapters.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,4 +19,5 @@ public class TemplateEntity {
 
     @Column(name = "name")
     String name;
+
 }

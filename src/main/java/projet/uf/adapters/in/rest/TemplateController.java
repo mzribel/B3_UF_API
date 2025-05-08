@@ -1,11 +1,11 @@
-package projet.uf.controllers;
+package projet.uf.adapters.in.rest;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import projet.uf.exceptions.TemplateException;
-import projet.uf.models.Template;
-import projet.uf.services.TemplateService;
+import projet.uf.domain.model.Template;
+import projet.uf.application.service.TemplateService;
 
 import java.util.List;
 
