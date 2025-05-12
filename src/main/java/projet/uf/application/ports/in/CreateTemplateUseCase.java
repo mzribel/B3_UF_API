@@ -1,4 +1,4 @@
-package projet.uf.domain.ports.in;
+package projet.uf.application.ports.in;
 
 public interface CreateTemplateUseCase {
 }

@@ -2,7 +2,7 @@ package projet.uf.adapters.out.persistence;
 
 import org.springframework.stereotype.Repository;
 import projet.uf.domain.model.Template;
-import projet.uf.domain.ports.out.TemplateRepository;
+import projet.uf.application.ports.out.TemplateRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

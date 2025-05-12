@@ -1,4 +1,4 @@
-package projet.uf.domain.ports.out;
+package projet.uf.application.ports.out;
 
 import projet.uf.domain.model.Template;
 

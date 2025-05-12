@@ -1,4 +1,4 @@
-package projet.uf.adapters.in.rest;
+package projet.uf.adapters.in.rest.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
