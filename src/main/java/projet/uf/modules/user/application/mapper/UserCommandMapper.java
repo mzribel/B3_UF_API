@@ -12,4 +12,12 @@ public class UserCommandMapper {
                 command.isAdmin()
         );
     }
+    public static User fromCreateCommand(CreateUserCommand command, String encodedPassword) {
+        return new User(
+                command.getEmail(),
+                encodedPassword,
+                command.getDisplayName(),
+                command.isAdmin()
+        );
+    }
 }

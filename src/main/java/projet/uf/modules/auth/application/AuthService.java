@@ -31,9 +31,7 @@ public class AuthService implements
             throw new IllegalArgumentException("Password not strong enough");
         }
 
-        command.setPassword(passwordEncoder.encode(command.getPassword()));
-
-        User user = UserCommandMapper.fromCreateCommand(command);
+        User user = UserCommandMapper.fromCreateCommand(command, passwordEncoder.encode(command.getPassword()));
         return saveUserPort.save(user);
     }
 }
