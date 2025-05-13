@@ -1,4 +1,4 @@
-package projet.uf.exceptions;
+package projet.uf.template.exceptions;
 
 public class TemplateException extends Exception {
     public TemplateException(String message) {

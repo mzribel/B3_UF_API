@@ -1,4 +1,4 @@
-package projet.uf.adapters.out.persistence;
+package projet.uf.template.adapters.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import projet.uf.exceptions.TemplateException;
-import projet.uf.adapters.out.persistence.JpaTemplateRepository;
-import projet.uf.application.service.TemplateService;
+import projet.uf.template.exceptions.TemplateException;
+import projet.uf.template.adapters.out.persistence.JpaTemplateRepository;
+import projet.uf.template.application.service.TemplateUseCaseService;
 
 import static org.mockito.Mockito.verify;
 
@@ -18,7 +18,7 @@ public class TemplateServiceTest {
     private JpaTemplateRepository templateRepository;
 
     @InjectMocks
-    private TemplateService templateService;
+    private TemplateUseCaseService templateService;
 
     @BeforeEach
     void setUp() {

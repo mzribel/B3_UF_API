@@ -1,6 +1,6 @@
-package projet.uf.domain.model;
+package projet.uf.template.domain.model;
 
-import projet.uf.adapters.out.persistence.TemplateEntity;
+import projet.uf.template.adapters.out.persistence.TemplateEntity;
 
 public record Template(String name) {
 

@@ -1,14 +1,14 @@
-package projet.uf.adapters.out.persistence;
+package projet.uf.template.adapters.out.persistence;
 
 import org.springframework.stereotype.Repository;
-import projet.uf.domain.model.Template;
-import projet.uf.application.ports.out.TemplateRepository;
+import projet.uf.template.domain.model.Template;
+import projet.uf.template.application.ports.out.TemplatePersistencePort;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class TemplateRepositoryImpl implements TemplateRepository {
+public class TemplateRepositoryImpl implements TemplatePersistencePort {
 
     private final JpaTemplateRepository jpaRepository;
 
