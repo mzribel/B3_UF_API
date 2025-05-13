@@ -1,9 +1,7 @@
 package projet.uf.modules.user.adapters.in.rest;
 
 import org.springframework.web.bind.annotation.*;
-import projet.uf.modules.user.application.ports.in.CreateUserUseCase;
 import projet.uf.modules.user.application.ports.in.GetUserUseCase;
-import projet.uf.modules.user.application.ports.in.CreateUserCommand;
 import projet.uf.modules.user.domain.model.User;
 
 import java.util.List;
