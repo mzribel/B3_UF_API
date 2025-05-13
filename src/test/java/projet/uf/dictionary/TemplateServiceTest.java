@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import projet.uf.template.exceptions.TemplateException;
-import projet.uf.template.adapters.out.persistence.JpaTemplateRepository;
-import projet.uf.template.application.service.TemplateUseCaseService;
+import projet.uf.modules.template.exceptions.TemplateException;
+import projet.uf.modules.template.adapters.out.persistence.JpaTemplateRepository;
+import projet.uf.modules.template.application.service.TemplateUseCaseService;
 
 import static org.mockito.Mockito.verify;
 

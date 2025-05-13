@@ -5,10 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import projet.uf.users.application.ports.in.CreateUserCommand;
-import projet.uf.users.application.ports.out.UserPersistencePort;
-import projet.uf.users.application.service.UserService;
-import projet.uf.users.domain.model.User;
+import projet.uf.modules.user.application.ports.in.CreateUserCommand;
+import projet.uf.modules.user.application.ports.out.UserPersistencePort;
+import projet.uf.modules.user.application.UserService;
+import projet.uf.modules.user.domain.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,5 +39,4 @@ public class UserServiceTest {
         verify(userPersistencePort).existsByEmail("test@test.fr");
         verify(userPersistencePort).save(any(User.class));
     }
-
 }
