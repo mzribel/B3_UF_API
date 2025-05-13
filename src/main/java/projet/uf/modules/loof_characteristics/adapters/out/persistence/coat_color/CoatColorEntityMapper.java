@@ -2,7 +2,6 @@ package projet.uf.modules.loof_characteristics.adapters.out.persistence.coat_col
 
 import org.springframework.stereotype.Component;
 import projet.uf.modules.loof_characteristics.adapters.out.persistence.LoofCharacteristicEntityMapper;
-import projet.uf.modules.loof_characteristics.domain.model.Breed;
 import projet.uf.modules.loof_characteristics.domain.model.CoatColor;
 
 @Component

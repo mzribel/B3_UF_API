@@ -3,7 +3,6 @@ package projet.uf.modules.loof_characteristics.adapters.out.persistence.breed;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import projet.uf.modules.loof_characteristics.adapters.out.persistence.LoofCharacteristicEntity;
 
 @Entity

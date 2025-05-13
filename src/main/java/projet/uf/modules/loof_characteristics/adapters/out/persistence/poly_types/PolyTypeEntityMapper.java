@@ -2,8 +2,6 @@ package projet.uf.modules.loof_characteristics.adapters.out.persistence.poly_typ
 
 import org.springframework.stereotype.Component;
 import projet.uf.modules.loof_characteristics.adapters.out.persistence.LoofCharacteristicEntityMapper;
-import projet.uf.modules.loof_characteristics.adapters.out.persistence.coat_white_marking.CoatWhiteMarkingEntity;
-import projet.uf.modules.loof_characteristics.domain.model.CoatWhiteMarking;
 import projet.uf.modules.loof_characteristics.domain.model.PolyType;
 
 @Component

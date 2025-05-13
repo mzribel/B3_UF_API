@@ -1,6 +1,5 @@
 package projet.uf.modules.user.adapters.out.persistence;
 
-import projet.uf.modules.user.adapters.out.persistence.UserEntity;
 import projet.uf.modules.user.domain.model.User;
 
 public class UserEntityMapper {

@@ -1,6 +1,5 @@
 package projet.uf.modules.auth.application;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import projet.uf.modules.auth.application.ports.out.LoadUserPort;
 import projet.uf.modules.auth.application.ports.out.PasswordEncoderPort;
 import projet.uf.modules.auth.application.ports.out.SaveUserPort;

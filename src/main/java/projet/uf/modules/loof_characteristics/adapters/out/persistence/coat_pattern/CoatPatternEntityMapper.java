@@ -2,7 +2,6 @@ package projet.uf.modules.loof_characteristics.adapters.out.persistence.coat_pat
 
 import org.springframework.stereotype.Component;
 import projet.uf.modules.loof_characteristics.adapters.out.persistence.LoofCharacteristicEntityMapper;
-import projet.uf.modules.loof_characteristics.domain.model.CoatEffect;
 import projet.uf.modules.loof_characteristics.domain.model.CoatPattern;
 
 @Component

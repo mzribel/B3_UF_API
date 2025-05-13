@@ -1,8 +1,5 @@
 package projet.uf.modules.user.adapters.out.persistence;
 
-import projet.uf.modules.user.adapters.out.persistence.JpaUserRepository;
-import projet.uf.modules.user.adapters.out.persistence.UserEntity;
-import projet.uf.modules.user.adapters.out.persistence.UserEntityMapper;
 import projet.uf.modules.user.application.ports.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
 

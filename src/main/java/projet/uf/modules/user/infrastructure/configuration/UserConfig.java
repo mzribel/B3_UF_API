@@ -2,9 +2,6 @@ package projet.uf.modules.user.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import projet.uf.modules.auth.application.ports.out.LoadUserPort;
-import projet.uf.modules.auth.application.ports.out.SaveUserPort;
-import projet.uf.modules.auth.application.AuthService;
 import projet.uf.modules.user.adapters.out.persistence.JpaUserRepository;
 import projet.uf.modules.user.adapters.out.persistence.UserPersistenceAdapter;
 import projet.uf.modules.user.application.UserService;
