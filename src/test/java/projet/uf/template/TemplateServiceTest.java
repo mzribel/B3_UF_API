@@ -35,7 +35,7 @@ public class TemplateServiceTest {
         templateService.getTemplateByName(name, accurate);
 
         // Then
-         verify(templateRepository).findByName("name");
+         verify(templateRepository).findByName(name);
     }
 
 }

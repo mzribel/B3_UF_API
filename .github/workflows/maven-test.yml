@@ -34,5 +34,5 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build with Maven
+      - name: Maven tests
         run: mvn test
