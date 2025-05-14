@@ -6,7 +6,6 @@ WORKDIR /app
 # On copie tous les fichiers utiles
 COPY .mvn/ .mvn/
 COPY mvnw ./mvnw
-RUN ls -l ./mvnw && cat ./mvnw | head -n 5
 COPY pom.xml .
 
 # Important : rendre le script exécutable (Docker Linux ne garde pas les droits Windows)
