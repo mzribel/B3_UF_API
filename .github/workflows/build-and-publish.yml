@@ -30,3 +30,15 @@ jobs:
         with:
           name: uf-api-jar
           path: target/*.jar
+
+# TODO : to update when the server is ready
+#      - name: Upload JAR on my server
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#          SSH_HOST: ${{ secrets.SSH_HOST }}
+#          SSH_USER: ${{ secrets.SSH_USER }}
+#        run: |
+#          echo "$SSH_PRIVATE_KEY" > private_key.pem
+#          chmod 600 private_key.pem
+#          scp -i private_key.pem target/*.jar $SSH_USER@$SSH_HOST:/path/to/destination/
+#          rm private_key.pem
