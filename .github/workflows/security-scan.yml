@@ -41,30 +41,31 @@ jobs:
           name: dependency-check-report
           path: dependency-check-report
 
-  codeql-analysis:
-    name: CodeQL Static Analysis
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      actions: read
-      contents: read
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'java' ]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-
-      - name: Build with Maven
-        run: mvn package -DskipTests
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+# TODO : to set up when the repo is public
+#  codeql-analysis:
+#    name: CodeQL Static Analysis
+#    runs-on: ubuntu-latest
+#    permissions:
+#      security-events: write
+#      actions: read
+#      contents: read
+#
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        language: [ 'java' ]
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      - name: Initialize CodeQL
+#        uses: github/codeql-action/init@v3
+#        with:
+#          languages: ${{ matrix.language }}
+#
+#      - name: Build with Maven
+#        run: mvn package -DskipTests
+#
+#      - name: Perform CodeQL Analysis
+#        uses: github/codeql-action/analyze@v3
