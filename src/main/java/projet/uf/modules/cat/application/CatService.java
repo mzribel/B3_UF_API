@@ -1,9 +1,11 @@
 package projet.uf.modules.cat.application;
 
+import jakarta.persistence.EntityNotFoundException;
 import projet.uf.modules.cat.application.mapper.CatCommandMapper;
 import projet.uf.modules.cat.application.ports.in.CreateCatCommand;
 import projet.uf.modules.cat.application.ports.in.CreateCatUseCase;
 import projet.uf.modules.cat.application.ports.in.GetCatUseCase;
+import projet.uf.modules.cat.application.ports.in.UpdateCatUseCase;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
 
@@ -12,7 +14,8 @@ import java.util.Optional;
 
 public class CatService implements
         CreateCatUseCase,
-        GetCatUseCase
+        GetCatUseCase,
+        UpdateCatUseCase
 {
     private final CatPersistencePort catPersistencePort;
 
@@ -39,5 +42,15 @@ public class CatService implements
     @Override
     public List<Cat> getAll() {
         return catPersistencePort.getAll();
+    }
+
+
+    @Override
+    public Cat updateCat(Long id, CreateCatCommand command) throws Exception {
+        Cat existingCat = catPersistencePort.getById(id).orElseThrow(() -> new Exception("Cat doesn't exist"));
+
+        Cat updatedCat = CatCommandMapper.fromCreateCommand(command);
+        updatedCat.setId(id);
+        return catPersistencePort.save(updatedCat);
     }
 }
