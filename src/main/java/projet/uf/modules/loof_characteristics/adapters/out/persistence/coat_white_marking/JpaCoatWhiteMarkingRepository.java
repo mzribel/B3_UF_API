@@ -1,5 +1,0 @@
-package projet.uf.modules.loof_characteristics.adapters.out.persistence.coat_white_marking;
-
-import projet.uf.modules.loof_characteristics.adapters.out.persistence.JpaLoofCharacteristicRepository;
-
-public interface JpaCoatWhiteMarkingRepository extends JpaLoofCharacteristicRepository<CoatWhiteMarkingEntity> {}
