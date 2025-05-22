@@ -1,0 +1,23 @@
+package projet.uf.modules.breeders.application.ports.in;
+
+import projet.uf.modules.breeders.domain.model.Breeder;
+
+import javax.swing.text.html.Option;
+import java.util.List;
+import java.util.Optional;
+
+public interface BreederService {
+    // CREATE
+    Breeder create(CreateBreederCommand command, Long createdByCatteryId);
+
+    // READ
+    Optional<Breeder> getById(Long id);
+    List<Breeder> getAll();
+    List<Breeder> getByCatteryId(Long id);
+
+    // UPDATE
+    Breeder update(Long id, CreateBreederCommand command);
+
+    // DELETE
+    void deleteById(Long id);
+}

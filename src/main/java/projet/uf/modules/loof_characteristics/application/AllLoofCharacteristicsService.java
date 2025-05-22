@@ -1,6 +1,6 @@
 package projet.uf.modules.loof_characteristics.application;
 
-import projet.uf.modules.loof_characteristics.application.model.AllLoofCharacteristicsResult;
+import projet.uf.modules.loof_characteristics.application.model.AllLoofCharacteristicsResponse;
 import projet.uf.modules.loof_characteristics.application.ports.in.GetAllLoofCharacteristicsUseCase;
 import projet.uf.modules.loof_characteristics.application.ports.out.LoofCharacteristicPersistencePort;
 import projet.uf.modules.loof_characteristics.domain.model.*;
@@ -23,8 +23,8 @@ public class AllLoofCharacteristicsService implements GetAllLoofCharacteristicsU
     }
 
     @Override
-    public AllLoofCharacteristicsResult getAll() {
-        return new AllLoofCharacteristicsResult(
+    public AllLoofCharacteristicsResponse getAll() {
+        return new AllLoofCharacteristicsResponse(
                 breedPersistencePort.getAll(),
                 coatColorPersistencePort.getAll(),
                 coatEffectPersistencePort.getAll(),
