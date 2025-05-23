@@ -5,5 +5,5 @@ import projet.uf.modules.user.domain.model.User;
 
 public interface AuthService {
     public User register(RegisterCommand command);
-    public String login(LoginCommand command);
+    public User login(LoginCommand command);
 }

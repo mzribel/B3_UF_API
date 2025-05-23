@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+import projet.uf.modules.user.domain.model.User;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -25,6 +26,14 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    public String generateToken(User user) {
+        Map<String, Object> claims = Map.of(
+            "userId", user.getId(),
+            "admin", user.isAdmin()
+        );
+        return generateToken(user.getEmail(), claims);
     }
 
     public String extractUsername(String token) {

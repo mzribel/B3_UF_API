@@ -15,12 +15,12 @@ public class UserController {
         this.getUserUseCase = getUserUseCase;
     }
 
-    @GetMapping("/users/")
+    @GetMapping({"/users/", "/users"})
     public List<User> getUsers() throws Exception {
         return getUserUseCase.getAll();
     }
 
-    @GetMapping("/users/{id}/")
+    @GetMapping( {"/users/{id}/", "/users/{id}"})
     public Optional<User> getUserById(@PathVariable Long id) throws Exception {
         return getUserUseCase.getById(id);
     }

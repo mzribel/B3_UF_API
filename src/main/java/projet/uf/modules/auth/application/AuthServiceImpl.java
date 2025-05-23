@@ -19,13 +19,11 @@ public class AuthServiceImpl implements AuthService
     private final PasswordEncoderPort passwordEncoder;
     private final LoadUserPort loadUserPort;
     private final SaveUserPort saveUserPort;
-    private final JwtService jwtService;
 
-    public AuthServiceImpl(PasswordEncoderPort passwordEncoder, LoadUserPort loadUserPort, SaveUserPort saveUserPort, JwtService jwtService) {
+    public AuthServiceImpl(PasswordEncoderPort passwordEncoder, LoadUserPort loadUserPort, SaveUserPort saveUserPort) {
         this.passwordEncoder = passwordEncoder;
         this.loadUserPort = loadUserPort;
         this.saveUserPort = saveUserPort;
-        this.jwtService = jwtService;
     }
 
     @Override
@@ -42,7 +40,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public String login(LoginCommand command) {
+    public User login(LoginCommand command) {
         User user = loadUserPort.getByEmail(command.email())
                 .orElseThrow(() -> new IllegalArgumentException("Email not found or incorrect password"));
 
@@ -50,11 +48,6 @@ public class AuthServiceImpl implements AuthService
             throw new IllegalArgumentException("Email not found or incorrect password");
         }
 
-        Map<String, Object> claims = Map.of(
-            "userId", user.getId(),
-            "admin", user.isAdmin()
-        );
-
-        return jwtService.generateToken(user.getEmail(), claims);
+        return user;
     }
 }

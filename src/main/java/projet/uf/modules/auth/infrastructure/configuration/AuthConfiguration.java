@@ -12,7 +12,7 @@ import projet.uf.modules.auth.application.ports.out.SaveUserPort;
 @Configuration
 public class AuthConfiguration {
     @Bean
-    public AuthService authService(PasswordEncoderPort passwordEncoder, LoadUserPort loadUserPort, SaveUserPort saveUserPort, JwtService jwtService) {
-        return new AuthServiceImpl(passwordEncoder, loadUserPort, saveUserPort, jwtService);
+    public AuthService authService(PasswordEncoderPort passwordEncoder, LoadUserPort loadUserPort, SaveUserPort saveUserPort) {
+        return new AuthServiceImpl(passwordEncoder, loadUserPort, saveUserPort);
     }
 }

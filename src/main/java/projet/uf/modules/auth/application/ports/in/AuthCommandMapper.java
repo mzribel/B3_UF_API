@@ -8,7 +8,7 @@ public class AuthCommandMapper {
                 command.email(),
                 command.password(),
                 command.displayName(),
-                command.isAdmin()
+                false
         );
     }
     public static User fromCreateCommand(RegisterCommand command, String encodedPassword) {
@@ -16,7 +16,7 @@ public class AuthCommandMapper {
                 command.email(),
                 encodedPassword,
                 command.displayName(),
-                command.isAdmin()
+                false
         );
     }
 }
