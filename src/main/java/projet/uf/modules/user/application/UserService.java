@@ -1,5 +1,7 @@
 package projet.uf.modules.user.application;
 
+import org.springframework.http.HttpStatus;
+import projet.uf.modules.auth.exception.UserAlreadyExistsException;
 import projet.uf.modules.user.application.mapper.UserCommandMapper;
 import projet.uf.modules.user.application.ports.in.CreateUserUseCase;
 import projet.uf.modules.user.application.ports.in.GetUserUseCase;
@@ -23,7 +25,7 @@ public class UserService implements
     @Override
     public User createUser(CreateUserCommand command) {
         if (userPersistencePort.existsByEmail(command.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new UserAlreadyExistsException("A user with this email already exists", HttpStatus.CONFLICT);
         }
         User user = UserCommandMapper.fromCreateCommand(command);
         return userPersistencePort.save(user);
