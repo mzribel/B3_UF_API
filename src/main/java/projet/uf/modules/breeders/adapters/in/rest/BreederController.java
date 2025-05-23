@@ -30,6 +30,6 @@ public class BreederController {
     @GetMapping("/breeders/test/")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String test(@AuthenticationPrincipal CurrentUser currentUser) {
-        return currentUser.getId().toString();
+        return currentUser.id().toString();
     }
 }
