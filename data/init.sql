@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 09 mai 2025 à 22:57
+-- Généré le : jeu. 22 mai 2025 à 13:43
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -85,7 +85,7 @@ INSERT INTO `breeders` (`id`, `name`, `siret`, `affix`, `is_affix_prefix`, `owne
 
 CREATE TABLE `breeds` (
   `id` int(11) NOT NULL,
-  `code` varchar(8) NOT NULL,
+  `code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `details` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -103,47 +103,39 @@ INSERT INTO `breeds` (`id`, `code`, `name`, `details`) VALUES
 -- Structure de la table `cats`
 --
 
-DROP TABLE IF EXISTS `cats`;
-
 CREATE TABLE `cats` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `surname` VARCHAR(255) DEFAULT NULL,
-    `sex` TINYINT(1) NOT NULL DEFAULT 0,
-    `birth_date` DATE DEFAULT NULL,
-    `litter_id` INT(11) DEFAULT NULL,
-    `origin_breeder_id` INT(11) DEFAULT NULL,
-    `current_breeder_id` INT(11) DEFAULT NULL,
-    `breed_id` INT(11) DEFAULT NULL,
-    `eye_color_id` INT(11) DEFAULT NULL,
-    `poly_type_id` INT(11) DEFAULT NULL,
-    `pedigree_no` VARCHAR(255) DEFAULT NULL,
-    `identification_no` VARCHAR(255) DEFAULT NULL,
-    `is_neutered` TINYINT(1) NOT NULL DEFAULT 0,
-    `neutered_date` DATE DEFAULT NULL,
-    `is_deceased` TINYINT(1) NOT NULL DEFAULT 0,
-    `deceased_date` DATE DEFAULT NULL,
-    `created_by_cattery_id` INT(11) NOT NULL,
-    `is_in_cattery` TINYINT(1) NOT NULL DEFAULT 1,
-    `notes` TEXT DEFAULT NULL,
-    PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `surname` varchar(255) DEFAULT NULL,
+  `sex` tinyint(1) NOT NULL DEFAULT 0,
+  `birth_date` date DEFAULT NULL,
+  `litter_id` int(11) DEFAULT NULL,
+  `origin_breeder_id` int(11) DEFAULT NULL,
+  `current_breeder_id` int(11) DEFAULT NULL,
+  `breed_id` int(11) DEFAULT NULL,
+  `eye_color_id` int(11) DEFAULT NULL,
+  `poly_type_id` int(11) DEFAULT NULL,
+  `pedigree_no` varchar(255) DEFAULT NULL,
+  `identification_no` varchar(255) DEFAULT NULL,
+  `is_neutered` tinyint(1) NOT NULL DEFAULT 0,
+  `neutered_date` date DEFAULT NULL,
+  `is_deceased` tinyint(1) NOT NULL DEFAULT 0,
+  `deceased_date` date DEFAULT NULL,
+  `created_by_cattery_id` int(11) NOT NULL,
+  `is_in_cattery` tinyint(1) NOT NULL DEFAULT 1,
+  `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 --
 -- Déchargement des données de la table `cats`
 --
 
-INSERT INTO `cats`
-(`id`, `name`, `surname`, `sex`, `birth_date`, `origin_breeder_id`, `current_breeder_id`, `breed_id`,
- `poly_type_id`, `eye_color_id`, `litter_id`, `pedigree_no`, `identification_no`, `is_neutered`,
- `neutered_date`, `is_deceased`, `deceased_date`, `created_by_cattery_id`, `is_in_cattery`, `notes`)
-VALUES
-    (1, 'Serkhan', 'Ptit Loup', 0, '2021-07-05', 3, 2, 1, 1, NULL, NULL, 'LOOF 2021.40533', '250269590612101', 0, NULL, 0, NULL, 1, 1, NULL),
-    (2, 'Salemm', NULL, 1, '2021-04-13', 4, 2, 1, 2, NULL, NULL, 'LOOF 2021.28950', '250268502119223', 0, NULL, 0, NULL, 1, 1, NULL),
-    (3, 'Scarlett', NULL, 1, '2021-04-07', 4, NULL, 1, NULL, NULL, NULL,'LOOF 2021.27416', '250268502119253', 1, NULL, 0, NULL, 1, 1, NULL),
-    (4, 'Uranus', 'Bingus', 0, '2023-02-20', 2, 1, 1, NULL, NULL, NULL, 'LOOF 2023.14148', '250268780001262', 1, NULL, 0, NULL, 1, 1, NULL),
-    (5, 'Teba', NULL, 0, NULL, 2, 1, 1, 1, NULL, NULL, 'LOOF 2022.51603', '2503268780001287', 1, NULL, 0, NULL, 1, 1, NULL);
+INSERT INTO `cats` (`id`, `name`, `surname`, `sex`, `birth_date`, `litter_id`, `origin_breeder_id`, `current_breeder_id`, `breed_id`, `eye_color_id`, `poly_type_id`, `pedigree_no`, `identification_no`, `is_neutered`, `neutered_date`, `is_deceased`, `deceased_date`, `created_by_cattery_id`, `is_in_cattery`, `notes`) VALUES
+(1, 'Serkhan', 'Ptit Loup', 0, '2021-07-05', NULL, 3, 2, 1, NULL, 1, 'LOOF 2021.40533', '250269590612101', 0, NULL, 0, NULL, 1, 1, NULL),
+(2, 'Salemm', NULL, 1, '2021-04-13', NULL, 4, 2, 1, NULL, 2, 'LOOF 2021.28950', '250268502119223', 0, NULL, 0, NULL, 1, 1, NULL),
+(3, 'Scarlett', NULL, 1, '2021-04-07', NULL, 4, NULL, 1, NULL, NULL, 'LOOF 2021.27416', '250268502119253', 1, NULL, 0, NULL, 1, 1, NULL),
+(4, 'Uranus', 'Bingus', 0, '2023-02-20', NULL, 2, 1, 1, NULL, NULL, 'LOOF 2023.14148', '250268780001262', 1, NULL, 0, NULL, 1, 1, NULL),
+(5, 'Teba', NULL, 0, NULL, NULL, 2, 1, 1, NULL, 1, 'LOOF 2022.51603', '2503268780001287', 1, NULL, 0, NULL, 1, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -153,15 +145,15 @@ VALUES
 
 CREATE TABLE `catteries` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `breeder_id` int(11) DEFAULT NULL
+  `created_by_user_id` int(11) NOT NULL,
+  `linked_to_breeder_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `catteries`
 --
 
-INSERT INTO `catteries` (`id`, `user_id`, `breeder_id`) VALUES
+INSERT INTO `catteries` (`id`, `created_by_user_id`, `linked_to_breeder_id`) VALUES
 (1, 1, 1);
 
 -- --------------------------------------------------------
@@ -203,6 +195,35 @@ INSERT INTO `cat_coats` (`cat_id`, `base_color_id`, `pattern_id`, `effect_id`, `
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `cat_entity`
+--
+
+CREATE TABLE `cat_entity` (
+  `id` bigint(20) NOT NULL,
+  `birth_date` date DEFAULT NULL,
+  `breed_id` bigint(20) DEFAULT NULL,
+  `created_by_cattery_id` bigint(20) DEFAULT NULL,
+  `current_breeder_id` bigint(20) DEFAULT NULL,
+  `deceased_date` date DEFAULT NULL,
+  `eye_color_id` bigint(20) DEFAULT NULL,
+  `identification_no` varchar(255) DEFAULT NULL,
+  `is_deceased` bit(1) NOT NULL,
+  `is_in_cattery` bit(1) NOT NULL,
+  `is_neutered` bit(1) NOT NULL,
+  `litter_id` bigint(20) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `neutered_date` date DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `origin_breeder_id` bigint(20) DEFAULT NULL,
+  `pedigree_no` varchar(255) DEFAULT NULL,
+  `poly_type_id` bigint(20) DEFAULT NULL,
+  `sex` bit(1) NOT NULL,
+  `surname` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `coat_base_colors`
 --
 
@@ -238,12 +259,25 @@ INSERT INTO `coat_base_colors` (`id`, `code`, `name`, `details`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `coat_colors`
+--
+
+CREATE TABLE `coat_colors` (
+  `id` bigint(20) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `details` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `coat_effects`
 --
 
 CREATE TABLE `coat_effects` (
   `id` int(11) NOT NULL,
-  `code` varchar(8) NOT NULL,
+  `code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `details` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -270,7 +304,7 @@ INSERT INTO `coat_effects` (`id`, `code`, `name`, `details`) VALUES
 
 CREATE TABLE `coat_patterns` (
   `id` int(11) NOT NULL,
-  `code` varchar(8) NOT NULL,
+  `code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `details` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -297,7 +331,7 @@ INSERT INTO `coat_patterns` (`id`, `code`, `name`, `details`) VALUES
 
 CREATE TABLE `coat_white_markings` (
   `id` int(11) NOT NULL,
-  `code` varchar(8) NOT NULL,
+  `code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `details` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -495,17 +529,29 @@ INSERT INTO `persons` (`id`, `sex`, `is_legal_person`, `first_name`, `last_name`
 
 CREATE TABLE `poly_types` (
   `id` int(11) NOT NULL,
-  `code` varchar(8) NOT NULL,
-  `name` varchar(255) DEFAULT NULL
+  `code` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `details` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `poly_types`
 --
 
-INSERT INTO `poly_types` (`id`, `code`, `name`) VALUES
-(1, 'P', 'polydactyle pattes avant'),
-(2, 'PP', 'polydactyle 4 pattes');
+INSERT INTO `poly_types` (`id`, `code`, `name`, `details`) VALUES
+(1, 'P', 'polydactyle pattes avant', NULL),
+(2, 'PP', 'polydactyle 4 pattes', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `templates`
+--
+
+CREATE TABLE `templates` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -528,6 +574,20 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `email`, `password`, `display_name`, `is_admin`) VALUES
 (1, 'chatterie@rathgate.fr', '', 'Chatterie RathGate', 0),
 (2, 'admin@rathgate.fr', '', 'RathGate', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user_entity`
+--
+
+CREATE TABLE `user_entity` (
+  `id` bigint(20) NOT NULL,
+  `display_name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `is_admin` bit(1) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Index pour les tables déchargées
@@ -557,6 +617,7 @@ ALTER TABLE `breeds`
 -- Index pour la table `cats`
 --
 ALTER TABLE `cats`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `origin_breeder_id` (`origin_breeder_id`),
   ADD KEY `current_breeder_id` (`current_breeder_id`),
   ADD KEY `breed_id` (`breed_id`),
@@ -570,8 +631,8 @@ ALTER TABLE `cats`
 --
 ALTER TABLE `catteries`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `fk_catteries_breeder_id` (`breeder_id`);
+  ADD KEY `user_id` (`created_by_user_id`),
+  ADD KEY `fk_catteries_breeder_id` (`linked_to_breeder_id`);
 
 --
 -- Index pour la table `cattery_users`
@@ -591,10 +652,23 @@ ALTER TABLE `cat_coats`
   ADD KEY `white_marking_id` (`white_marking_id`);
 
 --
+-- Index pour la table `cat_entity`
+--
+ALTER TABLE `cat_entity`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `coat_base_colors`
 --
 ALTER TABLE `coat_base_colors`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `coat_colors`
+--
+ALTER TABLE `coat_colors`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKo6kqxlwrcxuk3agy3aobil4be` (`name`);
 
 --
 -- Index pour la table `coat_effects`
@@ -691,11 +765,24 @@ ALTER TABLE `poly_types`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `templates`
+--
+ALTER TABLE `templates`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Index pour la table `user_entity`
+--
+ALTER TABLE `user_entity`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK4xad1enskw4j1t2866f7sodrx` (`email`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -732,10 +819,22 @@ ALTER TABLE `catteries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT pour la table `cat_entity`
+--
+ALTER TABLE `cat_entity`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `coat_base_colors`
 --
 ALTER TABLE `coat_base_colors`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT pour la table `coat_colors`
+--
+ALTER TABLE `coat_colors`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `coat_effects`
@@ -816,10 +915,22 @@ ALTER TABLE `poly_types`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT pour la table `templates`
+--
+ALTER TABLE `templates`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `user_entity`
+--
+ALTER TABLE `user_entity`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
@@ -848,8 +959,8 @@ ALTER TABLE `cats`
 -- Contraintes pour la table `catteries`
 --
 ALTER TABLE `catteries`
-  ADD CONSTRAINT `catteries_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `fk_catteries_breeder_id` FOREIGN KEY (`breeder_id`) REFERENCES `breeders` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `catteries_ibfk_1` FOREIGN KEY (`created_by_user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `fk_catteries_breeder_id` FOREIGN KEY (`linked_to_breeder_id`) REFERENCES `breeders` (`id`) ON DELETE SET NULL;
 
 --
 -- Contraintes pour la table `cattery_users`
