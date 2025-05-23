@@ -20,22 +20,22 @@ public class CatController {
         this.updateCatUseCase = updateCatUseCase;
     }
 
-    @GetMapping("/cats")
+    @GetMapping({"/cats/", "/cats"})
     public List<Cat> getAllCats() {
         return getCatUseCase.getAll();
     }
 
-    @PostMapping("/cats")
+    @PostMapping({"/cats/", "/cats"})
     public Cat createCat(@RequestBody CreateCatCommand command) {
         return createCatUseCase.createCat(command);
     }
 
-    @GetMapping("/cattery/{id}/cats")
+    @GetMapping({"/cattery/{id}/cats/", "/cattery/{id}/cats"})
     public List<Cat> getCatteryCats(@PathVariable Long id) {
         return getCatUseCase.getByCatteryId(id);
     }
 
-    @PutMapping("/cats/{id}")
+    @PutMapping({"/cats/{id}/", "/cats/{id}"})
     public Cat updateCat(@PathVariable Long id, @RequestBody CreateCatCommand command) throws Exception {
         return updateCatUseCase.updateCat(id, command);
     }

@@ -2,7 +2,7 @@ package projet.uf.modules.auth.adapters.out.persistence;
 
 import org.springframework.stereotype.Component;
 import projet.uf.modules.auth.application.ports.out.SaveUserPort;
-import projet.uf.modules.user.application.ports.out.UserPersistencePort;
+import projet.uf.modules.user.application.port.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
 
 @Component

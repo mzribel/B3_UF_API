@@ -2,10 +2,10 @@ package projet.uf.modules.template.application.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import projet.uf.modules.template.adapters.out.persistence.TemplateEntity;
-import projet.uf.modules.template.exceptions.TemplateException;
+import projet.uf.modules.template.adapter.out.persistence.TemplateEntity;
+import projet.uf.modules.template.exception.TemplateException;
 import projet.uf.modules.template.domain.model.Template;
-import projet.uf.modules.template.adapters.out.persistence.JpaTemplateRepository;
+import projet.uf.modules.template.adapter.out.persistence.JpaTemplateRepository;
 import java.util.List;
 
 @Service

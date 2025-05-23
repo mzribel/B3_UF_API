@@ -8,7 +8,7 @@ import projet.uf.modules.auth.adapters.out.security.JwtService;
 import projet.uf.modules.auth.application.ports.in.AuthService;
 import projet.uf.modules.auth.application.ports.in.LoginCommand;
 import projet.uf.modules.auth.application.ports.in.RegisterCommand;
-import projet.uf.modules.user.adapters.in.rest.dto.UserDtoMapper;
+import projet.uf.modules.user.adapter.in.rest.dto.UserDtoMapper;
 import projet.uf.modules.user.domain.model.User;
 
 @RestController

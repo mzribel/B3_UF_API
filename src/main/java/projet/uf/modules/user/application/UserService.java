@@ -3,10 +3,10 @@ package projet.uf.modules.user.application;
 import org.springframework.http.HttpStatus;
 import projet.uf.modules.auth.exception.UserAlreadyExistsException;
 import projet.uf.modules.user.application.mapper.UserCommandMapper;
-import projet.uf.modules.user.application.ports.in.CreateUserUseCase;
-import projet.uf.modules.user.application.ports.in.GetUserUseCase;
-import projet.uf.modules.user.application.ports.in.CreateUserCommand;
-import projet.uf.modules.user.application.ports.out.UserPersistencePort;
+import projet.uf.modules.user.application.port.in.CreateUserUseCase;
+import projet.uf.modules.user.application.port.in.GetUserUseCase;
+import projet.uf.modules.user.application.port.in.CreateUserCommand;
+import projet.uf.modules.user.application.port.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
 
 import java.util.List;

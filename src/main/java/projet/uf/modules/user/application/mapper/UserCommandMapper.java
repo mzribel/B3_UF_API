@@ -1,6 +1,6 @@
 package projet.uf.modules.user.application.mapper;
 
-import projet.uf.modules.user.application.ports.in.CreateUserCommand;
+import projet.uf.modules.user.application.port.in.CreateUserCommand;
 import projet.uf.modules.user.domain.model.User;
 
 public class UserCommandMapper {

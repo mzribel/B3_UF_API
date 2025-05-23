@@ -1,8 +1,6 @@
 package projet.uf.modules.cat.adapter.out.persistence;
 
 import projet.uf.modules.cat.domain.model.Cat;
-import projet.uf.modules.user.adapters.out.persistence.JpaUserRepository;
-import projet.uf.modules.user.adapters.out.persistence.UserPersistenceAdapter;
 
 public class CatEntityMapper {
 

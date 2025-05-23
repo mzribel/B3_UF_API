@@ -2,10 +2,10 @@ package projet.uf.modules.user.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import projet.uf.modules.user.adapters.out.persistence.JpaUserRepository;
-import projet.uf.modules.user.adapters.out.persistence.UserPersistenceAdapter;
+import projet.uf.modules.user.adapter.out.persistence.JpaUserRepository;
+import projet.uf.modules.user.adapter.out.persistence.UserPersistenceAdapter;
 import projet.uf.modules.user.application.UserService;
-import projet.uf.modules.user.application.ports.out.UserPersistencePort;
+import projet.uf.modules.user.application.port.out.UserPersistencePort;
 
 @Configuration
 public class UserConfig {
