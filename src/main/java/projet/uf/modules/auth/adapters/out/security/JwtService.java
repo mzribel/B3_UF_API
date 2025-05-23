@@ -16,6 +16,7 @@ import java.util.function.Function;
 @Component
 public class JwtService {
 
+    // TODO : MDR
     private static final String SECRET_KEY = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
 
     public String generateToken(String subject, Map<String, Object> claims) {
