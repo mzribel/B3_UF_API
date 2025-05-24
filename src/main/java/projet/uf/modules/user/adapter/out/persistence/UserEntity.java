@@ -21,10 +21,10 @@ public class UserEntity {
     @Column
     private String password;
 
-    @Column
+    @Column(name = "display_name")
     private String displayName;
 
-    @Column
+    @Column(name = "is_admin")
     private boolean isAdmin;
 
     public UserEntity(String email, String password, String displayName, boolean isAdmin) {
