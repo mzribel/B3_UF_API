@@ -1,6 +1,5 @@
-package projet.uf.modules.cat.application.mapper;
+package projet.uf.modules.cat.application.ports.in;
 
-import projet.uf.modules.cat.application.ports.in.CreateCatCommand;
 import projet.uf.modules.cat.domain.model.Cat;
 
 public class CatCommandMapper {

@@ -1,6 +1,6 @@
 package projet.uf.modules.cat.application;
 
-import projet.uf.modules.cat.application.mapper.CatCommandMapper;
+import projet.uf.modules.cat.application.ports.in.CatCommandMapper;
 import projet.uf.modules.cat.application.ports.in.*;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
