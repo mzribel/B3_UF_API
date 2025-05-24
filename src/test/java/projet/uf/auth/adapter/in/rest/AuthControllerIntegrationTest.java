@@ -149,4 +149,37 @@ public class AuthControllerIntegrationTest {
             .andExpect(jsonPath("$.user.displayName").value("Login Test"));
     }
 
+    @Test
+    void register_shouldReturn400_whenEmailIsInvalid() throws Exception {
+        String json = """
+            {
+              "email": "invalid-email",
+              "password": "Soleil123€",
+              "name": "Test"
+            }
+        """;
+
+        mockMvc.perform(post("/auth/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(json))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void register_shouldReturn400_whenDisplayNameTooLong() throws Exception {
+        String longName = "a".repeat(21);
+        String json = String.format("""
+            {
+              "email": "test@test.fr",
+              "password": "Soleil123€",
+              "displayName": "%s"
+            }
+        """, longName);
+
+        mockMvc.perform(post("/auth/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(json))
+            .andExpect(status().isBadRequest());
+    }
+
 }
