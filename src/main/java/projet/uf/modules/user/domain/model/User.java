@@ -14,6 +14,7 @@ public class User {
     private String email;
     private String password;
     private String displayName;
+    @Builder.Default
     private boolean isAdmin = false;
 
     public User(String email, String password, String displayName, boolean isAdmin) {

@@ -4,9 +4,8 @@ import org.springframework.http.HttpStatus;
 import projet.uf.modules.auth.application.ports.in.AuthCommandMapper;
 import projet.uf.modules.auth.application.ports.in.LoginCommand;
 import projet.uf.modules.auth.application.ports.in.RegisterCommand;
-import projet.uf.modules.auth.application.ports.out.LoadUserPort;
-import projet.uf.modules.auth.application.ports.out.PasswordEncoderPort;
-import projet.uf.modules.auth.application.ports.out.SaveUserPort;
+import projet.uf.modules.auth.application.ports.out.UserPersistence;
+import projet.uf.modules.auth.application.ports.out.PasswordEncoder;
 import projet.uf.modules.auth.exception.UserAlreadyExistsException;
 import projet.uf.modules.auth.exception.WeakPasswordException;
 import projet.uf.modules.auth.exception.WrongCredentialsException;
@@ -15,19 +14,17 @@ import projet.uf.modules.auth.application.ports.in.AuthService;
 
 public class AuthServiceImpl implements AuthService
 {
-    private final PasswordEncoderPort passwordEncoder;
-    private final LoadUserPort loadUserPort;
-    private final SaveUserPort saveUserPort;
+    private final PasswordEncoder passwordEncoder;
+    private final UserPersistence userPersistence;
 
-    public AuthServiceImpl(PasswordEncoderPort passwordEncoder, LoadUserPort loadUserPort, SaveUserPort saveUserPort) {
+    public AuthServiceImpl(PasswordEncoder passwordEncoder, UserPersistence userPersistence) {
         this.passwordEncoder = passwordEncoder;
-        this.loadUserPort = loadUserPort;
-        this.saveUserPort = saveUserPort;
+        this.userPersistence = userPersistence;
     }
 
     @Override
     public User register(RegisterCommand command) {
-        if (loadUserPort.existsByEmail(command.email())) {
+        if (userPersistence.existsByEmail(command.email())) {
             throw new UserAlreadyExistsException("A user with this email already exists", HttpStatus.CONFLICT);
         }
         if (!User.isStrongPassword(command.password())) {
@@ -35,12 +32,12 @@ public class AuthServiceImpl implements AuthService
         }
 
         User user = AuthCommandMapper.fromCreateCommand(command, passwordEncoder.encode(command.password()));
-        return saveUserPort.save(user);
+        return userPersistence.save(user);
     }
 
     @Override
     public User login(LoginCommand command) {
-        User user = loadUserPort.getByEmail(command.email())
+        User user = userPersistence.getByEmail(command.email())
                 .orElseThrow(() -> new WrongCredentialsException("Email not found or incorrect password", HttpStatus.BAD_REQUEST));
 
         if (!passwordEncoder.matches(command.password(), user.getPassword())) {

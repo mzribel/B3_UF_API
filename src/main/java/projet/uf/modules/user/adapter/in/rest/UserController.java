@@ -1,7 +1,7 @@
 package projet.uf.modules.user.adapter.in.rest;
 
 import org.springframework.web.bind.annotation.*;
-import projet.uf.modules.user.application.port.in.GetUserUseCase;
+import projet.uf.modules.user.application.port.in.UserService;
 import projet.uf.modules.user.domain.model.User;
 
 import java.util.List;
@@ -9,19 +9,20 @@ import java.util.Optional;
 
 @RestController
 public class UserController {
-    final GetUserUseCase getUserUseCase;
+    final UserService userService;
 
-    public UserController(GetUserUseCase getUserUseCase) {
-        this.getUserUseCase = getUserUseCase;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
+
 
     @GetMapping({"/users/", "/users"})
     public List<User> getUsers() throws Exception {
-        return getUserUseCase.getAll();
+        return userService.getAll();
     }
 
     @GetMapping( {"/users/{id}/", "/users/{id}"})
     public Optional<User> getUserById(@PathVariable Long id) throws Exception {
-        return getUserUseCase.getById(id);
+        return userService.getById(id);
     }
 }

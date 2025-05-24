@@ -9,10 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import projet.uf.modules.auth.adapters.out.security.HeaderAuthenticationTokenAdapter;
-import projet.uf.modules.auth.adapters.out.security.JwtService;
-import projet.uf.modules.auth.application.model.CurrentUser;
-import projet.uf.modules.auth.application.ports.out.LoadUserPort;
+import projet.uf.modules.auth.adapters.out.security.HeaderAuthenticationToken;
+import projet.uf.modules.auth.adapters.out.security.JwtServiceImpl;
+import projet.uf.modules.auth.domain.model.CurrentUser;
+import projet.uf.modules.auth.application.ports.out.UserPersistence;
 
 import java.io.IOException;
 
@@ -20,8 +20,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final LoadUserPort loadUserPort;
-    private final JwtService jwtService;
+    private final UserPersistence loadUserPort;
+    private final JwtServiceImpl jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         loadUserPort.getByEmail(email).ifPresent(user -> {
             CurrentUser currentUser = new CurrentUser(user.getId(), user.isAdmin());
-            Authentication auth = new HeaderAuthenticationTokenAdapter(currentUser);
+            Authentication auth = new HeaderAuthenticationToken(currentUser);
             SecurityContextHolder.getContext().setAuthentication(auth);
         });
 

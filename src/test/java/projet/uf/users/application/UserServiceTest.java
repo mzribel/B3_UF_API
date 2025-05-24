@@ -6,8 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import projet.uf.modules.user.application.port.in.CreateUserCommand;
-import projet.uf.modules.user.application.port.out.UserPersistencePort;
-import projet.uf.modules.user.application.UserService;
+import projet.uf.modules.user.application.port.out.UserPersistence;
+import projet.uf.modules.user.application.UserServiceImpl;
 import projet.uf.modules.user.domain.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,9 +18,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     @Mock
-    private UserPersistencePort userPersistencePort;
+    private UserPersistence userPersistencePort;
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Test
     public void shouldCreateUser_WhenValidAndNotExists() {

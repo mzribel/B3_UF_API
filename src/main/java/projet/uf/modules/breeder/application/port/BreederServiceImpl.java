@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import projet.uf.modules.breeder.application.mapper.BreederCommandMapper;
 import projet.uf.modules.breeder.application.port.in.BreederService;
 import projet.uf.modules.breeder.application.port.in.CreateBreederCommand;
-import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
+import projet.uf.modules.breeder.application.port.out.BreederPersistence;
 import projet.uf.modules.breeder.domain.model.Breeder;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 public class BreederServiceImpl implements BreederService {
-    private final BreederPersistencePort breederPersistencePort;
+    private final BreederPersistence breederPersistencePort;
 
     @Override
     public Breeder create(CreateBreederCommand command, Long createdByCatteryId) {

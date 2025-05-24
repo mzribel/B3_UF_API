@@ -6,7 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import projet.uf.modules.auth.application.model.CurrentUser;
+import projet.uf.modules.auth.domain.model.CurrentUser;
 import projet.uf.modules.breeder.application.port.in.BreederService;
 import projet.uf.modules.breeder.domain.model.Breeder;
 

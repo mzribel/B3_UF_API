@@ -1,42 +1,38 @@
 package projet.uf.modules.cat.adapter.in.rest;
 
 import org.springframework.web.bind.annotation.*;
+import projet.uf.modules.cat.application.ports.in.CatService;
 import projet.uf.modules.cat.application.ports.in.CreateCatCommand;
-import projet.uf.modules.cat.application.ports.in.CreateCatUseCase;
-import projet.uf.modules.cat.application.ports.in.GetCatUseCase;
-import projet.uf.modules.cat.application.ports.in.UpdateCatUseCase;
 import projet.uf.modules.cat.domain.model.Cat;
 
 import java.util.List;
 
 @RestController
 public class CatController {
-    final GetCatUseCase getCatUseCase;
-    final CreateCatUseCase createCatUseCase;
-    final UpdateCatUseCase updateCatUseCase;
-    public CatController(GetCatUseCase getCatUseCase, CreateCatUseCase createCatUseCase, UpdateCatUseCase updateCatUseCase) {
-        this.getCatUseCase = getCatUseCase;
-        this.createCatUseCase = createCatUseCase;
-        this.updateCatUseCase = updateCatUseCase;
+    final CatService catService;
+
+    public CatController(CatService catService) {
+        this.catService = catService;
     }
+
 
     @GetMapping({"/cats/", "/cats"})
     public List<Cat> getAllCats() {
-        return getCatUseCase.getAll();
+        return catService.getAll();
     }
 
     @PostMapping({"/cats/", "/cats"})
     public Cat createCat(@RequestBody CreateCatCommand command) {
-        return createCatUseCase.createCat(command);
+        return catService.createCat(command);
     }
 
     @GetMapping({"/cattery/{id}/cats/", "/cattery/{id}/cats"})
     public List<Cat> getCatteryCats(@PathVariable Long id) {
-        return getCatUseCase.getByCatteryId(id);
+        return catService.getByCatteryId(id);
     }
 
     @PutMapping({"/cats/{id}/", "/cats/{id}"})
     public Cat updateCat(@PathVariable Long id, @RequestBody CreateCatCommand command) throws Exception {
-        return updateCatUseCase.updateCat(id, command);
+        return catService.updateCat(id, command);
     }
 }

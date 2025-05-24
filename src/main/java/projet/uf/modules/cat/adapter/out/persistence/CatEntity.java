@@ -24,6 +24,7 @@ public class CatEntity {
     private String surname;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean sex = false;
 
     @Column(name = "birth_date")
@@ -54,12 +55,14 @@ public class CatEntity {
     private String identificationNo;
 
     @Column(name = "is_neutered", nullable = false)
+    @Builder.Default
     private boolean isNeutered = false;
 
     @Column(name = "neutered_date")
     private LocalDate neuteredDate;
 
     @Column(name = "is_deceased", nullable = false)
+    @Builder.Default
     private boolean isDeceased = false;
 
     @Column(name = "deceased_date")
@@ -69,6 +72,7 @@ public class CatEntity {
     private Long createdByCatteryId;        // TODO : nullable = false
 
     @Column(name = "is_in_cattery", nullable = false)
+    @Builder.Default
     private boolean isInCattery = true;
 
     @Column(columnDefinition = "TEXT")
