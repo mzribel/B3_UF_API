@@ -13,17 +13,17 @@ import projet.uf.modules.user.domain.model.User;
 
 @RestController
 public class AuthController {
-    final AuthUseCase authService;
+    final AuthUseCase authUseCase;
     final JwtService jwtService;
 
-    public AuthController(AuthUseCase authService, JwtService jwtService) {
-        this.authService = authService;
+    public AuthController(AuthUseCase authUseCase, JwtService jwtService) {
+        this.authUseCase = authUseCase;
         this.jwtService = jwtService;
     }
 
     @PostMapping({"/auth/register/", "/auth/register"})
     public AuthenticatedUserDto register(@RequestBody RegisterCommand command) throws Exception {
-        User createdUser = authService.register(command);
+        User createdUser = authUseCase.register(command);
 
         return new AuthenticatedUserDto(
                 UserDtoMapper.toDto(createdUser),
@@ -33,7 +33,7 @@ public class AuthController {
 
     @PostMapping({"/auth/login/", "/auth/login"})
     public AuthenticatedUserDto login(@RequestBody LoginCommand command) throws Exception {
-        User authenticatedUser =  authService.login(command);
+        User authenticatedUser =  authUseCase.login(command);
 
         return new AuthenticatedUserDto(
             UserDtoMapper.toDto(authenticatedUser),

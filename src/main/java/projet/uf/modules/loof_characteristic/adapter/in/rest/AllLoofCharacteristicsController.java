@@ -8,10 +8,10 @@ import projet.uf.modules.loof_characteristic.application.port.in.AllLoofCharacte
 
 @RestController
 @RequestMapping({"/loof/characteristics/", "/loof/characteristics"})
-public class LoofCharacteristicController {
+public class AllLoofCharacteristicsController {
     final AllLoofCharacteristicsUseCase getAllLoofCharacteristicsUseCase;
 
-    public LoofCharacteristicController(AllLoofCharacteristicsUseCase getAllLoofCharacteristicsUseCase) {
+    public AllLoofCharacteristicsController(AllLoofCharacteristicsUseCase getAllLoofCharacteristicsUseCase) {
         this.getAllLoofCharacteristicsUseCase = getAllLoofCharacteristicsUseCase;
     }
 

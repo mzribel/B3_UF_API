@@ -9,20 +9,20 @@ import java.util.Optional;
 
 @RestController
 public class UserController {
-    final UserUseCase userService;
+    final UserUseCase userUseCase;
 
-    public UserController(UserUseCase userService) {
-        this.userService = userService;
+    public UserController(UserUseCase userUseCase) {
+        this.userUseCase = userUseCase;
     }
 
 
     @GetMapping({"/users/", "/users"})
     public List<User> getUsers() throws Exception {
-        return userService.getAll();
+        return userUseCase.getAll();
     }
 
     @GetMapping( {"/users/{id}/", "/users/{id}"})
     public Optional<User> getUserById(@PathVariable Long id) throws Exception {
-        return userService.getById(id);
+        return userUseCase.getById(id);
     }
 }

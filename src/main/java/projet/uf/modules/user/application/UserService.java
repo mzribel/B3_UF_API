@@ -1,5 +1,6 @@
 package projet.uf.modules.user.application;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.modules.auth.exception.UserAlreadyExistsException;
 import projet.uf.modules.user.application.mapper.UserCommandMapper;
@@ -11,14 +12,9 @@ import projet.uf.modules.user.domain.model.User;
 import java.util.List;
 import java.util.Optional;
 
-public class UserService implements
-        UserUseCase
-{
+@AllArgsConstructor
+public class UserService implements UserUseCase {
     private final UserPersistencePort userPersistencePort;
-
-    public UserService(UserPersistencePort userPersistencePort) {
-        this.userPersistencePort = userPersistencePort;
-    }
 
     @Override
     public User createUser(CreateUserCommand command) {

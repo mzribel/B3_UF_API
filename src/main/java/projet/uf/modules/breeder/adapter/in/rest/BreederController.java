@@ -16,15 +16,15 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 public class BreederController {
-    final BreederUseCase breederService;
+    final BreederUseCase breederUseCase;
 
     @GetMapping({"/breeders/", "/breeders"})
     public List<Breeder> getAll() {
-        return breederService.getAll();
+        return breederUseCase.getAll();
     }
     @GetMapping({"/breeders/{id}/", "/breeders/{id}"})
     public Optional<Breeder> getById(@PathVariable Long id) {
-        return breederService.getById(id);
+        return breederUseCase.getById(id);
     }
 
     // TODO : route de tests pour les permissions ADMIN
