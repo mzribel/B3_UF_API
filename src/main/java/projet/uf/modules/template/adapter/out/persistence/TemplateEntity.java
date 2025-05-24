@@ -19,5 +19,4 @@ public class TemplateEntity {
 
     @Column(name = "name")
     String name;
-
 }

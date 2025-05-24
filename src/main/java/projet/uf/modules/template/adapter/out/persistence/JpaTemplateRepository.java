@@ -8,12 +8,8 @@ import java.util.List;
 
 @Repository
 public interface JpaTemplateRepository extends JpaRepository<TemplateEntity, Long> {
-
-    @Query("select template from TemplateEntity template where template.id in (select max(template.id) from TemplateEntity template where template.name = ?1 group by template.name)")
     List<TemplateEntity> findByName(String name);
 
     @Query("select template from TemplateEntity template where template.id in (select max(template.id) from TemplateEntity template where template.name like %?1% group by template.name)")
     List<TemplateEntity> findByNameLike(String name);
-
-
 }

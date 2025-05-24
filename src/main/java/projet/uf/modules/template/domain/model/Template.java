@@ -1,14 +1,13 @@
 package projet.uf.modules.template.domain.model;
 
-import projet.uf.modules.template.adapter.out.persistence.TemplateEntity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-public record Template(String name) {
-
-    public static Template from(final TemplateEntity templateEntity) {
-        return new Template(templateEntity.getName());
-    }
-
-    public String getName() {
-        return name;
-    }
+@Getter
+@Setter
+@AllArgsConstructor
+public class Template {
+    private Long id;
+    private String name;
 }

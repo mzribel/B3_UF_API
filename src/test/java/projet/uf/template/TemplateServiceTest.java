@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import projet.uf.modules.template.exception.TemplateException;
 import projet.uf.modules.template.adapter.out.persistence.JpaTemplateRepository;
-import projet.uf.modules.template.application.service.TemplateUseCaseService;
+import projet.uf.modules.template.application.service.TemplateService;
 
 import static org.mockito.Mockito.verify;
 
@@ -18,7 +18,7 @@ public class TemplateServiceTest {
     private JpaTemplateRepository templateRepository;
 
     @InjectMocks
-    private TemplateUseCaseService templateService;
+    private TemplateService templateService;
 
     @BeforeEach
     void setUp() {
