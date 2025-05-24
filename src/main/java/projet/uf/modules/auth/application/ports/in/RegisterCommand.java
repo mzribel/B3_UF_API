@@ -1,3 +1,8 @@
 package projet.uf.modules.auth.application.ports.in;
 
-public record RegisterCommand(String email, String password, String displayName) {}
+import jakarta.validation.constraints.NotBlank;
+
+public record RegisterCommand(
+        @NotBlank String email,
+        @NotBlank String password,
+        String displayName) {}

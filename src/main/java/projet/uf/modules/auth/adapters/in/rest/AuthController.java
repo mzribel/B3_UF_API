@@ -1,7 +1,10 @@
 package projet.uf.modules.auth.adapters.in.rest;
 
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import projet.uf.modules.auth.adapters.in.rest.dto.AuthenticatedUserDto;
 import projet.uf.modules.auth.adapters.out.security.JwtService;
@@ -22,7 +25,8 @@ public class AuthController {
     }
 
     @PostMapping({"/auth/register/", "/auth/register"})
-    public AuthenticatedUserDto register(@RequestBody RegisterCommand command) throws Exception {
+    @ResponseStatus(HttpStatus.CREATED) // 👈 ici !
+    public AuthenticatedUserDto register(@Valid @RequestBody RegisterCommand command) {
         User createdUser = authUseCase.register(command);
 
         return new AuthenticatedUserDto(
@@ -32,7 +36,7 @@ public class AuthController {
     }
 
     @PostMapping({"/auth/login/", "/auth/login"})
-    public AuthenticatedUserDto login(@RequestBody LoginCommand command) throws Exception {
+    public AuthenticatedUserDto login(@Valid @RequestBody LoginCommand command) {
         User authenticatedUser =  authUseCase.login(command);
 
         return new AuthenticatedUserDto(

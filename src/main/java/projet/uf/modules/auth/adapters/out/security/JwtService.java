@@ -1,8 +1,6 @@
 package projet.uf.modules.auth.adapters.out.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 import projet.uf.modules.user.domain.model.User;
@@ -16,7 +14,7 @@ import java.util.function.Function;
 @Component
 public class JwtService {
 
-    // TODO : MDR
+    // ⚠️ À externaliser en prod (env var, vault...)
     private static final String SECRET_KEY = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
 
     public String generateToken(String subject, Map<String, Object> claims) {
@@ -24,15 +22,15 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
     public String generateToken(User user) {
         Map<String, Object> claims = Map.of(
-            "userId", user.getId(),
-            "admin", user.isAdmin()
+                "userId", user.getId(),
+                "admin", user.isAdmin()
         );
         return generateToken(user.getEmail(), claims);
     }
@@ -42,7 +40,14 @@ public class JwtService {
     }
 
     public boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        try {
+            return extractExpiration(token).before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true;
+        } catch (JwtException e) {
+            // Autres cas : signature invalide, format invalide, etc.
+            return true;
+        }
     }
 
     private Date extractExpiration(String token) {
@@ -50,11 +55,16 @@ public class JwtService {
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> resolver) {
-        return resolver.apply(Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody());
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return resolver.apply(claims);
+        } catch (ExpiredJwtException e) {
+            return resolver.apply(e.getClaims());
+        }
     }
 
     private Key getSigningKey() {
