@@ -1,7 +1,7 @@
 package projet.uf.modules.cat.adapter.in.rest;
 
 import org.springframework.web.bind.annotation.*;
-import projet.uf.modules.cat.application.ports.in.CatService;
+import projet.uf.modules.cat.application.ports.in.CatUseCase;
 import projet.uf.modules.cat.application.ports.in.CreateCatCommand;
 import projet.uf.modules.cat.domain.model.Cat;
 
@@ -9,9 +9,9 @@ import java.util.List;
 
 @RestController
 public class CatController {
-    final CatService catService;
+    final CatUseCase catService;
 
-    public CatController(CatService catService) {
+    public CatController(CatUseCase catService) {
         this.catService = catService;
     }
 

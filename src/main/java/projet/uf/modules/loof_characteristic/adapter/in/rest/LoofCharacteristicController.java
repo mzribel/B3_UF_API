@@ -4,14 +4,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projet.uf.modules.loof_characteristic.application.model.AllLoofCharacteristics;
-import projet.uf.modules.loof_characteristic.application.port.in.AllLoofCharacteristicsService;
+import projet.uf.modules.loof_characteristic.application.port.in.AllLoofCharacteristicsUseCase;
 
 @RestController
 @RequestMapping({"/loof/characteristics/", "/loof/characteristics"})
 public class LoofCharacteristicController {
-    final AllLoofCharacteristicsService getAllLoofCharacteristicsUseCase;
+    final AllLoofCharacteristicsUseCase getAllLoofCharacteristicsUseCase;
 
-    public LoofCharacteristicController(AllLoofCharacteristicsService getAllLoofCharacteristicsUseCase) {
+    public LoofCharacteristicController(AllLoofCharacteristicsUseCase getAllLoofCharacteristicsUseCase) {
         this.getAllLoofCharacteristicsUseCase = getAllLoofCharacteristicsUseCase;
     }
 

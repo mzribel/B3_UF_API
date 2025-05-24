@@ -1,15 +1,15 @@
 package projet.uf.modules.user.adapter.out.persistence;
 
-import projet.uf.modules.user.application.port.out.UserPersistence;
+import projet.uf.modules.user.application.port.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
-public class UserPersistenceImpl implements UserPersistence {
+public class UserPersistenceAdapter implements UserPersistencePort {
     private final JpaUserRepository jpaUserRepository;
 
-    public UserPersistenceImpl(JpaUserRepository jpaUserRepository) {
+    public UserPersistenceAdapter(JpaUserRepository jpaUserRepository) {
         this.jpaUserRepository = jpaUserRepository;
     }
 

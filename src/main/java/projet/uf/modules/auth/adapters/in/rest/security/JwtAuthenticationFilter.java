@@ -10,9 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import projet.uf.modules.auth.adapters.out.security.HeaderAuthenticationToken;
-import projet.uf.modules.auth.adapters.out.security.JwtServiceImpl;
+import projet.uf.modules.auth.adapters.out.security.JwtService;
 import projet.uf.modules.auth.domain.model.CurrentUser;
-import projet.uf.modules.auth.application.ports.out.UserPersistence;
+import projet.uf.modules.auth.application.ports.out.UserAccessPort;
 
 import java.io.IOException;
 
@@ -20,8 +20,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final UserPersistence loadUserPort;
-    private final JwtServiceImpl jwtService;
+    private final UserAccessPort loadUserPort;
+    private final JwtService jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

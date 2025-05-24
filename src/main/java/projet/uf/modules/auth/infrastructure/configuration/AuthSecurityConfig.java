@@ -10,16 +10,16 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import projet.uf.modules.auth.adapters.in.rest.security.JwtAuthenticationFilter;
-import projet.uf.modules.auth.adapters.out.security.JwtServiceImpl;
-import projet.uf.modules.auth.application.ports.out.UserPersistence;
+import projet.uf.modules.auth.adapters.out.security.JwtService;
+import projet.uf.modules.auth.application.ports.out.UserAccessPort;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class AuthSecurityConfig {
 
-    private final UserPersistence loadUserPort;
-    private final JwtServiceImpl jwtService;
+    private final UserAccessPort loadUserPort;
+    private final JwtService jwtService;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {

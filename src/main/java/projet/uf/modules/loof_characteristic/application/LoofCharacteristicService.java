@@ -2,20 +2,20 @@ package projet.uf.modules.loof_characteristic.application;
 
 import projet.uf.modules.loof_characteristic.application.mapper.LoofCharacteristicCommandMapper;
 import projet.uf.modules.loof_characteristic.application.port.in.CreateLoofCharacteristicCommand;
-import projet.uf.modules.loof_characteristic.application.port.in.LoofCharacteristicService;
+import projet.uf.modules.loof_characteristic.application.port.in.LoofCharacteristicUseCase;
 import projet.uf.modules.loof_characteristic.application.port.out.LoofCharacteristicPersistence;
 import projet.uf.modules.loof_characteristic.domain.model.ALoofCharacteristic;
 
 import java.util.List;
 import java.util.Optional;
 
-public class LoofCharacteristicServiceImpl<T extends ALoofCharacteristic> implements
-        LoofCharacteristicService<T>
+public class LoofCharacteristicService<T extends ALoofCharacteristic> implements
+        LoofCharacteristicUseCase<T>
 {
     public final LoofCharacteristicPersistence<T> persistencePort;
     private final LoofCharacteristicCommandMapper<T> mapper;
 
-    public LoofCharacteristicServiceImpl(LoofCharacteristicPersistence<T> persistencePort, LoofCharacteristicCommandMapper<T> mapper) {
+    public LoofCharacteristicService(LoofCharacteristicPersistence<T> persistencePort, LoofCharacteristicCommandMapper<T> mapper) {
         this.persistencePort = persistencePort;
         this.mapper = mapper;
     }

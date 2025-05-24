@@ -5,7 +5,7 @@ import projet.uf.modules.user.domain.model.User;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserPersistence {
+public interface UserPersistencePort {
     // Récupération
     Optional<User> getById(Long id);
     Optional<User> getByEmail(String email);

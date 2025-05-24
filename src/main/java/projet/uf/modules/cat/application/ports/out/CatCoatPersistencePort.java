@@ -4,7 +4,7 @@ import projet.uf.modules.cat.domain.model.CatCoat;
 
 import java.util.Optional;
 
-public interface CatCoatPersistence {
+public interface CatCoatPersistencePort {
     Optional<CatCoat> getByCatId(Long id);
     CatCoat save(CatCoat catCoat);
 }

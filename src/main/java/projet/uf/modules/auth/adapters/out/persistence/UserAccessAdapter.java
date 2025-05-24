@@ -1,16 +1,17 @@
 package projet.uf.modules.auth.adapters.out.persistence;
 
 import org.springframework.stereotype.Component;
-import projet.uf.modules.user.application.port.out.UserPersistence;
+import projet.uf.modules.auth.application.ports.out.UserAccessPort;
+import projet.uf.modules.user.application.port.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
 
 import java.util.Optional;
 
 @Component
-public class UserPersistenceImpl implements projet.uf.modules.auth.application.ports.out.UserPersistence {
-    private final UserPersistence userPersistencePort;
+public class UserAccessAdapter implements UserAccessPort {
+    private final UserPersistencePort userPersistencePort;
 
-    public UserPersistenceImpl(UserPersistence userPersistencePort) {
+    public UserAccessAdapter(UserPersistencePort userPersistencePort) {
         this.userPersistencePort = userPersistencePort;
     }
 

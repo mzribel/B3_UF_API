@@ -1,15 +1,15 @@
 package projet.uf.modules.cat.adapter.out.persistence;
 
-import projet.uf.modules.cat.application.ports.out.CatPersistence;
+import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CatPersistenceImpl implements CatPersistence {
+public class CatPersistenceAdapter implements CatPersistencePort {
     private final JpaCatRepository jpaCatRepository;
 
-    public CatPersistenceImpl(JpaCatRepository jpaCatRepository) {
+    public CatPersistenceAdapter(JpaCatRepository jpaCatRepository) {
         this.jpaCatRepository = jpaCatRepository;
     }
 

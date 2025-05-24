@@ -5,7 +5,7 @@ import projet.uf.modules.breeder.domain.model.Breeder;
 import java.util.List;
 import java.util.Optional;
 
-public interface BreederService {
+public interface BreederUseCase {
     // CREATE
     Breeder create(CreateBreederCommand command, Long createdByCatteryId);
 

@@ -4,20 +4,20 @@ import org.springframework.http.HttpStatus;
 import projet.uf.modules.auth.application.ports.in.AuthCommandMapper;
 import projet.uf.modules.auth.application.ports.in.LoginCommand;
 import projet.uf.modules.auth.application.ports.in.RegisterCommand;
-import projet.uf.modules.auth.application.ports.out.UserPersistence;
+import projet.uf.modules.auth.application.ports.out.UserAccessPort;
 import projet.uf.modules.auth.application.ports.out.PasswordEncoder;
 import projet.uf.modules.auth.exception.UserAlreadyExistsException;
 import projet.uf.modules.auth.exception.WeakPasswordException;
 import projet.uf.modules.auth.exception.WrongCredentialsException;
 import projet.uf.modules.user.domain.model.User;
-import projet.uf.modules.auth.application.ports.in.AuthService;
+import projet.uf.modules.auth.application.ports.in.AuthUseCase;
 
-public class AuthServiceImpl implements AuthService
+public class AuthService implements AuthUseCase
 {
     private final PasswordEncoder passwordEncoder;
-    private final UserPersistence userPersistence;
+    private final UserAccessPort userPersistence;
 
-    public AuthServiceImpl(PasswordEncoder passwordEncoder, UserPersistence userPersistence) {
+    public AuthService(PasswordEncoder passwordEncoder, UserAccessPort userPersistence) {
         this.passwordEncoder = passwordEncoder;
         this.userPersistence = userPersistence;
     }

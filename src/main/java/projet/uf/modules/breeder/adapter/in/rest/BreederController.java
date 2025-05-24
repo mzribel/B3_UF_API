@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import projet.uf.modules.auth.domain.model.CurrentUser;
-import projet.uf.modules.breeder.application.port.in.BreederService;
+import projet.uf.modules.breeder.application.port.in.BreederUseCase;
 import projet.uf.modules.breeder.domain.model.Breeder;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 public class BreederController {
-    final BreederService breederService;
+    final BreederUseCase breederService;
 
     @GetMapping({"/breeders/", "/breeders"})
     public List<Breeder> getAll() {

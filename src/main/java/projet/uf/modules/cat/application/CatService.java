@@ -2,18 +2,18 @@ package projet.uf.modules.cat.application;
 
 import projet.uf.modules.cat.application.mapper.CatCommandMapper;
 import projet.uf.modules.cat.application.ports.in.*;
-import projet.uf.modules.cat.application.ports.out.CatPersistence;
+import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CatServiceImpl implements
-        CatService
+public class CatService implements
+        CatUseCase
 {
-    private final CatPersistence catPersistencePort;
+    private final CatPersistencePort catPersistencePort;
 
-    public CatServiceImpl(CatPersistence catPersistencePort) {
+    public CatService(CatPersistencePort catPersistencePort) {
         this.catPersistencePort = catPersistencePort;
     }
 

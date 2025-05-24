@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import projet.uf.modules.auth.adapters.in.rest.dto.AuthenticatedUserDto;
-import projet.uf.modules.auth.adapters.out.security.JwtServiceImpl;
-import projet.uf.modules.auth.application.ports.in.AuthService;
+import projet.uf.modules.auth.adapters.out.security.JwtService;
+import projet.uf.modules.auth.application.ports.in.AuthUseCase;
 import projet.uf.modules.auth.application.ports.in.LoginCommand;
 import projet.uf.modules.auth.application.ports.in.RegisterCommand;
 import projet.uf.modules.user.adapter.in.rest.dto.UserDtoMapper;
@@ -13,10 +13,10 @@ import projet.uf.modules.user.domain.model.User;
 
 @RestController
 public class AuthController {
-    final AuthService authService;
-    final JwtServiceImpl jwtService;
+    final AuthUseCase authService;
+    final JwtService jwtService;
 
-    public AuthController(AuthService authService, JwtServiceImpl jwtService) {
+    public AuthController(AuthUseCase authService, JwtService jwtService) {
         this.authService = authService;
         this.jwtService = jwtService;
     }

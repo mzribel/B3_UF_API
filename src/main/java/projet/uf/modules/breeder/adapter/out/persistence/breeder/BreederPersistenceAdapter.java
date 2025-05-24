@@ -1,14 +1,14 @@
 package projet.uf.modules.breeder.adapter.out.persistence.breeder;
 
 import lombok.AllArgsConstructor;
-import projet.uf.modules.breeder.application.port.out.BreederPersistence;
+import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.domain.model.Breeder;
 
 import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
-public class BreederPersistenceImpl implements BreederPersistence {
+public class BreederPersistenceAdapter implements BreederPersistencePort {
 
     private final JpaBreederRepository jpaBreederRepository;
 

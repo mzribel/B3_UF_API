@@ -4,7 +4,7 @@ import projet.uf.modules.user.domain.model.User;
 
 import java.util.Optional;
 
-public interface UserPersistence {
+public interface UserAccessPort {
      Optional<User> getByEmail(String email);
      boolean existsByEmail(String email);
      User save(User user);

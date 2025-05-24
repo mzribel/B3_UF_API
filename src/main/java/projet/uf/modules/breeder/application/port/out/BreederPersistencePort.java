@@ -5,7 +5,7 @@ import projet.uf.modules.breeder.domain.model.Breeder;
 import java.util.List;
 import java.util.Optional;
 
-public interface BreederPersistence {
+public interface BreederPersistencePort {
     Optional<Breeder> getById(Long id);
     List<Breeder> getByCatteryId(Long id);
     List<Breeder> getAll();

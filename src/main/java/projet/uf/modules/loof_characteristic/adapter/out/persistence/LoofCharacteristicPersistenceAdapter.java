@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class LoofCharacteristicPersistenceImpl<
+public class LoofCharacteristicPersistenceAdapter<
     T extends ALoofCharacteristic,
     E extends LoofCharacteristicEntity>
     implements LoofCharacteristicPersistence<T>
@@ -16,7 +16,7 @@ public class LoofCharacteristicPersistenceImpl<
     private final JpaLoofCharacteristicRepository<E> repository;
     private final LoofCharacteristicEntityMapper<T,E> mapper;
 
-    public LoofCharacteristicPersistenceImpl(JpaLoofCharacteristicRepository<E> repository, LoofCharacteristicEntityMapper<T, E> mapper) {
+    public LoofCharacteristicPersistenceAdapter(JpaLoofCharacteristicRepository<E> repository, LoofCharacteristicEntityMapper<T, E> mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }

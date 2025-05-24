@@ -4,19 +4,19 @@ import org.springframework.http.HttpStatus;
 import projet.uf.modules.auth.exception.UserAlreadyExistsException;
 import projet.uf.modules.user.application.mapper.UserCommandMapper;
 import projet.uf.modules.user.application.port.in.CreateUserCommand;
-import projet.uf.modules.user.application.port.in.UserService;
-import projet.uf.modules.user.application.port.out.UserPersistence;
+import projet.uf.modules.user.application.port.in.UserUseCase;
+import projet.uf.modules.user.application.port.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
-public class UserServiceImpl implements
-        UserService
+public class UserService implements
+        UserUseCase
 {
-    private final UserPersistence userPersistencePort;
+    private final UserPersistencePort userPersistencePort;
 
-    public UserServiceImpl(UserPersistence userPersistencePort) {
+    public UserService(UserPersistencePort userPersistencePort) {
         this.userPersistencePort = userPersistencePort;
     }
 
