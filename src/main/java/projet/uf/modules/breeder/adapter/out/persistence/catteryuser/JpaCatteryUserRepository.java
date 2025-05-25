@@ -2,11 +2,10 @@ package projet.uf.modules.breeder.adapter.out.persistence.catteryuser;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
-public interface JpaCatteryUserRepository extends JpaRepository<CatteryUserEntity, Long> {
+public interface JpaCatteryUserRepository extends JpaRepository<CatteryUserEntity, CatteryUserId> {
     boolean existsByCatteryIdAndUserId(Long catteryId, Long userId);
-    Optional<CatteryUserEntity> findByCatteryId(Long catteryId);
-    Optional<CatteryUserEntity> findByUserId(Long userId);
-    Optional<CatteryUserEntity> findByCatteryIdAndUserId(Long catteryId, Long userId);
+    List<CatteryUserEntity> findByCatteryId(Long catteryId);
+    List<CatteryUserEntity> findByUserId(Long userId);
 }

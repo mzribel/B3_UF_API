@@ -6,5 +6,5 @@ import projet.uf.modules.template.exception.TemplateException;
 import java.util.List;
 
 public interface TemplateUseCase {
-    public List<Template> getTemplateByName(final String name, final boolean accurate) throws TemplateException;
+    List<Template> getTemplateByName(final String name, final boolean accurate) throws TemplateException;
 }

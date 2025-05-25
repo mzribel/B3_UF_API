@@ -3,9 +3,8 @@ package projet.uf.modules.breeder.adapter.in.rest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
-import projet.uf.modules.auth.domain.model.CurrentUser;
+import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.breeder.application.model.CatteryDetails;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
 import projet.uf.modules.breeder.domain.model.Cattery;
@@ -20,44 +19,48 @@ public class CatteryController {
 
     @GetMapping({"/catteries/", "/catteries"})
     public List<CatteryDetails> getAll() {
-        CurrentUser currentUser = currentUserProvider.getCurrentUser();
-        // Admin : get all sans distinction
-        if (currentUser.isAdmin()) {
-            return catteryUseCase.getAll();
-        }
-        return catteryUseCase.getAllAccessibleFromUser(currentUser.id());
-    }
-
-    @GetMapping({"/catteries/{id}", "/catteries/{id}"})
-    public CatteryDetails getById(@PathVariable Long id) {
-        CurrentUser user = currentUserProvider.getCurrentUser();
-        return user.isAdmin()
-                ? catteryUseCase.getById(id)
-                : catteryUseCase.getByIdIfAuthorized(id, user.id());
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catteryUseCase.getAll(operator);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping({"/catteries/", "/catteries"})
     public Cattery create(@RequestParam(required = false, name = "userId") Long providedUserId) {
-        CurrentUser currentUser = currentUserProvider.getCurrentUser();
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catteryUseCase.create(providedUserId, operator);
+    }
 
-        if (providedUserId != null) {
-            if (!currentUser.isAdmin()) {
-                throw new ApiException("Non autorisé", HttpStatus.UNAUTHORIZED);
-            }
-            return catteryUseCase.create(providedUserId);
-        }
-
-        return catteryUseCase.create(currentUser.id());
+    @GetMapping({"/catteries/{id}", "/catteries/{id}"})
+    public CatteryDetails getById(@PathVariable Long id) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catteryUseCase.getById(id, operator);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping({"/catteries/{id}/", "/catteries/{id}"})
     public void deleteById(@PathVariable Long id) {
-        if (currentUserProvider.getCurrentUser().isAdmin()) {
-            catteryUseCase.deleteById(id);
-        } else {
-            catteryUseCase.deleteByIdIfAuthorized(id, currentUserProvider.getCurrentUser().id());
-        }
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        catteryUseCase.deleteById(id, operator);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping({"/catteries/{id}/users/", "/catteries/{id}/users"})
+    public void addUserToCattery(
+            @PathVariable Long id,
+            @RequestParam(required = false, name = "userEmail") String userEmail,
+            @RequestParam(required = false, name = "userId") Long userId)
+    {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        catteryUseCase.addUserToCattery(id, userId, userEmail, operator);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping({"/catteries/{catteryId}/users/{userId}/", "/catteries/{catteryId}/users/{userId}"})
+    public void removeUserFromCattery(
+            @PathVariable Long userId,
+            @PathVariable Long catteryId)
+    {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        catteryUseCase.removeUserFromCattery(catteryId, userId, operator);
     }
 }

@@ -1,6 +1,5 @@
 package projet.uf.modules.cat.application;
 
-import projet.uf.modules.cat.application.ports.in.CatCommandMapper;
 import projet.uf.modules.cat.application.ports.in.*;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
@@ -41,7 +40,7 @@ public class CatService implements
 
     @Override
     public Cat updateCat(Long id, CreateCatCommand command) throws Exception {
-        Cat existingCat = catPersistencePort.getById(id).orElseThrow(() -> new Exception("Cat doesn't exist"));
+        catPersistencePort.getById(id).orElseThrow(() -> new Exception("Cat doesn't exist"));
 
         Cat updatedCat = CatCommandMapper.fromCreateCommand(command);
         updatedCat.setId(id);

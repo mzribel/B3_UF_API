@@ -5,7 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import projet.uf.exceptions.ApiException;
-import projet.uf.modules.auth.domain.model.CurrentUser;
+import projet.uf.modules.auth.application.model.CurrentUser;
 
 @Component
 public class CurrentUserProvider {

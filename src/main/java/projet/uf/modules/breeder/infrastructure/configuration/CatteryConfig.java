@@ -10,6 +10,7 @@ import projet.uf.modules.breeder.application.port.CatteryService;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryUserPersistencePort;
 import projet.uf.modules.breeder.application.port.out.UserAccessPort;
+import projet.uf.modules.user.adapter.out.persistence.JpaUserRepository;
 
 @Configuration
 public class CatteryConfig {
@@ -18,8 +19,8 @@ public class CatteryConfig {
         return new CatteryPersistenceAdapter(jpaCatteryRepository);
     }
     @Bean
-    public CatteryUserPersistencePort catteryUserPersistencePort(JpaCatteryUserRepository jpaCatteryUserRepository) {
-        return new CatteryUserPersistenceAdapter(jpaCatteryUserRepository);
+    public CatteryUserPersistencePort catteryUserPersistencePort(JpaCatteryUserRepository jpaCatteryUserRepository, JpaUserRepository jpaUserRepository, JpaCatteryRepository jpaCatteryRepository ) {
+        return new CatteryUserPersistenceAdapter(jpaCatteryUserRepository, jpaUserRepository, jpaCatteryRepository);
     }
     @Bean
     public CatteryService catteryService(CatteryPersistencePort catteryPersistencePort, CatteryUserPersistencePort catteryUserPersistencePort, UserAccessPort userAccessPort) {
