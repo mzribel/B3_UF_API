@@ -19,12 +19,12 @@ public class JwtService {
 
     public String generateToken(String subject, Map<String, Object> claims) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h
-                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
-                .compact();
+            .setClaims(claims)
+            .setSubject(subject)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h
+            .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+            .compact();
     }
 
     public String generateToken(User user) {
