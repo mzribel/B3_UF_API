@@ -19,6 +19,12 @@ public final class HeaderAuthenticationToken extends AbstractAuthenticationToken
         setAuthenticated(true);
     }
 
+    public HeaderAuthenticationToken(CurrentUser principal, Collection<? extends GrantedAuthority> authorities) {
+        super(authorities);
+        this.principal = principal;
+        setAuthenticated(true);
+    }
+
     @Override
     public Object getCredentials() {
         return null;
@@ -37,9 +43,11 @@ public final class HeaderAuthenticationToken extends AbstractAuthenticationToken
     private static Collection<GrantedAuthority> getAuthorities(CurrentUser user) {
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("USER"));
+        System.out.println(user.isAdmin());
         if (user.isAdmin()) {
             roles.add(new SimpleGrantedAuthority("ADMIN"));
         }
+        System.out.println(roles);
         return roles;
     }
 }

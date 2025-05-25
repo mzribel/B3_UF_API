@@ -46,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         loadUserPort.getByEmail(email).ifPresent(user -> {
             CurrentUser currentUser = new CurrentUser(user.getId(), user.isAdmin());
+
             Authentication auth = new HeaderAuthenticationToken(currentUser);
             SecurityContextHolder.getContext().setAuthentication(auth);
         });

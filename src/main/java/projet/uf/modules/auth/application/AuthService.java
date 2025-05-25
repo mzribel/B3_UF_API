@@ -25,10 +25,10 @@ public class AuthService implements AuthUseCase
     @Override
     public User register(RegisterCommand command) {
         if (userPersistence.existsByEmail(command.email())) {
-            throw new UserAlreadyExistsException("A user with this email already exists", HttpStatus.CONFLICT);
+            throw new UserAlreadyExistsException("Un utilisateur avec cette adresse email existe déjà", HttpStatus.CONFLICT);
         }
         if (!User.isStrongPassword(command.password())) {
-            throw new WeakPasswordException("Password is too weak (required at least 8 characters and 1 uppercase, 1 lowercase, 1 number, 1 special character)", HttpStatus.BAD_REQUEST);
+            throw new WeakPasswordException("Le mot de passe est trop faible (au moins 8 caractères dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial)", HttpStatus.BAD_REQUEST);
         }
 
         User user = AuthCommandMapper.fromCreateCommand(command, passwordEncoder.encode(command.password()));
@@ -38,10 +38,10 @@ public class AuthService implements AuthUseCase
     @Override
     public User login(LoginCommand command) {
         User user = userPersistence.getByEmail(command.email())
-                .orElseThrow(() -> new WrongCredentialsException("Email not found or incorrect password", HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new WrongCredentialsException("Email ou mot de passe invalide", HttpStatus.BAD_REQUEST));
 
         if (!passwordEncoder.matches(command.password(), user.getPassword())) {
-            throw new WrongCredentialsException("Email not found or incorrect password", HttpStatus.BAD_REQUEST);
+            throw new WrongCredentialsException("Email ou mot de passe invalide", HttpStatus.BAD_REQUEST);
         }
 
         return user;
