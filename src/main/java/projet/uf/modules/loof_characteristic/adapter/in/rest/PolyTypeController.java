@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/loof/characteristics/coat-colors/", "/loof/characteristics/coat-colors"})
+@RequestMapping({"/loof/characteristics/poly-types/", "/loof/characteristics/poly-types"})
 public class PolyTypeController {
     final LoofCharacteristicUseCase<PolyType> PolyTypeUseCase;
 

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/loof/characteristics/coat-colors/", "/loof/characteristics/coat-colors"})
+@RequestMapping({"/loof/characteristics/coat-effects/", "/loof/characteristics/coat-effects"})
 public class CoatEffectController {
     final LoofCharacteristicUseCase<CoatEffect> coatEffectUseCase;
 
