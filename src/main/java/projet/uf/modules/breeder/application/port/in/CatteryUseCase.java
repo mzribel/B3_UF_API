@@ -10,10 +10,13 @@ public interface CatteryUseCase {
     Cattery create(Long createdByUserId);
 
     // READ
-    Cattery getById(Long id);
-    CatteryDetails getCatteryDetailsById(Long id);
-    List<CatteryDetails> getAllAccessibleByUser(Long userId);
+    CatteryDetails getById(Long id);
     CatteryDetails getByIdIfAuthorized(Long catteryId, Long userId);
-    List<Cattery> getAll();
-    List<CatteryDetails> getAllCatteryDetails();
+
+    List<CatteryDetails> getAll();
+    List<CatteryDetails> getAllAccessibleFromUser(Long userId);
+
+    // DELETE
+    void deleteById(Long id);
+    void deleteByIdIfAuthorized(Long id, Long userId);
 }

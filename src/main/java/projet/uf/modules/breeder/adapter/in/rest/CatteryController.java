@@ -23,19 +23,20 @@ public class CatteryController {
         CurrentUser currentUser = currentUserProvider.getCurrentUser();
         // Admin : get all sans distinction
         if (currentUser.isAdmin()) {
-            return catteryUseCase.getAllCatteryDetails();
+            return catteryUseCase.getAll();
         }
-        return catteryUseCase.getAllAccessibleByUser (currentUser.id());
+        return catteryUseCase.getAllAccessibleFromUser(currentUser.id());
     }
 
     @GetMapping({"/catteries/{id}", "/catteries/{id}"})
     public CatteryDetails getById(@PathVariable Long id) {
         CurrentUser user = currentUserProvider.getCurrentUser();
         return user.isAdmin()
-                ? catteryUseCase.getCatteryDetailsById(id)
+                ? catteryUseCase.getById(id)
                 : catteryUseCase.getByIdIfAuthorized(id, user.id());
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping({"/catteries/", "/catteries"})
     public Cattery create(@RequestParam(required = false, name = "userId") Long providedUserId) {
         CurrentUser currentUser = currentUserProvider.getCurrentUser();
@@ -48,5 +49,15 @@ public class CatteryController {
         }
 
         return catteryUseCase.create(currentUser.id());
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping({"/catteries/{id}/", "/catteries/{id}"})
+    public void deleteById(@PathVariable Long id) {
+        if (currentUserProvider.getCurrentUser().isAdmin()) {
+            catteryUseCase.deleteById(id);
+        } else {
+            catteryUseCase.deleteByIdIfAuthorized(id, currentUserProvider.getCurrentUser().id());
+        }
     }
 }

@@ -38,26 +38,35 @@ public class CatteryService implements
     }
 
     @Override
-    public Cattery getById(Long id) {
-        return catteryPersistencePort.getById(id)
-                .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.NOT_FOUND));
-    }
-
-    @Override
-    public List<Cattery> getAll() {
-        return catteryPersistencePort.getAll();
-    }
-
-    @Override
-    public CatteryDetails getCatteryDetailsById(Long catteryId) {
+    public CatteryDetails getById(Long catteryId) {
         return catteryPersistencePort.getById(catteryId)
                 .map(this::toDetails)
                 .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public List<CatteryDetails> getAllCatteryDetails() {
+    public List<CatteryDetails> getAll() {
         return catteryPersistencePort.getAll().stream().map(this::toDetails).toList();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (catteryPersistencePort.getById(id).isEmpty()) {
+            throw new ApiException("Chatterie introuvable", HttpStatus.NOT_FOUND);
+        }
+        catteryPersistencePort.deleteById(id);
+    }
+
+    @Override
+    public void deleteByIdIfAuthorized(Long id, Long userId) {
+        Cattery cattery = catteryPersistencePort.getById(id).orElseThrow(() ->
+                new ApiException("Chatterie introuvable", HttpStatus.NOT_FOUND));
+
+        if (!cattery.getCreatedByUserId().equals(userId)) {
+            throw new ApiException("Seul l'administrateur de la chatterie peut la supprimer", HttpStatus.UNAUTHORIZED);
+        }
+
+        catteryPersistencePort.deleteById(id);
     }
 
     private CatteryDetails toDetails(Cattery cattery) {
@@ -78,7 +87,7 @@ public class CatteryService implements
         );
     }
 
-    public List<CatteryDetails> getAllAccessibleByUser(Long userId) {
+    public List<CatteryDetails> getAllAccessibleFromUser(Long userId) {
         List<Cattery> created = catteryPersistencePort.getByCreatedByUserId(userId);
         List<CatteryUser> memberships = catteryUserPersistencePort.getByUserId(userId);
 
@@ -87,12 +96,11 @@ public class CatteryService implements
                 .flatMap(Optional::stream)
                 .toList();
 
-        // Fusion sans doublons
         List<Cattery> merged = Stream.concat(created.stream(), memberOf.stream())
-                .collect(Collectors.collectingAndThen(
-                        Collectors.toMap(Cattery::getId, Function.identity(), (a, b) -> a),
-                        map -> new ArrayList<>(map.values())
-                ));
+            .collect(Collectors.collectingAndThen(
+                Collectors.toMap(Cattery::getId, Function.identity(), (a, b) -> a),
+                map -> new ArrayList<>(map.values())
+            ));
 
         return merged.stream()
                 .map(this::toDetails)
