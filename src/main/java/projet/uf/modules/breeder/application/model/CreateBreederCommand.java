@@ -1,4 +1,4 @@
-package projet.uf.modules.breeder.application.port.in;
+package projet.uf.modules.breeder.application.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

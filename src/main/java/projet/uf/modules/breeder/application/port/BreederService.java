@@ -1,9 +1,9 @@
 package projet.uf.modules.breeder.application.port;
 
 import lombok.AllArgsConstructor;
-import projet.uf.modules.breeder.application.mapper.BreederCommandMapper;
+import projet.uf.modules.breeder.application.model.BreederCommandMapper;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
-import projet.uf.modules.breeder.application.port.in.CreateBreederCommand;
+import projet.uf.modules.breeder.application.model.CreateBreederCommand;
 import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.domain.model.Breeder;
 

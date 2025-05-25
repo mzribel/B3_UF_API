@@ -37,6 +37,11 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return jpaUserRepository.existsById(id);
+    }
+
+    @Override
     public void deleteById(Long id) {
         // TODO : condition de suppression (ex : existence préalable)
         jpaUserRepository.deleteById(id);

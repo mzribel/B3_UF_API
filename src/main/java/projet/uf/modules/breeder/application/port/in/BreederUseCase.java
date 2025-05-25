@@ -1,5 +1,6 @@
 package projet.uf.modules.breeder.application.port.in;
 
+import projet.uf.modules.breeder.application.model.CreateBreederCommand;
 import projet.uf.modules.breeder.domain.model.Breeder;
 
 import java.util.List;

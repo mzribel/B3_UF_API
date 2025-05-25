@@ -31,4 +31,7 @@ public class User {
         String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$";
         return password != null && password.matches(regex);
     }
+    public User(Long id) {
+        this.id = id;
+    }
 }

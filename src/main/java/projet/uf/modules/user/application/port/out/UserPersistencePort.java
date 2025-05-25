@@ -13,6 +13,7 @@ public interface UserPersistencePort {
 
     // Vérification
     boolean existsByEmail(String email);
+    boolean existsById(Long id);
 
     // Suppression
     void deleteById(Long id);
