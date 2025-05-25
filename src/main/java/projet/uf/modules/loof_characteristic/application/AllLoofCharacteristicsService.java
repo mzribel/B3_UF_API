@@ -2,18 +2,18 @@ package projet.uf.modules.loof_characteristic.application;
 
 import projet.uf.modules.loof_characteristic.application.model.AllLoofCharacteristics;
 import projet.uf.modules.loof_characteristic.application.port.in.AllLoofCharacteristicsUseCase;
-import projet.uf.modules.loof_characteristic.application.port.out.LoofCharacteristicPersistence;
+import projet.uf.modules.loof_characteristic.application.port.out.LoofCharacteristicPersistencePort;
 import projet.uf.modules.loof_characteristic.domain.model.*;
 
 public class AllLoofCharacteristicsService implements AllLoofCharacteristicsUseCase {
-    private final LoofCharacteristicPersistence<Breed> breedPersistencePort;
-    private final LoofCharacteristicPersistence<CoatColor> coatColorPersistencePort;
-    private final LoofCharacteristicPersistence<CoatEffect> coatEffectPersistencePort;
-    private final LoofCharacteristicPersistence<CoatPattern> coatPatternPersistencePort;
-    private final LoofCharacteristicPersistence<CoatWhiteMarking> coatWhiteMarkingPersistencePort;
-    private final LoofCharacteristicPersistence<PolyType> polyTypePersistencePort;
+    private final LoofCharacteristicPersistencePort<Breed> breedPersistencePort;
+    private final LoofCharacteristicPersistencePort<CoatColor> coatColorPersistencePort;
+    private final LoofCharacteristicPersistencePort<CoatEffect> coatEffectPersistencePort;
+    private final LoofCharacteristicPersistencePort<CoatPattern> coatPatternPersistencePort;
+    private final LoofCharacteristicPersistencePort<CoatWhiteMarking> coatWhiteMarkingPersistencePort;
+    private final LoofCharacteristicPersistencePort<PolyType> polyTypePersistencePort;
 
-    public AllLoofCharacteristicsService(LoofCharacteristicPersistence<Breed> breedPersistencePort, LoofCharacteristicPersistence<CoatColor> coatColorPersistencePort, LoofCharacteristicPersistence<CoatEffect> coatEffectPersistencePort, LoofCharacteristicPersistence<CoatPattern> coatPatternPersistencePort, LoofCharacteristicPersistence<CoatWhiteMarking> coatWhiteMarkingPersistencePort, LoofCharacteristicPersistence<PolyType> polyTypePersistencePort) {
+    public AllLoofCharacteristicsService(LoofCharacteristicPersistencePort<Breed> breedPersistencePort, LoofCharacteristicPersistencePort<CoatColor> coatColorPersistencePort, LoofCharacteristicPersistencePort<CoatEffect> coatEffectPersistencePort, LoofCharacteristicPersistencePort<CoatPattern> coatPatternPersistencePort, LoofCharacteristicPersistencePort<CoatWhiteMarking> coatWhiteMarkingPersistencePort, LoofCharacteristicPersistencePort<PolyType> polyTypePersistencePort) {
         this.breedPersistencePort = breedPersistencePort;
         this.coatColorPersistencePort = coatColorPersistencePort;
         this.coatEffectPersistencePort = coatEffectPersistencePort;

@@ -11,4 +11,5 @@ public interface JpaLoofCharacteristicRepository<T extends LoofCharacteristicEnt
     boolean existsByName(String name);
     Optional<T> findByName(String name);
     List<T> findByCode(String code);
+    boolean existsByNameAndIdNot(String name, Long id);
 }

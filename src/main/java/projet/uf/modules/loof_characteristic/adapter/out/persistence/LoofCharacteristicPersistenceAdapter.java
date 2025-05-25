@@ -1,6 +1,8 @@
 package projet.uf.modules.loof_characteristic.adapter.out.persistence;
 
-import projet.uf.modules.loof_characteristic.application.port.out.LoofCharacteristicPersistence;
+import org.springframework.http.HttpStatus;
+import projet.uf.exceptions.ApiException;
+import projet.uf.modules.loof_characteristic.application.port.out.LoofCharacteristicPersistencePort;
 import projet.uf.modules.loof_characteristic.domain.model.ALoofCharacteristic;
 
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.stream.Collectors;
 public class LoofCharacteristicPersistenceAdapter<
     T extends ALoofCharacteristic,
     E extends LoofCharacteristicEntity>
-    implements LoofCharacteristicPersistence<T>
+    implements LoofCharacteristicPersistencePort<T>
 {
 
     private final JpaLoofCharacteristicRepository<E> repository;
@@ -21,9 +23,29 @@ public class LoofCharacteristicPersistenceAdapter<
         this.mapper = mapper;
     }
 
-    @Override
-    public T save(T t) {
-        E saved = repository.save(mapper.toEntity(t));
+    public T insert(T t) {
+        if (t.getId() != null) {
+            throw new IllegalArgumentException("insert() ne doit pas être appelé avec un ID déjà défini");
+        }
+
+        E entity = mapper.toEntity(t);
+        E saved = repository.save(entity);
+        return mapper.toModel(saved);
+    }
+
+    public T update(T t) {
+        if (t.getId() == null) {
+            throw new IllegalArgumentException("update() nécessite un ID");
+        }
+
+        E existing = repository.findById(t.getId())
+                .orElseThrow(() -> new ApiException("Aucune caractéristique trouvée avec l'id " + t.getId(), HttpStatus.NOT_FOUND));
+
+        existing.setName(t.getName());
+        existing.setCode(t.getCode());
+        existing.setDetails(t.getDetails());
+
+        E saved = repository.save(existing);
         return mapper.toModel(saved);
     }
 
@@ -50,5 +72,15 @@ public class LoofCharacteristicPersistenceAdapter<
     @Override
     public boolean existsByName(String name) {
         return repository.existsByName(name);
+    }
+
+    @Override
+    public boolean existsByNameAndIdNot(String name, Long id) {
+        return repository.existsByNameAndIdNot(name, id);
+    }
+
+    @Override
+    public void deleteById(long id) {
+        repository.deleteById(id);
     }
 }

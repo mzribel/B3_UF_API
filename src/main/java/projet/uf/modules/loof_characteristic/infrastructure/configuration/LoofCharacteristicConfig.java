@@ -18,7 +18,7 @@ import projet.uf.modules.loof_characteristic.adapter.out.persistence.poly_type.P
 import projet.uf.modules.loof_characteristic.application.AllLoofCharacteristicsService;
 import projet.uf.modules.loof_characteristic.application.LoofCharacteristicService;
 import projet.uf.modules.loof_characteristic.application.mapper.*;
-import projet.uf.modules.loof_characteristic.application.port.out.LoofCharacteristicPersistence;
+import projet.uf.modules.loof_characteristic.application.port.out.LoofCharacteristicPersistencePort;
 import projet.uf.modules.loof_characteristic.domain.model.*;
 
 @Configuration
@@ -26,12 +26,12 @@ public class LoofCharacteristicConfig {
     // ALL
     @Bean
     public AllLoofCharacteristicsService allLoofCharacteristicsService(
-            LoofCharacteristicPersistence<Breed> breedPort,
-            LoofCharacteristicPersistence<CoatColor> coatColorPort,
-            LoofCharacteristicPersistence<CoatEffect> coatEffectPort,
-            LoofCharacteristicPersistence<CoatPattern> coatPatternPort,
-            LoofCharacteristicPersistence<CoatWhiteMarking> coatWhiteMarkingPort,
-            LoofCharacteristicPersistence<PolyType> polyTypePort
+            LoofCharacteristicPersistencePort<Breed> breedPort,
+            LoofCharacteristicPersistencePort<CoatColor> coatColorPort,
+            LoofCharacteristicPersistencePort<CoatEffect> coatEffectPort,
+            LoofCharacteristicPersistencePort<CoatPattern> coatPatternPort,
+            LoofCharacteristicPersistencePort<CoatWhiteMarking> coatWhiteMarkingPort,
+            LoofCharacteristicPersistencePort<PolyType> polyTypePort
     ) {
         return new AllLoofCharacteristicsService(
                 breedPort,
@@ -49,14 +49,14 @@ public class LoofCharacteristicConfig {
         return new BreedCommandMapper();
     }
     @Bean
-    public LoofCharacteristicPersistence<Breed> breedPersistencePort(
+    public LoofCharacteristicPersistencePort<Breed> breedPersistencePort(
             JpaBreedRepository repository,
             BreedEntityMapper mapper) {
         return new LoofCharacteristicPersistenceAdapter<>(repository, mapper);
     }
     @Bean
     public LoofCharacteristicService<Breed> breedService(
-            LoofCharacteristicPersistence<Breed> persistencePort,
+            LoofCharacteristicPersistencePort<Breed> persistencePort,
             LoofCharacteristicCommandMapper<Breed> mapper) {
         return new LoofCharacteristicService<>(persistencePort, mapper);
     }
@@ -67,14 +67,14 @@ public class LoofCharacteristicConfig {
         return new CoatColorCommandMapper();
     }
     @Bean
-    public LoofCharacteristicPersistence<CoatColor> coatColorPersistencePort(
+    public LoofCharacteristicPersistencePort<CoatColor> coatColorPersistencePort(
             JpaCoatColorRepository repository,
             CoatColorEntityMapper mapper) {
         return new LoofCharacteristicPersistenceAdapter<>(repository, mapper);
     }
     @Bean
     public LoofCharacteristicService<CoatColor> coatColorService(
-            LoofCharacteristicPersistence<CoatColor> persistencePort,
+            LoofCharacteristicPersistencePort<CoatColor> persistencePort,
             LoofCharacteristicCommandMapper<CoatColor> mapper) {
         return new LoofCharacteristicService<>(persistencePort, mapper);
     }
@@ -85,14 +85,14 @@ public class LoofCharacteristicConfig {
         return new CoatPatternCommandMapper();
     }
     @Bean
-    public LoofCharacteristicPersistence<CoatPattern> coatPatternPersistencePort(
+    public LoofCharacteristicPersistencePort<CoatPattern> coatPatternPersistencePort(
             JpaCoatPatternRepository repository,
             CoatPatternEntityMapper mapper) {
         return new LoofCharacteristicPersistenceAdapter<>(repository, mapper);
     }
     @Bean
     public LoofCharacteristicService<CoatPattern> coatPatternService(
-            LoofCharacteristicPersistence<CoatPattern> persistencePort,
+            LoofCharacteristicPersistencePort<CoatPattern> persistencePort,
             LoofCharacteristicCommandMapper<CoatPattern> mapper) {
         return new LoofCharacteristicService<>(persistencePort, mapper);
     }
@@ -103,14 +103,14 @@ public class LoofCharacteristicConfig {
         return new CoatEffectCommandMapper();
     }
     @Bean
-    public LoofCharacteristicPersistence<CoatEffect> coatEffectPersistencePort(
+    public LoofCharacteristicPersistencePort<CoatEffect> coatEffectPersistencePort(
             JpaCoatEffectRepository repository,
             CoatEffectEntityMapper mapper) {
         return new LoofCharacteristicPersistenceAdapter<>(repository, mapper);
     }
     @Bean
     public LoofCharacteristicService<CoatEffect> coatEffectService(
-            LoofCharacteristicPersistence<CoatEffect> persistencePort,
+            LoofCharacteristicPersistencePort<CoatEffect> persistencePort,
             LoofCharacteristicCommandMapper<CoatEffect> mapper) {
         return new LoofCharacteristicService<>(persistencePort, mapper);
     }
@@ -121,14 +121,14 @@ public class LoofCharacteristicConfig {
         return new CoatWhiteMarkingCommandMapper();
     }
     @Bean
-    public LoofCharacteristicPersistence<CoatWhiteMarking> coatWhiteMarkingPersistencePort(
+    public LoofCharacteristicPersistencePort<CoatWhiteMarking> coatWhiteMarkingPersistencePort(
             JpaCoatWhiteMarkingRepository repository,
             CoatWhiteMarkingEntityMapper mapper) {
         return new LoofCharacteristicPersistenceAdapter<>(repository, mapper);
     }
     @Bean
     public LoofCharacteristicService<CoatWhiteMarking> coatWhiteMarkingService(
-            LoofCharacteristicPersistence<CoatWhiteMarking> persistencePort,
+            LoofCharacteristicPersistencePort<CoatWhiteMarking> persistencePort,
             LoofCharacteristicCommandMapper<CoatWhiteMarking> mapper) {
         return new LoofCharacteristicService<>(persistencePort, mapper);
     }
@@ -139,14 +139,14 @@ public class LoofCharacteristicConfig {
         return new PolyTypeCommandMapper();
     }
     @Bean
-    public LoofCharacteristicPersistence<PolyType> polyTypePersistencePort(
+    public LoofCharacteristicPersistencePort<PolyType> polyTypePersistencePort(
             JpaPolyTypeRepository repository,
             PolyTypeEntityMapper mapper) {
         return new LoofCharacteristicPersistenceAdapter<>(repository, mapper);
     }
     @Bean
     public LoofCharacteristicService<PolyType> polyTypeService(
-            LoofCharacteristicPersistence<PolyType> persistencePort,
+            LoofCharacteristicPersistencePort<PolyType> persistencePort,
             LoofCharacteristicCommandMapper<PolyType> mapper) {
         return new LoofCharacteristicService<>(persistencePort, mapper);
     }
