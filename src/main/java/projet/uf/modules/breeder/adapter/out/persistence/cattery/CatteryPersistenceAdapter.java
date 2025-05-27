@@ -39,9 +39,12 @@ public class CatteryPersistenceAdapter implements CatteryPersistencePort {
         return CatteryEntityMapper.toModel(saved);
     }
 
+    // TODO : Vérifications
     @Override
     public Cattery update(Cattery cattery) {
-        return null;
+        CatteryEntity entity = CatteryEntityMapper.toEntity(cattery);
+        CatteryEntity saved = jpaCatteryRepository.save(entity);
+        return CatteryEntityMapper.toModel(saved);
     }
 
     @Override

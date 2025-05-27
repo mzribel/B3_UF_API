@@ -164,27 +164,33 @@ public class CatteryService implements
 
     private CatteryDetails toDetails(Cattery cattery) {
         User createdBy = userAccessPort.getById(cattery.getCreatedByUserId())
-                .orElse(new User(cattery.getCreatedByUserId())); // ou exception
+            .orElse(new User(cattery.getCreatedByUserId())); // ou exception
 
         // Membres (filtre les absents si user supprimé par exemple)
         List<User> members = catteryUserPersistencePort.getByCatteryId(cattery.getId()).stream()
-                .map(cu -> userAccessPort.getById(cu.getUserId()))
-                .flatMap(Optional::stream)
-                .toList();
+            .map(cu -> userAccessPort.getById(cu.getUserId()))
+            .flatMap(Optional::stream)
+            .toList();
+
+
+        Breeder breeder =
+            cattery.getLinkedToBreederId() != null
+            ? breederUseCase.getById(cattery.getLinkedToBreederId()).orElse(null)
+            : null;
 
         return new CatteryDetails(
-                cattery.getId(),
-                createdBy,
-                null,
-                members
+            cattery.getId(),
+            createdBy,
+            breeder,
+            members
         );
     }
     private CatteryDetails toDetails(Cattery cattery, User createdBy, Breeder breeder) {
         return new CatteryDetails(
-                cattery.getId(),
-                createdBy,
-                breeder,
-                null
+            cattery.getId(),
+            createdBy,
+            breeder,
+            null
         );
     }
 
