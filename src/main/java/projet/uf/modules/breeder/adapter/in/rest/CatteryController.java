@@ -1,13 +1,14 @@
 package projet.uf.modules.breeder.adapter.in.rest;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.breeder.application.model.CatteryDetails;
+import projet.uf.modules.breeder.application.model.CreateCatteryCommand;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
-import projet.uf.modules.breeder.domain.model.Cattery;
 
 import java.util.List;
 
@@ -25,9 +26,12 @@ public class CatteryController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping({"/catteries/", "/catteries"})
-    public Cattery create(@RequestParam(required = false, name = "userId") Long providedUserId) {
+    public CatteryDetails create(
+            @RequestParam(required = false, name = "userId") Long providedUserId,
+            @RequestBody @Valid CreateCatteryCommand command
+            ) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
-        return catteryUseCase.create(providedUserId, operator);
+        return catteryUseCase.create(providedUserId, command.name(), operator);
     }
 
     @GetMapping({"/catteries/{id}", "/catteries/{id}"})

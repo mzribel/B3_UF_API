@@ -5,10 +5,12 @@ import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.breeder.application.model.CatteryDetails;
+import projet.uf.modules.breeder.application.port.in.BreederUseCase;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryUserPersistencePort;
 import projet.uf.modules.breeder.application.port.out.UserAccessPort;
+import projet.uf.modules.breeder.domain.model.Breeder;
 import projet.uf.modules.breeder.domain.model.Cattery;
 import projet.uf.modules.breeder.domain.model.CatteryUser;
 import projet.uf.modules.user.domain.model.User;
@@ -26,10 +28,11 @@ public class CatteryService implements
 {
     private final CatteryPersistencePort catteryPersistencePort;
     private final CatteryUserPersistencePort catteryUserPersistencePort;
+    private final BreederUseCase breederUseCase;
     private final UserAccessPort userAccessPort;
 
     @Override
-    public Cattery create(Long createdByUserId, OperatorUser operatorUser) {
+    public CatteryDetails create(Long createdByUserId, String name, OperatorUser operatorUser) {
         Long userId;
 
         // Seul un administrateur peut créer une chatterie pour un autre utilisateur
@@ -43,12 +46,15 @@ public class CatteryService implements
             userId = operatorUser.getId();
         }
 
-        if (!userAccessPort.existsById(userId)) {
-            throw new ApiException("Utilisateur introuvable", HttpStatus.BAD_REQUEST);
-        }
+        User user = userAccessPort.getById(userId)
+                .orElseThrow(() -> new ApiException("Utilisateur introuvable", HttpStatus.BAD_REQUEST));
 
-        Cattery newCattery = new Cattery(userId);
-        return catteryPersistencePort.insert(newCattery);
+        Cattery newCattery = catteryPersistencePort.insert(new Cattery(userId));
+        Breeder breeder = breederUseCase.initialize(name, newCattery.getId());
+        newCattery.setLinkedToBreederId(breeder.getId());
+        catteryPersistencePort.update(newCattery);
+
+        return this.toDetails(newCattery, user, breeder);
     }
 
     @Override
@@ -171,6 +177,14 @@ public class CatteryService implements
                 createdBy,
                 null,
                 members
+        );
+    }
+    private CatteryDetails toDetails(Cattery cattery, User createdBy, Breeder breeder) {
+        return new CatteryDetails(
+                cattery.getId(),
+                createdBy,
+                breeder,
+                null
         );
     }
 

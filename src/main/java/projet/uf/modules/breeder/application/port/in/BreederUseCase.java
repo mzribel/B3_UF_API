@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface BreederUseCase {
     // CREATE
     Breeder create(CreateBreederCommand command, Long createdByCatteryId);
+    Breeder initialize(String name, Long createdByCatteryId);
 
     // READ
     Optional<Breeder> getById(Long id);

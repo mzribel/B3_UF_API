@@ -24,6 +24,12 @@ public class BreederService implements BreederUseCase {
     }
 
     @Override
+    public Breeder initialize(String name, Long createdByCatteryId) {
+        Breeder breeder = new Breeder(name);
+        return breederPersistencePort.save(breeder);
+    }
+
+    @Override
     public Optional<Breeder> getById(Long id) {
         return breederPersistencePort.getById(id);
     }
