@@ -36,7 +36,8 @@ public class Breeder {
         this.isActive = isActive;
         this.isDerogatory = isDerogatory;
     }
-    public Breeder(String name) {
+    public Breeder(String name, Long createdByCatteryId) {
         this.name = name;
+        this.createdByCatteryId = createdByCatteryId;
     }
 }
