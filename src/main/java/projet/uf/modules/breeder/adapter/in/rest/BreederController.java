@@ -10,7 +10,6 @@ import projet.uf.modules.breeder.application.model.CreateContactBreederCommand;
 import projet.uf.modules.breeder.application.model.UpdateCatteryBreederCommand;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
 import projet.uf.modules.breeder.domain.model.Breeder;
-
 import java.util.List;
 import java.util.Optional;
 
