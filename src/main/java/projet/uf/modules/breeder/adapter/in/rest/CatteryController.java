@@ -67,4 +67,6 @@ public class CatteryController {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         catteryUseCase.removeUserFromCattery(catteryId, userId, operator);
     }
+
+
 }

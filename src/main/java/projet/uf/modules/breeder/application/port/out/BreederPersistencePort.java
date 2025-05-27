@@ -10,6 +10,7 @@ public interface BreederPersistencePort {
     List<Breeder> getByCatteryId(Long id);
     List<Breeder> getAll();
     boolean existsByAffixAndCatteryId(String affix, Long catteryId);
+    boolean existsByAffixAndCatteryIdExceptId(String affix, Long catteryId, Long breederId);
     Breeder save(Breeder breeder);
     void deleteById(Long id);
 }

@@ -50,7 +50,7 @@ public class CatteryService implements
                 .orElseThrow(() -> new ApiException("Utilisateur introuvable", HttpStatus.BAD_REQUEST));
 
         Cattery newCattery = catteryPersistencePort.insert(new Cattery(userId));
-        Breeder breeder = breederUseCase.initialize(name, newCattery.getId());
+        Breeder breeder = breederUseCase.createEmptyCatteryBreeder(name, newCattery.getId());
         newCattery.setLinkedToBreederId(breeder.getId());
         catteryPersistencePort.update(newCattery);
 

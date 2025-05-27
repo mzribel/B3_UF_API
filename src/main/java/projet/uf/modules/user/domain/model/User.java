@@ -28,8 +28,10 @@ public class User {
     }
 
     public static boolean isStrongPassword(String password) {
-        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$";
-        return password != null && password.matches(regex);
+        // TODO: Décommenter la sécurité
+//        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$";
+//        return password != null && password.matches(regex);
+        return password != null;
     }
     public User(Long id) {
         this.id = id;

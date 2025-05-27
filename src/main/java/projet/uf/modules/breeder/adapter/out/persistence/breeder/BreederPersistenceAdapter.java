@@ -39,6 +39,11 @@ public class BreederPersistenceAdapter implements BreederPersistencePort {
     }
 
     @Override
+    public boolean existsByAffixAndCatteryIdExceptId(String affix, Long catteryId, Long breederId) {
+        return jpaBreederRepository.existsByAffixAndCreatedByCatteryIdAndIdNot(affix, catteryId, breederId);
+    }
+
+    @Override
     public Breeder save(Breeder breeder) {
         BreederEntity entity = BreederEntityMapper.toEntity(breeder);
         BreederEntity saved = jpaBreederRepository.save(entity);

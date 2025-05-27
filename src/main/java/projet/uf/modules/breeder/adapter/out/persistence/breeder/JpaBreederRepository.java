@@ -7,4 +7,5 @@ import java.util.List;
 public interface JpaBreederRepository extends JpaRepository<BreederEntity, Long> {
     List<BreederEntity> findByCreatedByCatteryId(Long createdByCatteryId);
     boolean existsByAffixAndCreatedByCatteryId(String affix, Long createdByCatteryId);
+    boolean existsByAffixAndCreatedByCatteryIdAndIdNot(String affix, Long createdByCatteryId, Long id);
 }
