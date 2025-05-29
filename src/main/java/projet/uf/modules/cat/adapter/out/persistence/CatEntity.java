@@ -68,8 +68,8 @@ public class CatEntity {
     @Column(name = "deceased_date")
     private LocalDate deceasedDate;
 
-    @Column(name = "created_by_cattery_id")
-    private Long createdByCatteryId;        // TODO : nullable = false
+    @Column(name = "created_by_cattery_id", nullable = false)
+    private Long createdByCatteryId;
 
     @Column(name = "is_in_cattery", nullable = false)
     @Builder.Default
