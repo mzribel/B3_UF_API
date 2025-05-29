@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.model.AddUserToCatteryCommand;
-import projet.uf.modules.breeder.application.model.CatteryDetails;
-import projet.uf.modules.breeder.application.model.CreateCatteryCommand;
-import projet.uf.modules.breeder.application.model.UserCatteries;
+import projet.uf.modules.breeder.application.command.AddUserToCatteryCommand;
+import projet.uf.modules.breeder.application.dto.CatteryDetailsDto;
+import projet.uf.modules.breeder.application.command.CreateCatteryCommand;
+import projet.uf.modules.breeder.application.dto.UserCatteriesDto;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
 import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
@@ -39,7 +39,7 @@ public class CatteryService implements
     private final UserPersistencePort userPersistencePort;
 
     @Override
-    public CatteryDetails create(CreateCatteryCommand command, OperatorUser operatorUser) {
+    public CatteryDetailsDto create(CreateCatteryCommand command, OperatorUser operatorUser) {
         if (!operatorUser.isAdmin() && command.userId() != null && !command.userId().equals(operatorUser.getId())) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
@@ -58,7 +58,7 @@ public class CatteryService implements
     }
 
     @Override
-    public CatteryDetails getById(Long catteryId, OperatorUser operator) {
+    public CatteryDetailsDto getById(Long catteryId, OperatorUser operator) {
         Cattery cattery = catteryPersistencePort.getById(catteryId)
                 .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.NOT_FOUND));
 
@@ -74,7 +74,7 @@ public class CatteryService implements
     }
 
     @Override
-    public List<CatteryDetails> getAll(OperatorUser operator) {
+    public List<CatteryDetailsDto> getAll(OperatorUser operator) {
         if (operator.isAdmin()) {
             return catteryPersistencePort.getAll().stream().map(this::toDetails).toList();
         }
@@ -169,7 +169,7 @@ public class CatteryService implements
     }
 
     @Override
-    public UserCatteries getUserCatteries(Long id, OperatorUser operator) {
+    public UserCatteriesDto getUserCatteries(Long id, OperatorUser operator) {
         if (!operator.isAdmin() && !Objects.equals(id, operator.getId())) {
             throw new ApiException("Accès non autorisé", HttpStatus.FORBIDDEN);
         }
@@ -179,23 +179,23 @@ public class CatteryService implements
             throw new ApiException("Utilisateur introuvable", HttpStatus.BAD_REQUEST);
         }
 
-        return new UserCatteries(
+        return new UserCatteriesDto(
                 getCatteriesWhereUserIsAdmin(userId),
                 getCatteriesWhereUserIsMember(userId)
         );
     }
 
-    public List<CatteryDetails> getCatteriesWhereUserIsAdmin(Long userId) {
+    public List<CatteryDetailsDto> getCatteriesWhereUserIsAdmin(Long userId) {
         return catteryPersistencePort.getByCreatedByUserId(userId)
                 .stream().map(this::toDetails).toList();
     }
 
-    public List<CatteryDetails> getCatteriesWhereUserIsMember(Long userId) {
+    public List<CatteryDetailsDto> getCatteriesWhereUserIsMember(Long userId) {
         return catteryUserPersistencePort.getAllCatteriesByUserId(userId)
                 .stream().map(this::toDetails).toList();
     }
 
-    private CatteryDetails toDetails(Cattery cattery) {
+    private CatteryDetailsDto toDetails(Cattery cattery) {
         User createdBy = userPersistencePort.getById(cattery.getCreatedByUserId())
             .orElse(new User(cattery.getCreatedByUserId())); // ou exception
 
@@ -210,15 +210,15 @@ public class CatteryService implements
             ? breederPersistencePort.getById(cattery.getLinkedToBreederId()).orElse(null)
             : null;
 
-        return new CatteryDetails(
+        return new CatteryDetailsDto(
             cattery.getId(),
             UserDto.toDto(createdBy),
             breeder,
             members
         );
     }
-    private CatteryDetails toDetails(Cattery cattery, User createdBy, Breeder breeder) {
-        return new CatteryDetails(
+    private CatteryDetailsDto toDetails(Cattery cattery, User createdBy, Breeder breeder) {
+        return new CatteryDetailsDto(
             cattery.getId(),
             UserDto.toDto(createdBy),
             breeder,
@@ -226,7 +226,7 @@ public class CatteryService implements
         );
     }
 
-    private List<CatteryDetails> getAllAccessibleFromUser(Long userId) {
+    private List<CatteryDetailsDto> getAllAccessibleFromUser(Long userId) {
         List<Cattery> created = catteryPersistencePort.getByCreatedByUserId(userId);
         List<CatteryUser> memberships = catteryUserPersistencePort.getByUserId(userId);
 

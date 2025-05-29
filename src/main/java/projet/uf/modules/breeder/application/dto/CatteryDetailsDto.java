@@ -1,4 +1,4 @@
-package projet.uf.modules.breeder.application.model;
+package projet.uf.modules.breeder.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class CatteryDetails {
+public class CatteryDetailsDto {
     private Long id;
     private UserDto createdByUser;
     private Breeder linkedBreeder;

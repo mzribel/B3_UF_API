@@ -5,11 +5,9 @@ import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
-import projet.uf.modules.cat.application.ports.dto.CatDetailsDto;
-import projet.uf.modules.cat.application.ports.dto.CatDtoAssembler;
+import projet.uf.modules.cat.application.dto.CatDetailsDto;
 import projet.uf.modules.cat.application.ports.in.*;
-import projet.uf.modules.cat.application.ports.model.CatCommandMapper;
-import projet.uf.modules.cat.application.ports.model.CreateCatCommand;
+import projet.uf.modules.cat.application.command.CreateCatCommand;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
 
@@ -31,7 +29,7 @@ public class CatService implements
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
 
-        Cat cat = CatCommandMapper.fromCreateCommand(command, createdByCatteryId);
+        Cat cat = CreateCatCommand.toModel(command, createdByCatteryId);
         Cat saved = catPersistencePort.save(cat);
 
         if (command.coat() != null) {
@@ -44,7 +42,7 @@ public class CatService implements
     @Override
     public Cat updateCatById(Long id, CreateCatCommand command, OperatorUser operator) {
         Cat cat = catAccessUseCase.getCatOrThrow(id, operator);
-        Cat updatedCat = CatCommandMapper.fromCreateCommand(command, cat.getCreatedByCatteryId());
+        Cat updatedCat = CreateCatCommand.toModel(command, cat.getCreatedByCatteryId());
         updatedCat.setId(cat.getId());
         return catPersistencePort.save(updatedCat);
     }

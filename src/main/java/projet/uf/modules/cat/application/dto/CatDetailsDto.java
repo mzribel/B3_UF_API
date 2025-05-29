@@ -1,4 +1,4 @@
-package projet.uf.modules.cat.application.ports.dto;
+package projet.uf.modules.cat.application.dto;
 
 import projet.uf.modules.breeder.domain.model.Breeder;
 import projet.uf.modules.cat.domain.model.Cat;

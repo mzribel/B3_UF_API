@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.model.BreederCommandMapper;
-import projet.uf.modules.breeder.application.model.UpdateCatteryBreederCommand;
+import projet.uf.modules.breeder.application.command.UpdateCatteryBreederCommand;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
-import projet.uf.modules.breeder.application.model.CreateContactBreederCommand;
+import projet.uf.modules.breeder.application.command.CreateContactBreederCommand;
 import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.domain.model.Breeder;
@@ -40,7 +39,7 @@ public class BreederService implements BreederUseCase {
         }
 
         // Créé l'éleveur contact
-        Breeder breeder = BreederCommandMapper.fromCreateContactCommand(command, createdByCatteryId);
+        Breeder breeder = CreateContactBreederCommand.toModel(command, createdByCatteryId);
         return breederPersistencePort.save(breeder);
     }
 
@@ -74,7 +73,7 @@ public class BreederService implements BreederUseCase {
         }
 
         // Modifie l'éleveur contact
-        Breeder updatedBreeder = BreederCommandMapper.fromCreateContactCommand(command, catteryId);
+        Breeder updatedBreeder = CreateContactBreederCommand.toModel(command, catteryId);
         updatedBreeder.setId(breederId);
         return breederPersistencePort.save(updatedBreeder);
     }
@@ -120,7 +119,7 @@ public class BreederService implements BreederUseCase {
                 ? breederPersistencePort.getById(breederId)
                 : Optional.empty();
         // Mapper le breeder depuis la commande
-        Breeder updatedBreeder = BreederCommandMapper.fromUpdateBreederCommand(command, catteryId);
+        Breeder updatedBreeder = UpdateCatteryBreederCommand.toModel(command, catteryId);
 
         if (existingBreeder.isEmpty()) {
             if (breederPersistencePort.existsByAffixAndCatteryId(command.getAffix(), catteryId)) {

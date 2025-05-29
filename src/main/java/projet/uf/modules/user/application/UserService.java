@@ -6,8 +6,7 @@ import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.auth.exception.UserAlreadyExistsException;
 import projet.uf.modules.user.application.dto.UserDto;
-import projet.uf.modules.user.application.mapper.UserCommandMapper;
-import projet.uf.modules.user.application.port.in.CreateUserCommand;
+import projet.uf.modules.user.application.command.CreateUserCommand;
 import projet.uf.modules.user.application.port.in.UserUseCase;
 import projet.uf.modules.user.application.port.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
@@ -28,7 +27,7 @@ public class UserService implements UserUseCase {
             throw new UserAlreadyExistsException("Un utilisateur avec cette adresse email existe déjà", HttpStatus.CONFLICT);
         }
 
-        User user = UserCommandMapper.fromCreateCommand(command);
+        User user = CreateUserCommand.toModel(command);
         return UserDto.toDto(userPersistencePort.save(user));
     }
 

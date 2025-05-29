@@ -1,4 +1,4 @@
-package projet.uf.modules.cat.application.ports.dto;
+package projet.uf.modules.cat.application.dto;
 
 import projet.uf.modules.loof_characteristic.domain.model.CoatColor;
 import projet.uf.modules.loof_characteristic.domain.model.CoatEffect;

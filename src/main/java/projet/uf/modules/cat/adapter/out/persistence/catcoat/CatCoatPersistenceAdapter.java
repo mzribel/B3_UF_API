@@ -12,7 +12,7 @@ public class CatCoatPersistenceAdapter implements CatCoatPersistencePort {
 
     @Override
     public Optional<CatCoat> getByCatId(Long id) {
-        return jpaCatCoatRepository.findByCatId(id).map(CatCoatEntityMapper::toModel);
+        return jpaCatCoatRepository.findByCatId(id).map(CatCoatEntity::toModel);
     }
 
     public void deleteByCatId(Long id) {
@@ -21,10 +21,10 @@ public class CatCoatPersistenceAdapter implements CatCoatPersistencePort {
 
     @Override
     public CatCoat save(CatCoat catCoat) {
-        CatCoatEntity catCoatEntity = CatCoatEntityMapper.toEntity(catCoat);
+        CatCoatEntity catCoatEntity = CatCoatEntity.toEntity(catCoat);
         if (catCoat.getCatId() != null) {
             catCoatEntity.setCatId(catCoat.getCatId());
         }
-        return CatCoatEntityMapper.toModel(jpaCatCoatRepository.save(catCoatEntity));
+        return CatCoatEntity.toModel(jpaCatCoatRepository.save(catCoatEntity));
     }
 }

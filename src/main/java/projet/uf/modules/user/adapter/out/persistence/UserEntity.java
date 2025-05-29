@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import projet.uf.modules.user.domain.model.User;
 
 @Entity
 @Getter
@@ -38,4 +39,23 @@ public class UserEntity {
         this(email, password, displayName, false);
     }
 
+    public static User toModel(UserEntity entity) {
+        return new User(
+                entity.getId(),
+                entity.getEmail(),
+                entity.getPassword(),
+                entity.getDisplayName(),
+                entity.isAdmin()
+        );
+    }
+
+    public static UserEntity toEntity(User model) {
+        return new UserEntity(
+                model.getId(),
+                model.getEmail(),
+                model.getPassword(),
+                model.getDisplayName(),
+                model.isAdmin()
+        );
+    }
 }

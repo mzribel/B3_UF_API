@@ -1,4 +1,4 @@
-package projet.uf.modules.breeder.application.model;
+package projet.uf.modules.breeder.application.command;
 
 public record AddUserToCatteryCommand(
         Long userId,

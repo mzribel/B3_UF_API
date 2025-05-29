@@ -15,19 +15,19 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     @Override
     public Optional<User> getById(Long id) {
-        return jpaUserRepository.findById(id).map(UserEntityMapper::toModel);
+        return jpaUserRepository.findById(id).map(UserEntity::toModel);
     }
 
     @Override
     public Optional<User> getByEmail(String email) {
-        return jpaUserRepository.findByEmail(email).map(UserEntityMapper::toModel);
+        return jpaUserRepository.findByEmail(email).map(UserEntity::toModel);
     }
 
     @Override
     public List<User> getAll() {
         return jpaUserRepository.findAll()
                 .stream()
-                .map(UserEntityMapper::toModel)
+                .map(UserEntity::toModel)
                 .toList();
     }
 
@@ -49,8 +49,8 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     @Override
     public User save(User user) {
-        UserEntity userEntity = UserEntityMapper.toEntity(user);
+        UserEntity userEntity = UserEntity.toEntity(user);
         UserEntity saved = jpaUserRepository.save(userEntity);
-        return UserEntityMapper.toModel(saved);
+        return UserEntity.toModel(saved);
     }
 }

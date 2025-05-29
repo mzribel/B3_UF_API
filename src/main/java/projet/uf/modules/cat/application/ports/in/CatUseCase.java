@@ -1,8 +1,8 @@
 package projet.uf.modules.cat.application.ports.in;
 
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.cat.application.ports.dto.CatDetailsDto;
-import projet.uf.modules.cat.application.ports.model.CreateCatCommand;
+import projet.uf.modules.cat.application.dto.CatDetailsDto;
+import projet.uf.modules.cat.application.command.CreateCatCommand;
 import projet.uf.modules.cat.domain.model.Cat;
 
 import java.util.List;

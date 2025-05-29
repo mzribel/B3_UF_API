@@ -15,24 +15,24 @@ public class CatPersistenceAdapter implements CatPersistencePort {
 
     @Override
     public Optional<Cat> getById(Long id) {
-        return jpaCatRepository.findById(id).map(CatEntityMapper::toModel);
+        return jpaCatRepository.findById(id).map(CatEntity::toModel);
     }
 
     @Override
     public List<Cat> getByCatteryId(Long id) {
-        return jpaCatRepository.findAllByCreatedByCatteryId(id).stream().map(CatEntityMapper::toModel).toList();
+        return jpaCatRepository.findAllByCreatedByCatteryId(id).stream().map(CatEntity::toModel).toList();
     }
 
     @Override
     public List<Cat> getAll() {
-        return jpaCatRepository.findAll().stream().map(CatEntityMapper::toModel).toList();
+        return jpaCatRepository.findAll().stream().map(CatEntity::toModel).toList();
     }
 
     @Override
     public Cat save(Cat cat) {
-        CatEntity catEntity = CatEntityMapper.toEntity(cat);
+        CatEntity catEntity = CatEntity.toEntity(cat);
         CatEntity savedCatEntity = jpaCatRepository.save(catEntity);
-        return CatEntityMapper.toModel(savedCatEntity);
+        return CatEntity.toModel(savedCatEntity);
     }
 
     @Override

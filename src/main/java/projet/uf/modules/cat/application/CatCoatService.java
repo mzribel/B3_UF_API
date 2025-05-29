@@ -4,9 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
-import projet.uf.modules.cat.application.ports.dto.CatCoatDto;
-import projet.uf.modules.cat.application.ports.model.CatCoatCommand;
-import projet.uf.modules.cat.application.ports.model.CatCoatCommandMapper;
+import projet.uf.modules.cat.application.dto.CatCoatDto;
+import projet.uf.modules.cat.application.command.CatCoatCommand;
 import projet.uf.modules.cat.application.ports.in.CatCoatUseCase;
 import projet.uf.modules.cat.application.ports.out.CatCoatPersistencePort;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
@@ -34,7 +33,7 @@ public class CatCoatService implements CatCoatUseCase {
             throw new ApiException("Chat introuvable", HttpStatus.BAD_REQUEST);
         }
 
-        CatCoat catCoat = CatCoatCommandMapper.fromCommand(command, catId);
+        CatCoat catCoat = CatCoatCommand.toModel(command, catId);
         return catCoatPersistencePort.save(catCoat);
     }
 

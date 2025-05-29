@@ -6,10 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.model.AddUserToCatteryCommand;
-import projet.uf.modules.breeder.application.model.CatteryDetails;
-import projet.uf.modules.breeder.application.model.CreateCatteryCommand;
-import projet.uf.modules.breeder.application.model.UserCatteries;
+import projet.uf.modules.breeder.application.command.AddUserToCatteryCommand;
+import projet.uf.modules.breeder.application.dto.CatteryDetailsDto;
+import projet.uf.modules.breeder.application.command.CreateCatteryCommand;
+import projet.uf.modules.breeder.application.dto.UserCatteriesDto;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
 
 import java.util.List;
@@ -21,14 +21,14 @@ public class CatteryController {
     private final CurrentUserProvider currentUserProvider;
 
     @GetMapping({"/catteries/", "/catteries"})
-    public List<CatteryDetails> getAll() {
+    public List<CatteryDetailsDto> getAll() {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catteryUseCase.getAll(operator);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping({"/catteries/", "/catteries"})
-    public CatteryDetails create(
+    public CatteryDetailsDto create(
             @RequestBody @Valid CreateCatteryCommand command
             ) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
@@ -36,7 +36,7 @@ public class CatteryController {
     }
 
     @GetMapping({"/catteries/{id}", "/catteries/{id}"})
-    public CatteryDetails getById(@PathVariable Long id) {
+    public CatteryDetailsDto getById(@PathVariable Long id) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catteryUseCase.getById(id, operator);
     }
@@ -70,7 +70,7 @@ public class CatteryController {
     }
 
     @GetMapping({"/users/{userId}/catteries/", "/users/{userId}/catteries"})
-    public UserCatteries getAllUserCatteries(@PathVariable Long userId) {
+    public UserCatteriesDto getAllUserCatteries(@PathVariable Long userId) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catteryUseCase.getUserCatteries(userId, operator);
     }

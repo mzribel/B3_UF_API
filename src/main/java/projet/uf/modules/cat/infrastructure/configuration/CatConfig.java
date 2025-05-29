@@ -10,7 +10,7 @@ import projet.uf.modules.cat.adapter.out.persistence.catcoat.CatCoatPersistenceA
 import projet.uf.modules.cat.adapter.out.persistence.catcoat.JpaCatCoatRepository;
 import projet.uf.modules.cat.application.CatAccessService;
 import projet.uf.modules.cat.application.CatCoatService;
-import projet.uf.modules.cat.application.ports.dto.CatDtoAssembler;
+import projet.uf.modules.cat.application.CatDtoAssembler;
 import projet.uf.modules.cat.application.CatService;
 import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
 import projet.uf.modules.cat.application.ports.in.CatCoatUseCase;

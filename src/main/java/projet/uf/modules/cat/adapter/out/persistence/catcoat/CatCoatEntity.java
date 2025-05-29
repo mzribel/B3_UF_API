@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
+import projet.uf.modules.cat.domain.model.CatCoat;
 
 @Entity
 @Getter
@@ -29,4 +30,24 @@ public class CatCoatEntity {
 
     @Column(name = "coat_white_marking_id", nullable = false)
     Long coatWhiteMarkingId;
+
+    public static CatCoat toModel(CatCoatEntity entity) {
+        return new CatCoat(
+                entity.catId,
+                entity.coatColorId,
+                entity.coatPatternId,
+                entity.coatEffectId,
+                entity.coatWhiteMarkingId
+        );
+    }
+
+    public static CatCoatEntity toEntity(CatCoat model) {
+        return new CatCoatEntity(
+                model.getCatId(),
+                model.getCoatColorId(),
+                model.getCoatPatternId(),
+                model.getCoatEffectId(),
+                model.getCoatWhiteMarkingId()
+        );
+    }
 }

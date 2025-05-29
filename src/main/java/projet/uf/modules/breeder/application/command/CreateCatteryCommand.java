@@ -1,4 +1,4 @@
-package projet.uf.modules.breeder.application.model;
+package projet.uf.modules.breeder.application.command;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

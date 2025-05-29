@@ -1,8 +1,11 @@
-package projet.uf.modules.cat.application.ports.dto;
+package projet.uf.modules.cat.application;
 
 import lombok.AllArgsConstructor;
 import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.domain.model.Breeder;
+import projet.uf.modules.cat.application.dto.CatCoatDto;
+import projet.uf.modules.cat.application.dto.CatDetailsDto;
+import projet.uf.modules.cat.application.dto.CatLoofDto;
 import projet.uf.modules.cat.application.ports.in.CatCoatUseCase;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
