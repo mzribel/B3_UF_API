@@ -1,18 +1,16 @@
 package projet.uf.modules.cat.adapter.out.persistence.cat;
 
+import lombok.AllArgsConstructor;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
 
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 public class CatPersistenceAdapter implements CatPersistencePort {
     private final JpaCatRepository jpaCatRepository;
-
-    public CatPersistenceAdapter(JpaCatRepository jpaCatRepository) {
-        this.jpaCatRepository = jpaCatRepository;
-    }
-
+    
     @Override
     public Optional<Cat> getById(Long id) {
         return jpaCatRepository.findById(id).map(CatEntity::toModel);

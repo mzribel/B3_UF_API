@@ -1,6 +1,7 @@
 package projet.uf.modules.auth.adapters.in.rest;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,14 +16,10 @@ import projet.uf.modules.user.application.dto.UserDto;
 import projet.uf.modules.user.domain.model.User;
 
 @RestController
+@AllArgsConstructor
 public class AuthController {
     final AuthUseCase authUseCase;
     final JwtService jwtService;
-
-    public AuthController(AuthUseCase authUseCase, JwtService jwtService) {
-        this.authUseCase = authUseCase;
-        this.jwtService = jwtService;
-    }
 
     @PostMapping({"/auth/register/", "/auth/register"})
     @ResponseStatus(HttpStatus.CREATED) // 👈 ici !

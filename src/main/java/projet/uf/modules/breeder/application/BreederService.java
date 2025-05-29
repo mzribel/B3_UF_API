@@ -34,7 +34,7 @@ public class BreederService implements BreederUseCase {
         }
 
         // Vérifie l'existence d'un éleveur ayant déjà cet affixe
-        if (breederPersistencePort.existsByAffixAndCatteryId(command.getAffix(), createdByCatteryId)) {
+        if (breederPersistencePort.existsByAffixAndCatteryId(command.affix(), createdByCatteryId)) {
             throw new ApiException("La chatterie possède déjà un éleveur avec cet affixe", HttpStatus.CONFLICT);
         }
 
@@ -68,7 +68,7 @@ public class BreederService implements BreederUseCase {
         }
 
         // Vérifie l'existence d'un éleveur ayant déjà cet affixe
-        if (breederPersistencePort.existsByAffixAndCatteryIdExceptId(command.getAffix(), catteryId, breederId)) {
+        if (breederPersistencePort.existsByAffixAndCatteryIdExceptId(command.affix(), catteryId, breederId)) {
             throw new ApiException("La chatterie possède déjà un éleveur avec cet affixe", HttpStatus.CONFLICT);
         }
 
@@ -122,7 +122,7 @@ public class BreederService implements BreederUseCase {
         Breeder updatedBreeder = UpdateCatteryBreederCommand.toModel(command, catteryId);
 
         if (existingBreeder.isEmpty()) {
-            if (breederPersistencePort.existsByAffixAndCatteryId(command.getAffix(), catteryId)) {
+            if (breederPersistencePort.existsByAffixAndCatteryId(command.affix(), catteryId)) {
                 throw new ApiException("La chatterie possède déjà un éleveur avec cet affixe", HttpStatus.CONFLICT);
             }
             // Cas création
@@ -132,7 +132,7 @@ public class BreederService implements BreederUseCase {
             return savedBreeder;
         } else {
             // Vérifie l'existence d'un éleveur ayant déjà cet affixe
-            if (breederPersistencePort.existsByAffixAndCatteryIdExceptId(command.getAffix(), catteryId, existingBreeder.get().getId())) {
+            if (breederPersistencePort.existsByAffixAndCatteryIdExceptId(command.affix(), catteryId, existingBreeder.get().getId())) {
                 throw new ApiException("La chatterie possède déjà un éleveur avec cet affixe", HttpStatus.CONFLICT);
             }
             // Cas mise à jour

@@ -4,7 +4,7 @@ import projet.uf.modules.loof_characteristic.domain.model.*;
 
 import java.util.List;
 
-public record AllLoofCharacteristics(
+public record AllLoofCharacteristicsDto(
     List<Breed> breeds,
     List<CoatColor> coatColors,
     List<CoatEffect> coatEffects,

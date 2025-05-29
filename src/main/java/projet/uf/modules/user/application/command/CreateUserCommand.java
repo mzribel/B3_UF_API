@@ -1,32 +1,28 @@
 package projet.uf.modules.user.application.command;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import projet.uf.modules.user.domain.model.User;
 
-@AllArgsConstructor
-@Getter
-@Setter
-public class CreateUserCommand {
-    private String email;
-    private String password;
-    private String displayName;
-    private boolean isAdmin;
+public record CreateUserCommand(
+        String email,
+        String passwrd,
+        String displayNme,
+        boolean isAdmin
+) {
 
     public static User toModel(CreateUserCommand command) {
         return new User(
-                command.getEmail(),
-                command.getPassword(),
-                command.getDisplayName(),
+                command.email(),
+                command.passwrd(),
+                command.displayNme(),
                 command.isAdmin()
         );
     }
+
     public static User toModel(CreateUserCommand command, String encodedPassword) {
         return new User(
-                command.getEmail(),
+                command.email(),
                 encodedPassword,
-                command.getDisplayName(),
+                command.displayNme(),
                 command.isAdmin()
         );
     }

@@ -23,7 +23,7 @@ public class UserService implements UserUseCase {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
 
-        if (userPersistencePort.existsByEmail(command.getEmail())) {
+        if (userPersistencePort.existsByEmail(command.email())) {
             throw new UserAlreadyExistsException("Un utilisateur avec cette adresse email existe déjà", HttpStatus.CONFLICT);
         }
 

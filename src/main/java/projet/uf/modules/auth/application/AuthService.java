@@ -2,7 +2,6 @@ package projet.uf.modules.auth.application;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import projet.uf.modules.auth.application.ports.in.AuthCommandMapper;
 import projet.uf.modules.auth.application.ports.in.LoginCommand;
 import projet.uf.modules.auth.application.ports.in.RegisterCommand;
 import projet.uf.modules.auth.application.ports.out.PasswordEncoder;
@@ -28,7 +27,7 @@ public class AuthService implements AuthUseCase
             throw new WeakPasswordException("Le mot de passe est trop faible (au moins 8 caractères dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial)", HttpStatus.BAD_REQUEST);
         }
 
-        User user = AuthCommandMapper.fromCreateCommand(command, passwordEncoder.encode(command.password()));
+        User user = RegisterCommand.toModel(command, passwordEncoder.encode(command.password()));
         return userPersistencePort.save(user);
     }
 
