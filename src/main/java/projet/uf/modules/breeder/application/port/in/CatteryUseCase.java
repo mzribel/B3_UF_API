@@ -1,13 +1,16 @@
 package projet.uf.modules.breeder.application.port.in;
 
 import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.breeder.application.model.AddUserToCatteryCommand;
 import projet.uf.modules.breeder.application.model.CatteryDetails;
+import projet.uf.modules.breeder.application.model.CreateCatteryCommand;
+import projet.uf.modules.breeder.application.model.UserCatteries;
 
 import java.util.List;
 
 public interface CatteryUseCase {
     // CREATE
-    CatteryDetails create(Long createdByUserId, String name, OperatorUser operatorUser);
+    CatteryDetails create(CreateCatteryCommand command, OperatorUser operatorUser);
 
     // READ
     CatteryDetails getById(Long id, OperatorUser operator);
@@ -18,7 +21,9 @@ public interface CatteryUseCase {
     void deleteById(Long id, OperatorUser operator);
 
     // ADD USER
-    void addUserToCattery(Long catteryId, Long userId, String email, OperatorUser operator);
+    void addUserToCattery(Long catteryId, AddUserToCatteryCommand command, OperatorUser operator);
     // REMOVE USER
     void removeUserFromCattery(Long catteryId, Long userIdToRemove, OperatorUser operator);
+
+    UserCatteries getUserCatteries(Long userId, OperatorUser operator);
 }

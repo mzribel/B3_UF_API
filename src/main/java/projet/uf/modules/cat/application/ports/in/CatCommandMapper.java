@@ -3,7 +3,7 @@ package projet.uf.modules.cat.application.ports.in;
 import projet.uf.modules.cat.domain.model.Cat;
 
 public class CatCommandMapper {
-    public static Cat fromCreateCommand(CreateCatCommand command) {
+    public static Cat fromCreateCommand(CreateCatCommand command, Long createdByCatteryId) {
         return new Cat(
                 command.getName(),
                 command.getSurname(),
@@ -12,16 +12,16 @@ public class CatCommandMapper {
                 command.getLitterId(),
                 command.getOriginBreederId(),
                 command.getCurrentBreederId(),
-                command.getBreedId(),
-                command.getEyeColorId(),
-                command.getPolyTypeId(),
+                null,
+                null,
+                null,
                 command.getPedigreeNo(),
                 command.getIdentificationNo(),
                 Boolean.TRUE.equals(command.getIsNeutered()),
                 command.getNeuteredDate(),
                 Boolean.TRUE.equals(command.getIsDeceased()),
                 command.getDeceasedDate(),
-                command.getCreatedByCatteryId(),
+                createdByCatteryId,
                 Boolean.TRUE.equals(command.getIsInCattery()),
                 command.getNotes()
         );

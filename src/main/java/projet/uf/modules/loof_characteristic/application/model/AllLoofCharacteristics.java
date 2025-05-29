@@ -11,4 +11,4 @@ public record AllLoofCharacteristics(
     List<CoatPattern> coatPatterns,
     List<CoatWhiteMarking> coatWhiteMarkings,
     List<PolyType> polyTypes
-){};
+){}

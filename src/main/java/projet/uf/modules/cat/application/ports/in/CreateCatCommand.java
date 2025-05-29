@@ -7,15 +7,15 @@ import java.time.LocalDate;
 
 @Getter
 public class CreateCatCommand {
-    @NotBlank
+    @NotBlank(message = "Le nom du chat ne peut pas être vide")
+    @NotBlank(message = "Le nom du chat ne peut pas être vide")
+    @Size(max = 30, message = "Le nom du chat ne peut pas dépasser 30 caractères")
     private String name;
+    @Size(max = 30, message = "Le surnom du chat ne peut pas dépasser 30 caractères")
     private String surname;
     private boolean sex;
+    @PastOrPresent(message = "Le chat doit être né à une date antérieure ou égale à aujourd'hui")
     private LocalDate birthDate;
-
-    private Long breedId;
-    private Long eyeColorId;
-    private Long polyTypeId;
 
     private String pedigreeNo;
     private String identificationNo;
@@ -29,7 +29,6 @@ public class CreateCatCommand {
     private Long originBreederId;
     private Long currentBreederId;
 
-    private Long createdByCatteryId;
     private Boolean isInCattery;
     private String notes;
 

@@ -13,7 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import projet.uf.modules.auth.adapters.out.security.HeaderAuthenticationToken;
 import projet.uf.modules.auth.adapters.out.security.JwtService;
 import projet.uf.modules.auth.application.model.CurrentUser;
-import projet.uf.modules.auth.application.ports.out.UserAccessPort;
+import projet.uf.modules.user.application.port.out.UserPersistencePort;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final UserAccessPort loadUserPort;
+    private final UserPersistencePort userPersistencePort;
     private final JwtService jwtService;
 
     @Override
@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        loadUserPort.getByEmail(email).ifPresent(user -> {
+        userPersistencePort.getByEmail(email).ifPresent(user -> {
             CurrentUser currentUser = new CurrentUser(user.getId(), user.isAdmin());
 
             Authentication auth = new HeaderAuthenticationToken(currentUser);

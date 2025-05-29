@@ -1,28 +1,28 @@
 package projet.uf.modules.user.adapter.in.rest;
 
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
+import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.user.application.dto.UserDto;
 import projet.uf.modules.user.application.port.in.UserUseCase;
-import projet.uf.modules.user.domain.model.User;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@AllArgsConstructor
 public class UserController {
     final UserUseCase userUseCase;
-
-    public UserController(UserUseCase userUseCase) {
-        this.userUseCase = userUseCase;
-    }
-
+    private final CurrentUserProvider currentUserProvider;
 
     @GetMapping({"/users/", "/users"})
-    public List<User> getUsers() {
-        return userUseCase.getAll();
+    public List<UserDto> getUsers() {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return userUseCase.getAll(operator);
     }
 
     @GetMapping( {"/users/{id}/", "/users/{id}"})
-    public Optional<User> getUserById(@PathVariable Long id) {
+    public UserDto getUserById(@PathVariable Long id) {
         return userUseCase.getById(id);
     }
 }

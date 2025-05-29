@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.breeder.application.model.AddUserToCatteryCommand;
 import projet.uf.modules.breeder.application.model.CatteryDetails;
 import projet.uf.modules.breeder.application.model.CreateCatteryCommand;
+import projet.uf.modules.breeder.application.model.UserCatteries;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
 
 import java.util.List;
@@ -27,11 +29,10 @@ public class CatteryController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping({"/catteries/", "/catteries"})
     public CatteryDetails create(
-            @RequestParam(required = false, name = "userId") Long providedUserId,
             @RequestBody @Valid CreateCatteryCommand command
             ) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
-        return catteryUseCase.create(providedUserId, command.name(), operator);
+        return catteryUseCase.create(command, operator);
     }
 
     @GetMapping({"/catteries/{id}", "/catteries/{id}"})
@@ -48,18 +49,18 @@ public class CatteryController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping({"/catteries/{id}/users/", "/catteries/{id}/users"})
+    @PostMapping({"/catteries/{id}/members/", "/catteries/{id}/members"})
     public void addUserToCattery(
             @PathVariable Long id,
-            @RequestParam(required = false, name = "userEmail") String userEmail,
-            @RequestParam(required = false, name = "userId") Long userId)
+            @RequestBody AddUserToCatteryCommand command
+            )
     {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
-        catteryUseCase.addUserToCattery(id, userId, userEmail, operator);
+        catteryUseCase.addUserToCattery(id, command, operator);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping({"/catteries/{catteryId}/users/{userId}/", "/catteries/{catteryId}/users/{userId}"})
+    @DeleteMapping({"/catteries/{catteryId}/members/{userId}/", "/catteries/{catteryId}/members/{userId}"})
     public void removeUserFromCattery(
             @PathVariable Long userId,
             @PathVariable Long catteryId)
@@ -68,5 +69,9 @@ public class CatteryController {
         catteryUseCase.removeUserFromCattery(catteryId, userId, operator);
     }
 
-
+    @GetMapping({"/users/{userId}/catteries/", "/users/{userId}/catteries"})
+    public UserCatteries getAllUserCatteries(@PathVariable Long userId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catteryUseCase.getUserCatteries(userId, operator);
+    }
 }

@@ -1,14 +1,11 @@
 package projet.uf.modules.user.application.port.in;
 
-import projet.uf.modules.user.domain.model.User;
-
+import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.user.application.dto.UserDto;
 import java.util.List;
-import java.util.Optional;
 
 public interface UserUseCase {
-    Optional<User> getById(Long id);
-    Optional<User> getByEmail(String email);
-    List<User> getAll();
-
-    User createUser(CreateUserCommand command);
+    UserDto getById(Long id);
+    List<UserDto> getAll(OperatorUser operator);
+    UserDto createUser(CreateUserCommand command, OperatorUser operator);
 }

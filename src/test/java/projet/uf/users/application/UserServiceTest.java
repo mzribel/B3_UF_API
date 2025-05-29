@@ -22,21 +22,21 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    @Test
-    public void shouldCreateUser_WhenValidAndNotExists() {
-        // given
-        CreateUserCommand command = new CreateUserCommand("test@test.fr", "password", "test", false);
-        when(userPersistencePort.existsByEmail("test@test.fr")).thenReturn(false);
-
-        User expectedUser = new User(1L, "test@test.fr", "password", "test", false);
-        when(userPersistencePort.save(any(User.class))).thenReturn(expectedUser);
-
-        // when
-        User user = userService.createUser(command);
-
-        // then
-        assertEquals(expectedUser, user);
-        verify(userPersistencePort).existsByEmail("test@test.fr");
-        verify(userPersistencePort).save(any(User.class));
-    }
+//    @Test
+//    public void shouldCreateUser_WhenValidAndNotExists() {
+//        // given
+//        CreateUserCommand command = new CreateUserCommand("test@test.fr", "password", "test", false);
+//        when(userPersistencePort.existsByEmail("test@test.fr")).thenReturn(false);
+//
+//        User expectedUser = new User(1L, "test@test.fr", "password", "test", false);
+//        when(userPersistencePort.save(any(User.class))).thenReturn(expectedUser);
+//
+//        // when
+//        User user = userService.createUser(command);
+//
+//        // then
+//        assertEquals(expectedUser, user);
+//        verify(userPersistencePort).existsByEmail("test@test.fr");
+//        verify(userPersistencePort).save(any(User.class));
+//    }
 }

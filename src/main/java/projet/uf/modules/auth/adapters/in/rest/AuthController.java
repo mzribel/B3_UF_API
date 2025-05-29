@@ -11,7 +11,7 @@ import projet.uf.modules.auth.adapters.out.security.JwtService;
 import projet.uf.modules.auth.application.ports.in.AuthUseCase;
 import projet.uf.modules.auth.application.ports.in.LoginCommand;
 import projet.uf.modules.auth.application.ports.in.RegisterCommand;
-import projet.uf.modules.user.adapter.in.rest.dto.UserDtoMapper;
+import projet.uf.modules.user.application.dto.UserDto;
 import projet.uf.modules.user.domain.model.User;
 
 @RestController
@@ -30,7 +30,7 @@ public class AuthController {
         User createdUser = authUseCase.register(command);
 
         return new AuthenticatedUserDto(
-                UserDtoMapper.toDto(createdUser),
+                UserDto.toDto(createdUser),
                 jwtService.generateToken(createdUser)
         );
     }
@@ -40,7 +40,7 @@ public class AuthController {
         User authenticatedUser =  authUseCase.login(command);
 
         return new AuthenticatedUserDto(
-            UserDtoMapper.toDto(authenticatedUser),
+            UserDto.toDto(authenticatedUser),
             jwtService.generateToken(authenticatedUser)
         );
     }

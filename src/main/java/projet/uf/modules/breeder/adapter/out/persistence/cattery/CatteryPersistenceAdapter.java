@@ -53,6 +53,11 @@ public class CatteryPersistenceAdapter implements CatteryPersistencePort {
     }
 
     @Override
+    public boolean isUserAdminOfCattery(Long userId, Long catteryId) {
+        return jpaCatteryRepository.existsByIdAndCreatedByUserId(catteryId, userId);
+    }
+
+    @Override
     public boolean isBreederLinkedToAnyCattery(Long breederId) {
         return jpaCatteryRepository.existsByLinkedToBreederId(breederId);
     }
