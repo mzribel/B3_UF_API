@@ -14,7 +14,7 @@ import java.util.List;
 public class TemplateController {
     private final TemplateUseCase templateUseCase;
 
-    @GetMapping(value = {"/template/{name}/{accurate}/", "/template/{name}/{accurate}"})
+    @GetMapping("/template/{name}/{accurate}")
     public List<Template> getTemplateByName(
             @PathVariable final String name,
             @PathVariable final boolean accurate) throws TemplateException {

@@ -18,20 +18,20 @@ public class CatController {
     final CatUseCase catUseCase;
     private final CurrentUserProvider currentUserProvider;
 
-    @GetMapping({"/cats/", "/cats"})
+    @GetMapping("/cats")
     public List<Cat> getAllCats() {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
 
         return catUseCase.getAll(operator);
     }
 
-    @GetMapping({"/cats/{catId}/", "/cats/{catId}"})
+    @GetMapping("/cats/{catId}")
     public CatDetailsDto getCat(@PathVariable Long catId) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.getById(catId, operator);
     }
 
-    @PostMapping({"/catteries/{catteryId}/cats/", "/catteries/{catteryId}/cats"})
+    @PostMapping( "/catteries/{catteryId}/cats")
     @ResponseStatus(HttpStatus.CREATED)
     public CatDetailsDto createCat(
             @PathVariable Long catteryId,
@@ -41,19 +41,19 @@ public class CatController {
         return catUseCase.createCat(command, catteryId, operator);
     }
 
-    @GetMapping({"/catteries/{id}/cats/", "/catteries/{id}/cats"})
+    @GetMapping( "/catteries/{id}/cats")
     public List<Cat> getCatteryCats(@PathVariable Long id) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.getByCatteryId(id, operator);
     }
 
-    @PutMapping({"/cats/{id}/", "/cats/{id}"})
+    @PutMapping("/cats/{id}")
     public Cat updateCat(@PathVariable Long id, @RequestBody CreateCatCommand command) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.updateCatById(id, command, operator);
     }
 
-    @DeleteMapping({"/cats/{id}/", "/cats/{id}"})
+    @DeleteMapping( "/cats/{id}")
     public void deleteCat(@PathVariable Long id) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         catUseCase.deleteCatById(id, operator);

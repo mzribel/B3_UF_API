@@ -21,7 +21,7 @@ public class AuthController {
     final AuthUseCase authUseCase;
     final JwtService jwtService;
 
-    @PostMapping({"/auth/register/", "/auth/register"})
+    @PostMapping("/auth/register")
     @ResponseStatus(HttpStatus.CREATED) // 👈 ici !
     public AuthenticatedUserDto register(@Valid @RequestBody RegisterCommand command) {
         User createdUser = authUseCase.register(command);
@@ -32,7 +32,7 @@ public class AuthController {
         );
     }
 
-    @PostMapping({"/auth/login/", "/auth/login"})
+    @PostMapping("/auth/login")
     public AuthenticatedUserDto login(@Valid @RequestBody LoginCommand command) {
         User authenticatedUser =  authUseCase.login(command);
 

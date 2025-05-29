@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/loof/characteristics/poly-types/", "/loof/characteristics/poly-types"})
+@RequestMapping("/loof/characteristics/poly-types")
 public class PolyTypeController {
     final LoofCharacteristicUseCase<PolyType> PolyTypeUseCase;
 
@@ -25,7 +25,7 @@ public class PolyTypeController {
         return PolyTypeUseCase.getAll();
     }
 
-    @GetMapping({"/{id}/", "/{id}"})
+    @GetMapping("/{id}")
     public Optional<PolyType> getById(@PathVariable Long id) {
         return Optional.ofNullable(PolyTypeUseCase.getById(id)
             .orElseThrow(() -> new ApiException("Aucune couleur de robe (coat color) trouvée avec l'id " + id, HttpStatus.NOT_FOUND)));
@@ -38,13 +38,13 @@ public class PolyTypeController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping({"/{id}/", "/{id}"})
+    @PutMapping("/{id}")
     public PolyType PolyType(@PathVariable Long id, @Valid @RequestBody CreateLoofCharacteristicCommand command) throws LoofCharacteristicAlreadyExists {
         return PolyTypeUseCase.update(id, command);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping({"/{id}/", "/{id}"})
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void PolyType(@PathVariable Long id) {
         PolyTypeUseCase.deleteById(id);

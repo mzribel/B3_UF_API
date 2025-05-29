@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/loof/characteristics/breeds/", "/loof/characteristics/breeds"})
+@RequestMapping("/loof/characteristics/breeds")
 public class BreedController {
     final LoofCharacteristicUseCase<Breed> breedUseCase;
 
@@ -25,7 +25,7 @@ public class BreedController {
         return breedUseCase.getAll();
     }
 
-    @GetMapping({"/{id}/", "/{id}"})
+    @GetMapping("/{id}")
     public Optional<Breed> getById(@PathVariable Long id) {
         return Optional.ofNullable(breedUseCase.getById(id)
             .orElseThrow(() -> new ApiException("Aucune race (breed) trouvée avec l'id " + id, HttpStatus.NOT_FOUND)));
@@ -38,13 +38,13 @@ public class BreedController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping({"/{id}/", "/{id}"})
+    @PutMapping("/{id}")
     public Breed updateBreed(@PathVariable Long id, @Valid @RequestBody CreateLoofCharacteristicCommand command) throws LoofCharacteristicAlreadyExists {
         return breedUseCase.update(id, command);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping({"/{id}/", "/{id}"})
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBreed(@PathVariable Long id) {
         breedUseCase.deleteById(id);

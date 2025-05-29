@@ -20,14 +20,14 @@ public class CatteryController {
     final CatteryUseCase catteryUseCase;
     private final CurrentUserProvider currentUserProvider;
 
-    @GetMapping({"/catteries/", "/catteries"})
+    @GetMapping("/catteries")
     public List<CatteryDetailsDto> getAll() {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catteryUseCase.getAll(operator);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping({"/catteries/", "/catteries"})
+    @PostMapping("/catteries")
     public CatteryDetailsDto create(
             @RequestBody @Valid CreateCatteryCommand command
             ) {
@@ -35,21 +35,21 @@ public class CatteryController {
         return catteryUseCase.create(command, operator);
     }
 
-    @GetMapping({"/catteries/{id}", "/catteries/{id}"})
+    @GetMapping("/catteries/{id}")
     public CatteryDetailsDto getById(@PathVariable Long id) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catteryUseCase.getById(id, operator);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping({"/catteries/{id}/", "/catteries/{id}"})
+    @DeleteMapping("/catteries/{id}")
     public void deleteById(@PathVariable Long id) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         catteryUseCase.deleteById(id, operator);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping({"/catteries/{id}/members/", "/catteries/{id}/members"})
+    @PostMapping( "/catteries/{id}/members")
     public void addUserToCattery(
             @PathVariable Long id,
             @RequestBody AddUserToCatteryCommand command
@@ -60,7 +60,7 @@ public class CatteryController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping({"/catteries/{catteryId}/members/{userId}/", "/catteries/{catteryId}/members/{userId}"})
+    @DeleteMapping("/catteries/{catteryId}/members/{userId}")
     public void removeUserFromCattery(
             @PathVariable Long userId,
             @PathVariable Long catteryId)
@@ -69,7 +69,7 @@ public class CatteryController {
         catteryUseCase.removeUserFromCattery(catteryId, userId, operator);
     }
 
-    @GetMapping({"/users/{userId}/catteries/", "/users/{userId}/catteries"})
+    @GetMapping("/users/{userId}/catteries")
     public UserCatteriesDto getAllUserCatteries(@PathVariable Long userId) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catteryUseCase.getUserCatteries(userId, operator);

@@ -15,13 +15,13 @@ public class UserController {
     final UserUseCase userUseCase;
     private final CurrentUserProvider currentUserProvider;
 
-    @GetMapping({"/users/", "/users"})
+    @GetMapping("/users")
     public List<UserDto> getUsers() {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return userUseCase.getAll(operator);
     }
 
-    @GetMapping( {"/users/{id}/", "/users/{id}"})
+    @GetMapping("/users/{id}")
     public UserDto getUserById(@PathVariable Long id) {
         return userUseCase.getById(id);
     }
