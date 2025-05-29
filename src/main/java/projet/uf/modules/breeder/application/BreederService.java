@@ -144,7 +144,7 @@ public class BreederService implements BreederUseCase {
 
     @Override
     public Breeder getById(Long id, OperatorUser operator) {
-        if (operator.isAdmin()) {
+        if (!operator.isAdmin()) {
             throw new ApiException("Accès non autorisé", HttpStatus.UNAUTHORIZED);
         }
         return breederPersistencePort.getById(id).orElseThrow(()-> new ApiException("Eleveur introuvable", HttpStatus.NOT_FOUND));
