@@ -2,10 +2,6 @@ package projet.uf.modules.template.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import projet.uf.modules.cat.adapter.out.persistence.CatPersistenceAdapter;
-import projet.uf.modules.cat.adapter.out.persistence.JpaCatRepository;
-import projet.uf.modules.cat.application.CatService;
-import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.template.adapter.out.persistence.JpaTemplateRepository;
 import projet.uf.modules.template.adapter.out.persistence.TemplatePersistenceAdapter;
 import projet.uf.modules.template.application.port.out.TemplatePersistencePort;

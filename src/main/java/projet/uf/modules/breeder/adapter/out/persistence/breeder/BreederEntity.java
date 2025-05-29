@@ -24,7 +24,7 @@ public class BreederEntity {
     @Column(nullable = false)
     private String affix;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_affix_prefix")
     private boolean isAffixPrefix = false;
 
     @Column
@@ -36,19 +36,9 @@ public class BreederEntity {
     @Column(nullable = false)
     private Long createdByCatteryId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_active")
     private boolean isActive = true;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_derogatory")
     private boolean isDerogatory = false;
-
-    public BreederEntity(String name, String siret, String affix, boolean isAffixPrefix, Long createdByCatteryId, boolean isActive, boolean isDerogatory) {
-        this.name = name;
-        this.siret = siret;
-        this.affix = affix;
-        this.isAffixPrefix = isAffixPrefix;
-        this.createdByCatteryId = createdByCatteryId;
-        this.isActive = isActive;
-        this.isDerogatory = isDerogatory;
-    }
 }

@@ -1,5 +1,6 @@
 package projet.uf.modules.breeder.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,12 +15,15 @@ public class Breeder {
     private String name;
     private String siret;
     private String affix;
+    @JsonProperty("isAffixPrefix")
     private boolean isAffixPrefix;
     private Long ownerId;
     private Long addressId;
     private Long createdByCatteryId;
-    private boolean isActive;
-    private boolean isDerogatory;
+    @JsonProperty("isActive")
+    private boolean isActive = true;
+    @JsonProperty("isDerogatory")
+    private boolean isDerogatory = false;
 
     public Breeder(String name, String siret, String affix, boolean isAffixPrefix, Long ownerId, Long addressId, Long createdByCatteryId, boolean isActive, boolean isDerogatory) {
         this.name = name;
@@ -31,5 +35,9 @@ public class Breeder {
         this.createdByCatteryId = createdByCatteryId;
         this.isActive = isActive;
         this.isDerogatory = isDerogatory;
+    }
+    public Breeder(String name, Long createdByCatteryId) {
+        this.name = name;
+        this.createdByCatteryId = createdByCatteryId;
     }
 }

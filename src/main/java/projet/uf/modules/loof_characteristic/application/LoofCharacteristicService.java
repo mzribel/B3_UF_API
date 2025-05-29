@@ -47,8 +47,6 @@ public class LoofCharacteristicService<T extends ALoofCharacteristic> implements
         entity.setCode(command.code());
         entity.setDetails(command.details());
 
-        System.out.println("Entity updated: " + entity.getId());
-
         return persistencePort.update(entity);
     }
 

@@ -17,12 +17,12 @@ public class UserController {
 
 
     @GetMapping({"/users/", "/users"})
-    public List<User> getUsers() throws Exception {
+    public List<User> getUsers() {
         return userUseCase.getAll();
     }
 
     @GetMapping( {"/users/{id}/", "/users/{id}"})
-    public Optional<User> getUserById(@PathVariable Long id) throws Exception {
+    public Optional<User> getUserById(@PathVariable Long id) {
         return userUseCase.getById(id);
     }
 }

@@ -1,22 +1,26 @@
 package projet.uf.modules.breeder.application.port.in;
 
+import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.breeder.application.model.CreateContactBreederCommand;
+import projet.uf.modules.breeder.application.model.UpdateCatteryBreederCommand;
 import projet.uf.modules.breeder.domain.model.Breeder;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BreederUseCase {
-    // CREATE
-    Breeder create(CreateBreederCommand command, Long createdByCatteryId);
+    // TOUS SANS DISTINCTION
+    Breeder getById(Long id, OperatorUser operator);
+    List<Breeder> getAll(OperatorUser operator);
+    void deleteById(Long catteryId, OperatorUser operator);
 
-    // READ
-    Optional<Breeder> getById(Long id);
-    List<Breeder> getAll();
-    List<Breeder> getByCatteryId(Long id);
+    // CATTERY BREEDER
+    Breeder getCatteryBreederByCatteryId(Long catteryId, OperatorUser operator);
+    Breeder createEmptyCatteryBreeder(String name, Long createdByCatteryId);
+    Breeder updateCatteryBreeder(Long catteryId, UpdateCatteryBreederCommand command, OperatorUser operator);
 
-    // UPDATE
-    Breeder update(Long id, CreateBreederCommand command);
-
-    // DELETE
-    void deleteById(Long id);
+    // CONTACT BREEDERS
+    Breeder createContactBreeder(CreateContactBreederCommand command, Long createdByCatteryId, OperatorUser operator);
+    List<Breeder> getAllContactBreedersByCatteryId(Long catteryId, OperatorUser operator);
+    Breeder updateContactBreeder(Long breederId, Long catteryId, CreateContactBreederCommand command, OperatorUser operator);
+    void deleteContactBreeder(Long breederId, Long catteryId, OperatorUser operator);
 }

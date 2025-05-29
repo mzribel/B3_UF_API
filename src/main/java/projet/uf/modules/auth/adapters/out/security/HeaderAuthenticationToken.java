@@ -3,7 +3,7 @@ package projet.uf.modules.auth.adapters.out.security;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import projet.uf.modules.auth.domain.model.CurrentUser;
+import projet.uf.modules.auth.application.model.CurrentUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,12 +19,6 @@ public final class HeaderAuthenticationToken extends AbstractAuthenticationToken
         setAuthenticated(true);
     }
 
-    public HeaderAuthenticationToken(CurrentUser principal, Collection<? extends GrantedAuthority> authorities) {
-        super(authorities);
-        this.principal = principal;
-        setAuthenticated(true);
-    }
-
     @Override
     public Object getCredentials() {
         return null;
@@ -35,19 +29,13 @@ public final class HeaderAuthenticationToken extends AbstractAuthenticationToken
         return principal;
     }
 
-//    @Override
-//    public String getName() {
-//        return String.valueOf(principal.userId());
-//    }
-
     private static Collection<GrantedAuthority> getAuthorities(CurrentUser user) {
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("USER"));
-        System.out.println(user.isAdmin());
+
         if (user.isAdmin()) {
             roles.add(new SimpleGrantedAuthority("ADMIN"));
         }
-        System.out.println(roles);
         return roles;
     }
 }

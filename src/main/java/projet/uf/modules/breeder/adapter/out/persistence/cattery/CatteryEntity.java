@@ -9,19 +9,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "catteries")
 public class CatteryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "created_by_user_id")
     private Long createdByUserId;
 
-    @Column
+    @Column(name = "linked_to_breeder_id")
     private Long linkedToBreederId;
-
-    public CatteryEntity(Long createdByUserId, Long linkedToBreederId) {
-        this.createdByUserId = createdByUserId;
-        this.linkedToBreederId = linkedToBreederId;
-    }
 }
