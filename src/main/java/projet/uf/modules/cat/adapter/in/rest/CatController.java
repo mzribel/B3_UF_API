@@ -1,6 +1,7 @@
 package projet.uf.modules.cat.adapter.in.rest;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
@@ -31,6 +32,7 @@ public class CatController {
     }
 
     @PostMapping({"/catteries/{catteryId}/cats/", "/catteries/{catteryId}/cats"})
+    @ResponseStatus(HttpStatus.CREATED)
     public CatDetailsDto createCat(
             @PathVariable Long catteryId,
             @RequestBody CreateCatCommand command
@@ -49,5 +51,11 @@ public class CatController {
     public Cat updateCat(@PathVariable Long id, @RequestBody CreateCatCommand command) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.updateCatById(id, command, operator);
+    }
+
+    @DeleteMapping({"/cats/{id}/", "/cats/{id}"})
+    public void deleteCat(@PathVariable Long id) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        catUseCase.deleteCatById(id, operator);
     }
 }
