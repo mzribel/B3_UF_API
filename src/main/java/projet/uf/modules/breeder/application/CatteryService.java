@@ -1,5 +1,6 @@
 package projet.uf.modules.breeder.application;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
@@ -9,14 +10,13 @@ import projet.uf.modules.breeder.application.dto.CatteryDetailsDto;
 import projet.uf.modules.breeder.application.command.CreateCatteryCommand;
 import projet.uf.modules.breeder.application.dto.UserCatteriesDto;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
-import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryUserPersistencePort;
 import projet.uf.modules.breeder.domain.model.Breeder;
 import projet.uf.modules.breeder.domain.model.Cattery;
 import projet.uf.modules.breeder.domain.model.CatteryUser;
-import projet.uf.modules.user.application.dto.UserDto;
 import projet.uf.modules.user.application.port.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
 
@@ -32,81 +32,60 @@ import java.util.stream.Stream;
 public class CatteryService implements
         CatteryUseCase
 {
+    // TODO : ranger les dépendances
     private final CatteryPersistencePort catteryPersistencePort;
     private final CatteryUserPersistencePort catteryUserPersistencePort;
-    private final BreederPersistencePort breederPersistencePort;
     private final BreederUseCase breederUseCase;
     private final UserPersistencePort userPersistencePort;
+    private final CatteryDtoAssembler dtoAssembler;
+    private final CatteryAccessUseCase catteryAccessUseCase;
 
     @Override
+    @Transactional
     public CatteryDetailsDto create(CreateCatteryCommand command, OperatorUser operatorUser) {
         if (!operatorUser.isAdmin() && command.userId() != null && !command.userId().equals(operatorUser.getId())) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
 
         Long userId = operatorUser.isAdmin() && command.userId() != null ? command.userId() : operatorUser.getId();
-
-        User user = userPersistencePort.getById(userId)
+        userPersistencePort.getById(userId)
                 .orElseThrow(() -> new ApiException("Utilisateur introuvable", HttpStatus.BAD_REQUEST));
 
+        // Créé la chatterie
         Cattery newCattery = catteryPersistencePort.insert(new Cattery(userId));
+        // Crée l'éleveur associé
         Breeder breeder = breederUseCase.createEmptyCatteryBreeder(command.name(), newCattery.getId());
+        // Ajoute l'éleveur en tant qu'éleveur de la chatterie
         newCattery.setLinkedToBreederId(breeder.getId());
         catteryPersistencePort.update(newCattery);
 
-        return this.toDetails(newCattery, user, breeder);
+        return dtoAssembler.toDetailsDto(newCattery);
     }
 
     @Override
     public CatteryDetailsDto getById(Long catteryId, OperatorUser operator) {
-        Cattery cattery = catteryPersistencePort.getById(catteryId)
-                .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.NOT_FOUND));
-
-        // L'utilisateur doit être admin ou créateur/membre de la chatterie pour accéder aux données
-        boolean isCreator = cattery.getCreatedByUserId().equals(operator.getId());
-        boolean isMember = catteryUserPersistencePort.getByCatteryId(catteryId).stream()
-                .anyMatch(cu -> cu.getUserId().equals(operator.getId()));
-        if (!operator.isAdmin() && !isCreator && !isMember) {
-            throw new ApiException("Accès interdit à cette chatterie", HttpStatus.FORBIDDEN);
-        }
-
-        return this.toDetails(cattery);
+        Cattery cattery = catteryAccessUseCase.getCatteryOrThrow(catteryId, operator);
+        return dtoAssembler.toDetailsDto(cattery);
     }
 
     @Override
     public List<CatteryDetailsDto> getAll(OperatorUser operator) {
         if (operator.isAdmin()) {
-            return catteryPersistencePort.getAll().stream().map(this::toDetails).toList();
+            return catteryPersistencePort.getAll().stream().map(dtoAssembler::toDetailsDto).toList();
         }
         return getAllAccessibleFromUser(operator.getId());
     }
 
     @Override
     public void deleteById(Long id, OperatorUser operator) {
-        Cattery cattery = catteryPersistencePort.getById(id)
-                .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.NOT_FOUND));
-
-        boolean isCreator = cattery.getCreatedByUserId().equals(operator.getId());
-
-        if (!operator.isAdmin() && !isCreator) {
-            throw new ApiException("Seul un administrateur ou l'administrateur de la chatterie peut la supprimer", HttpStatus.FORBIDDEN);
-        }
-
+        catteryAccessUseCase.getCatteryOrThrow(id, operator);
         catteryPersistencePort.deleteById(id);
     }
 
     // TODO : Splitter ce mastodonte
     @Override
     public void addUserToCattery(Long catteryId, AddUserToCatteryCommand command, OperatorUser operator) {
-        // Récupère la chatterie
-        Cattery cattery = catteryPersistencePort.getById(catteryId)
-                .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.BAD_REQUEST));
-
-        // Vérifie les droits : admin global ou admin de la chatterie
-        boolean isCreator = cattery.getCreatedByUserId().equals(operator.getId());
-        if (!operator.isAdmin() && !isCreator) {
-            throw new ApiException("Seul un administrateur ou l'administrateur de la chatterie peut la modifier", HttpStatus.FORBIDDEN);
-        }
+        Cattery cattery = catteryAccessUseCase.getCatteryOrThrow(catteryId, operator);
 
         // Récupère les champs depuis le command
         Long userId = command.userId();
@@ -127,7 +106,6 @@ public class CatteryService implements
         if (targetUserId.equals(cattery.getCreatedByUserId())) {
             throw new ApiException("L'utilisateur est déjà administrateur de cette chatterie", HttpStatus.CONFLICT);
         }
-
         if (catteryUserPersistencePort.isUserMemberOfCattery(targetUserId, catteryId)) {
             throw new ApiException("L'utilisateur est déjà membre de cette chatterie", HttpStatus.CONFLICT);
         }
@@ -140,9 +118,7 @@ public class CatteryService implements
     // TODO : Splitter ce mastodonte
     @Override
     public void removeUserFromCattery(Long catteryId, Long userIdToRemove, OperatorUser operator) {
-        // Vérifie que la chatterie existe
-        Cattery cattery = catteryPersistencePort.getById(catteryId)
-                .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.BAD_REQUEST));
+        Cattery cattery = catteryAccessUseCase.getCatteryOrThrow(catteryId, operator);
 
         // Vérifie que l'utilisateur à retirer existe
         userPersistencePort.getById(userIdToRemove)
@@ -151,12 +127,6 @@ public class CatteryService implements
         // Vérifie que ce n'est pas le créateur
         if (userIdToRemove.equals(cattery.getCreatedByUserId())) {
             throw new ApiException("Impossible de retirer l'administrateur de la chatterie", HttpStatus.FORBIDDEN);
-        }
-
-        // Vérifie les droits de l'opérateur
-        boolean isCreator = cattery.getCreatedByUserId().equals(operator.getId());
-        if (!operator.isAdmin() && !isCreator) {
-            throw new ApiException("Seul un administrateur ou le créateur de la chatterie peut retirer un membre", HttpStatus.FORBIDDEN);
         }
 
         // Vérifie que le membre fait bien partie de la chatterie
@@ -187,43 +157,12 @@ public class CatteryService implements
 
     public List<CatteryDetailsDto> getCatteriesWhereUserIsAdmin(Long userId) {
         return catteryPersistencePort.getByCreatedByUserId(userId)
-                .stream().map(this::toDetails).toList();
+                .stream().map(dtoAssembler::toDetailsDto).toList();
     }
 
     public List<CatteryDetailsDto> getCatteriesWhereUserIsMember(Long userId) {
         return catteryUserPersistencePort.getAllCatteriesByUserId(userId)
-                .stream().map(this::toDetails).toList();
-    }
-
-    private CatteryDetailsDto toDetails(Cattery cattery) {
-        User createdBy = userPersistencePort.getById(cattery.getCreatedByUserId())
-            .orElse(new User(cattery.getCreatedByUserId())); // ou exception
-
-        // Membres (filtre les absents si user supprimé par exemple)
-        List<User> members = catteryUserPersistencePort.getByCatteryId(cattery.getId()).stream()
-            .map(cu -> userPersistencePort.getById(cu.getUserId()))
-            .flatMap(Optional::stream)
-            .toList();
-
-        Breeder breeder =
-            cattery.getLinkedToBreederId() != null
-            ? breederPersistencePort.getById(cattery.getLinkedToBreederId()).orElse(null)
-            : null;
-
-        return new CatteryDetailsDto(
-            cattery.getId(),
-            UserDto.toDto(createdBy),
-            breeder,
-            members
-        );
-    }
-    private CatteryDetailsDto toDetails(Cattery cattery, User createdBy, Breeder breeder) {
-        return new CatteryDetailsDto(
-            cattery.getId(),
-            UserDto.toDto(createdBy),
-            breeder,
-            null
-        );
+                .stream().map(dtoAssembler::toDetailsDto).toList();
     }
 
     private List<CatteryDetailsDto> getAllAccessibleFromUser(Long userId) {
@@ -242,7 +181,7 @@ public class CatteryService implements
             ));
 
         return merged.stream()
-                .map(this::toDetails)
+                .map(dtoAssembler::toDetailsDto)
                 .toList();
     }
 }
