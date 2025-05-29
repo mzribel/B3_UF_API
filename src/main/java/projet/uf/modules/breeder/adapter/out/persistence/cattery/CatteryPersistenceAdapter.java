@@ -51,4 +51,9 @@ public class CatteryPersistenceAdapter implements CatteryPersistencePort {
     public void deleteById(Long id) {
         jpaCatteryRepository.deleteById(id);
     }
+
+    @Override
+    public boolean isBreederLinkedToAnyCattery(Long breederId) {
+        return jpaCatteryRepository.existsByLinkedToBreederId(breederId);
+    }
 }

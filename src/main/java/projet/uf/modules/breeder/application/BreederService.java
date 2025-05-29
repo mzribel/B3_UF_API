@@ -24,7 +24,7 @@ public class BreederService implements BreederUseCase {
     private final CatteryPersistencePort catteryPersistencePort;
 
     @Override
-    public Breeder createContact(CreateContactBreederCommand command, Long createdByCatteryId, OperatorUser operator) {
+    public Breeder createContactBreeder(CreateContactBreederCommand command, Long createdByCatteryId, OperatorUser operator) {
         // Récupère la chatterie source
         Cattery cattery = catteryPersistencePort.getById(createdByCatteryId)
                 .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.BAD_REQUEST));
@@ -77,6 +77,30 @@ public class BreederService implements BreederUseCase {
         Breeder updatedBreeder = BreederCommandMapper.fromCreateContactCommand(command, catteryId);
         updatedBreeder.setId(breederId);
         return breederPersistencePort.save(updatedBreeder);
+    }
+
+    @Override
+    public void deleteContactBreeder(Long breederId, Long catteryId, OperatorUser operator) {
+        // Récupère le breeder
+        Breeder breeder = breederPersistencePort.getById(breederId)
+                .orElseThrow(() -> new ApiException("Breeder introuvable", HttpStatus.BAD_REQUEST));
+        // Vérifie qu'il est bien associé au catteryId fourni
+        if (!breeder.getCreatedByCatteryId().equals(catteryId)) {
+            throw new ApiException("Breeder introuvable", HttpStatus.BAD_REQUEST);
+        }
+
+        // Récupère la chatterie
+        Cattery cattery = catteryPersistencePort.getById(catteryId).orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.BAD_REQUEST));
+
+        if (!operator.isAdmin() && !cattery.getCreatedByUserId().equals(operator.getId())) {
+            throw new ApiException("Accès non autorisé", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (catteryPersistencePort.isBreederLinkedToAnyCattery(breederId)) {
+            throw new ApiException("Un éleveur dont les informations sont liées à une chatterie ne peut pas être supprimé", HttpStatus.CONFLICT);
+        }
+
+        breederPersistencePort.deleteById(breederId);
     }
 
     @Transactional
@@ -135,17 +159,45 @@ public class BreederService implements BreederUseCase {
     }
 
     @Override
-    public List<Breeder> getByCatteryId(Long id) {
-        return breederPersistencePort.getByCatteryId(id);
+    public void deleteById(Long breederId, OperatorUser operator) {
+        if (!operator.isAdmin()) {
+            throw new ApiException("Accès non autorisé", HttpStatus.UNAUTHORIZED);
+        }
+
+        // Récupère le breeder
+        breederPersistencePort.getById(breederId)
+            .orElseThrow(() -> new ApiException("Breeder introuvable", HttpStatus.BAD_REQUEST));
+
+        if (catteryPersistencePort.isBreederLinkedToAnyCattery(breederId)) {
+            throw new ApiException("Un éleveur dont les informations sont liées à une chatterie ne peut pas être supprimé", HttpStatus.CONFLICT);
+        }
+
+        breederPersistencePort.deleteById(breederId);
     }
 
     @Override
-    public Breeder update(Long id, CreateContactBreederCommand command) {
-        return null;
+    public Breeder getCatteryBreederByCatteryId(Long catteryId, OperatorUser operator) {
+        // Récupère la chatterie source
+        Cattery cattery = catteryPersistencePort.getById(catteryId)
+            .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.BAD_REQUEST));
+        // Vérifie les droits utilisateur
+        if (!operator.isAdmin() && !cattery.getCreatedByUserId().equals(operator.getId())) {
+            throw new ApiException("Seul un administrateur ou l'administrateur de la chatterie accéder aux données", HttpStatus.UNAUTHORIZED);
+        }
+
+        return breederPersistencePort.getBreederLinkedToCatteryId(catteryId)
+            .orElseThrow(()-> new ApiException("La chatterie n'a pas encore entré d'informations éleveur", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public void deleteById(Long id) {
-        breederPersistencePort.deleteById(id);
+    public List<Breeder> getAllContactBreedersByCatteryId(Long catteryId, OperatorUser operator) {
+        // Récupère la chatterie source
+        Cattery cattery = catteryPersistencePort.getById(catteryId)
+                .orElseThrow(() -> new ApiException("Chatterie introuvable", HttpStatus.BAD_REQUEST));
+        // Vérifie les droits utilisateur
+        if (!operator.isAdmin() && !cattery.getCreatedByUserId().equals(operator.getId())) {
+            throw new ApiException("Seul un administrateur ou l'administrateur de la chatterie accéder aux données", HttpStatus.UNAUTHORIZED);
+        }
+        return breederPersistencePort.getContactsByCatteryId(catteryId);
     }
 }
