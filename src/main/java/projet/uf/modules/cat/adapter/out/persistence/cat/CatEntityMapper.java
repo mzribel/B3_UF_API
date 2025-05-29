@@ -1,4 +1,4 @@
-package projet.uf.modules.cat.adapter.out.persistence;
+package projet.uf.modules.cat.adapter.out.persistence.cat;
 
 import projet.uf.modules.cat.domain.model.Cat;
 

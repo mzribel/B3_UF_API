@@ -5,6 +5,8 @@ import projet.uf.modules.loof_characteristic.application.port.in.AllLoofCharacte
 import projet.uf.modules.loof_characteristic.application.port.out.LoofCharacteristicPersistencePort;
 import projet.uf.modules.loof_characteristic.domain.model.*;
 
+import java.util.Optional;
+
 public class AllLoofCharacteristicsService implements AllLoofCharacteristicsUseCase {
     private final LoofCharacteristicPersistencePort<Breed> breedPersistencePort;
     private final LoofCharacteristicPersistencePort<CoatColor> coatColorPersistencePort;
@@ -33,4 +35,36 @@ public class AllLoofCharacteristicsService implements AllLoofCharacteristicsUseC
                 polyTypePersistencePort.getAll()
         );
     }
+
+    @Override
+    public Optional<Breed> getBreedById(Long id) {
+        return breedPersistencePort.getById(id);
+    }
+
+    @Override
+    public Optional<CoatColor> getCoatColorById(Long id) {
+        return coatColorPersistencePort.getById(id);
+    }
+    @Override
+    public Optional<CoatEffect> getCoatEffectById(Long id) {
+        return coatEffectPersistencePort.getById(id);
+    }
+
+
+    @Override
+    public Optional<CoatPattern> getCoatPatternById(Long id) {
+        return coatPatternPersistencePort.getById(id);
+    }
+
+
+    @Override
+    public Optional<CoatWhiteMarking> getCoatWhiteMarkingById(Long id) {
+        return coatWhiteMarkingPersistencePort.getById(id);
+    }
+
+    @Override
+    public Optional<PolyType> getPolyTypeById(Long id) {
+        return polyTypePersistencePort.getById(id);
+    }
+
 }

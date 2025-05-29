@@ -1,4 +1,4 @@
-package projet.uf.modules.cat.adapter.out.persistence;
+package projet.uf.modules.cat.adapter.out.persistence.cat;
 
 import jakarta.persistence.*;
 import lombok.*;

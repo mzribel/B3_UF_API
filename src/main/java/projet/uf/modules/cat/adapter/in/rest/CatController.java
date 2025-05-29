@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.cat.application.ports.dto.CatDetailsDto;
 import projet.uf.modules.cat.application.ports.in.CatUseCase;
-import projet.uf.modules.cat.application.ports.in.CreateCatCommand;
+import projet.uf.modules.cat.application.ports.model.CreateCatCommand;
 import projet.uf.modules.cat.domain.model.Cat;
 
 import java.util.List;
@@ -24,13 +25,13 @@ public class CatController {
     }
 
     @GetMapping({"/cats/{catId}/", "/cats/{catId}"})
-    public Cat getCat(@PathVariable Long catId) {
+    public CatDetailsDto getCat(@PathVariable Long catId) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.getById(catId, operator);
     }
 
     @PostMapping({"/catteries/{catteryId}/cats/", "/catteries/{catteryId}/cats"})
-    public Cat createCat(
+    public CatDetailsDto createCat(
             @PathVariable Long catteryId,
             @RequestBody CreateCatCommand command
     ) {
@@ -45,7 +46,7 @@ public class CatController {
     }
 
     @PutMapping({"/cats/{id}/", "/cats/{id}"})
-    public Cat updateCat(@PathVariable Long id, @RequestBody CreateCatCommand command) throws Exception {
+    public Cat updateCat(@PathVariable Long id, @RequestBody CreateCatCommand command) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.updateCatById(id, command, operator);
     }

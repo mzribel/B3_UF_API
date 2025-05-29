@@ -61,16 +61,6 @@ public class LoofCharacteristicService<T extends ALoofCharacteristic> implements
     }
 
     @Override
-    public List<T> getByCode(String code) {
-        return persistencePort.getByCode(code);
-    }
-
-    @Override
-    public Optional<T> getByName(String name) {
-        return persistencePort.getByName(name);
-    }
-
-    @Override
     public void deleteById(Long id) {
         persistencePort.deleteById(id);
     }

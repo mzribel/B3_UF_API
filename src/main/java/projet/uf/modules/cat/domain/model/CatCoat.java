@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CatCoat {
-    private Long cat_id;
-    private Long coat_color_id;
-    private Long coat_pattern_id;
-    private Long coat_effect_id;
-    private Long coat_white_marking_id;
+    private Long catId;
+    private Long coatColorId;
+    private Long coatPatternId;
+    private Long coatEffectId;
+    private Long coatWhiteMarkingId;
 }

@@ -5,7 +5,11 @@ import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
+import projet.uf.modules.cat.application.ports.dto.CatDetailsDto;
+import projet.uf.modules.cat.application.ports.dto.CatDtoAssembler;
 import projet.uf.modules.cat.application.ports.in.*;
+import projet.uf.modules.cat.application.ports.model.CatCommandMapper;
+import projet.uf.modules.cat.application.ports.model.CreateCatCommand;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
 
@@ -18,15 +22,23 @@ public class CatService implements
     private final CatPersistencePort catPersistencePort;
     private final CatteryAccessUseCase catteryAccessUseCase;
     private final CatAccessUseCase catAccessUseCase;
+    private final CatCoatUseCase catCoatUseCase;
+    private final CatDtoAssembler dtoAssembler;
 
     @Override
-    public Cat createCat(CreateCatCommand command, Long createdByCatteryId, OperatorUser operator) {
+    public CatDetailsDto createCat(CreateCatCommand command, Long createdByCatteryId, OperatorUser operator) {
         if (!catteryAccessUseCase.hasUserAccessToCattery(createdByCatteryId, operator)) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
 
         Cat cat = CatCommandMapper.fromCreateCommand(command, createdByCatteryId);
-        return catPersistencePort.save(cat);
+        Cat saved = catPersistencePort.save(cat);
+
+        if (command.coat() != null) {
+            catCoatUseCase.createOrUpdateCatCoat(saved.getId(), command.coat());
+        }
+
+        return dtoAssembler.toDetailsDto(saved);
     }
 
     @Override
@@ -46,8 +58,8 @@ public class CatService implements
     }
 
     @Override
-    public Cat getById(Long id, OperatorUser operator) {
-        return catAccessUseCase.getCatOrThrow(id, operator);
+    public CatDetailsDto getById(Long id, OperatorUser operator) {
+        return dtoAssembler.toDetailsDto(catAccessUseCase.getCatOrThrow(id, operator));
     }
 
     @Override
@@ -65,4 +77,7 @@ public class CatService implements
         }
         return catPersistencePort.getAll();
     }
+
+
+
 }
