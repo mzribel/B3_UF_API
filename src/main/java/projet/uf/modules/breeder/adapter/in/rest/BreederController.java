@@ -11,7 +11,6 @@ import projet.uf.modules.breeder.application.model.UpdateCatteryBreederCommand;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
 import projet.uf.modules.breeder.domain.model.Breeder;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -21,12 +20,14 @@ public class BreederController {
 
     @GetMapping({"/breeders/", "/breeders"})
     public List<Breeder> getAll() {
-        return breederUseCase.getAll();
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return breederUseCase.getAll(operator);
     }
 
     @GetMapping({"/breeders/{id}/", "/breeders/{id}"})
-    public Optional<Breeder> getById(@PathVariable Long id) {
-        return breederUseCase.getById(id);
+    public Breeder getById(@PathVariable Long id) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return breederUseCase.getById(id, operator);
     }
 
     @PostMapping({"/catteries/{catteryId}/contacts/breeders/", "/catteries/{catteryId}/contacts/breeders"})

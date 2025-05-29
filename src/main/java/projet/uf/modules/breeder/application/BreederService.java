@@ -1,4 +1,4 @@
-package projet.uf.modules.breeder.application.port;
+package projet.uf.modules.breeder.application;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -60,7 +60,7 @@ public class BreederService implements BreederUseCase {
 
         // Vérifie la cohérence entre le catteryId et le breeder.createdByCatteryId
         if (!Objects.equals(cattery.getId(), breeder.getCreatedByCatteryId())) {
-            throw new ApiException("Ce contact éleveur ne fait pas partie de la chatterie");
+            throw new ApiException("Ce contact éleveur ne fait pas partie de la chatterie", HttpStatus.BAD_REQUEST);
         }
 
         // Vérifie les droits utilisateur
@@ -119,12 +119,18 @@ public class BreederService implements BreederUseCase {
     }
 
     @Override
-    public Optional<Breeder> getById(Long id) {
-        return breederPersistencePort.getById(id);
+    public Breeder getById(Long id, OperatorUser operator) {
+        if (operator.isAdmin()) {
+            throw new ApiException("Accès non autorisé", HttpStatus.UNAUTHORIZED);
+        }
+        return breederPersistencePort.getById(id).orElseThrow(()-> new ApiException("Eleveur introuvable", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public List<Breeder> getAll() {
+    public List<Breeder> getAll(OperatorUser operator) {
+        if (operator.isAdmin()) {
+            throw new ApiException("Accès non autorisé", HttpStatus.UNAUTHORIZED);
+        }
         return breederPersistencePort.getAll();
     }
 

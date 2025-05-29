@@ -6,7 +6,6 @@ import projet.uf.modules.breeder.application.model.UpdateCatteryBreederCommand;
 import projet.uf.modules.breeder.domain.model.Breeder;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BreederUseCase {
     // CREATE
@@ -19,8 +18,8 @@ public interface BreederUseCase {
 
 
         // READ
-    Optional<Breeder> getById(Long id);
-    List<Breeder> getAll();
+    Breeder getById(Long id, OperatorUser operator);
+    List<Breeder> getAll(OperatorUser operator);
     List<Breeder> getByCatteryId(Long id);
 
     // UPDATE

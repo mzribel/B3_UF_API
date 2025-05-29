@@ -6,8 +6,9 @@ import projet.uf.modules.breeder.adapter.out.persistence.cattery.CatteryPersiste
 import projet.uf.modules.breeder.adapter.out.persistence.cattery.JpaCatteryRepository;
 import projet.uf.modules.breeder.adapter.out.persistence.catteryuser.CatteryUserPersistenceAdapter;
 import projet.uf.modules.breeder.adapter.out.persistence.catteryuser.JpaCatteryUserRepository;
-import projet.uf.modules.breeder.application.port.CatteryService;
+import projet.uf.modules.breeder.application.CatteryService;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
+import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryUserPersistencePort;
 import projet.uf.modules.breeder.application.port.out.UserAccessPort;
@@ -25,7 +26,7 @@ public class CatteryConfig {
     }
 
     @Bean
-    public CatteryService catteryService(CatteryPersistencePort catteryPersistencePort, CatteryUserPersistencePort catteryUserPersistencePort, BreederUseCase breederUseCase, UserAccessPort userAccessPort) {
-        return new CatteryService(catteryPersistencePort, catteryUserPersistencePort, breederUseCase, userAccessPort);
+    public CatteryService catteryService(CatteryPersistencePort catteryPersistencePort, CatteryUserPersistencePort catteryUserPersistencePort, BreederPersistencePort breederPersistencePort, BreederUseCase breederUseCase, UserAccessPort userAccessPort) {
+        return new CatteryService(catteryPersistencePort, catteryUserPersistencePort, breederPersistencePort, breederUseCase, userAccessPort);
     }
 }

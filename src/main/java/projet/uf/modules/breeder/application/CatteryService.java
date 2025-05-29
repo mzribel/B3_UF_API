@@ -1,4 +1,4 @@
-package projet.uf.modules.breeder.application.port;
+package projet.uf.modules.breeder.application;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,6 +7,7 @@ import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.breeder.application.model.CatteryDetails;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
+import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryUserPersistencePort;
 import projet.uf.modules.breeder.application.port.out.UserAccessPort;
@@ -28,6 +29,7 @@ public class CatteryService implements
 {
     private final CatteryPersistencePort catteryPersistencePort;
     private final CatteryUserPersistencePort catteryUserPersistencePort;
+    private final BreederPersistencePort breederPersistencePort;
     private final BreederUseCase breederUseCase;
     private final UserAccessPort userAccessPort;
 
@@ -175,7 +177,7 @@ public class CatteryService implements
 
         Breeder breeder =
             cattery.getLinkedToBreederId() != null
-            ? breederUseCase.getById(cattery.getLinkedToBreederId()).orElse(null)
+            ? breederPersistencePort.getById(cattery.getLinkedToBreederId()).orElse(null)
             : null;
 
         return new CatteryDetails(

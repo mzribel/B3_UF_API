@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import projet.uf.modules.breeder.adapter.out.persistence.breeder.BreederPersistenceAdapter;
 import projet.uf.modules.breeder.adapter.out.persistence.breeder.JpaBreederRepository;
-import projet.uf.modules.breeder.application.port.BreederService;
+import projet.uf.modules.breeder.application.BreederService;
 import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 
