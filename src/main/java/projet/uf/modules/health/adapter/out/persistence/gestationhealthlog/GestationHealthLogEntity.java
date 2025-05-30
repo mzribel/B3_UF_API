@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import projet.uf.modules.health.domain.model.GestationHealthLog;
 
 import java.math.BigDecimal;
 
@@ -40,4 +41,32 @@ public class GestationHealthLogEntity {
 
     @Column(name = "kitten_movement")
     private Boolean kittenMovement;
+
+    public static GestationHealthLog toModel(GestationHealthLogEntity entity) {
+        return GestationHealthLog.builder()
+                .id(entity.getId())
+                .gestationId(entity.getGestationId())
+                .healthLogId(entity.getHealthLogId())
+                .weight(entity.getWeight())
+                .temperature(entity.getTemperature())
+                .behavior(entity.getBehavior())
+                .notes(entity.getNotes())
+                .mammaryObservations(entity.getMammaryObservations())
+                .kittenMovement(entity.getKittenMovement())
+                .build();
+    }
+
+    public static GestationHealthLogEntity toEntity(GestationHealthLog model) {
+        return new GestationHealthLogEntity(
+                model.getId(),
+                model.getGestationId(),
+                model.getHealthLogId(),
+                model.getWeight(),
+                model.getTemperature(),
+                model.getBehavior(),
+                model.getNotes(),
+                model.getMammaryObservations(),
+                model.getKittenMovement()
+        );
+    }
 }

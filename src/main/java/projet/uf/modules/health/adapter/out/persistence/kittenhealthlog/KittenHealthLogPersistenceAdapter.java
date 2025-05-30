@@ -13,19 +13,19 @@ public class KittenHealthLogPersistenceAdapter implements KittenHealthLogPersist
 
     @Override
     public Optional<KittenHealthLog> getById(Long id) {
-        return jpaKittenHealthLogRepository.findById(id).map(KittenHealthLogEntityMapper::toModel);
+        return jpaKittenHealthLogRepository.findById(id).map(KittenHealthLogEntity::toModel);
     }
 
     @Override
     public Optional<KittenHealthLog> getByHealthLogId(Long healthLogId) {
-        return jpaKittenHealthLogRepository.findByHealthLogId(healthLogId).map(KittenHealthLogEntityMapper::toModel);
+        return jpaKittenHealthLogRepository.findByHealthLogId(healthLogId).map(KittenHealthLogEntity::toModel);
     }
 
     @Override
     public KittenHealthLog save(KittenHealthLog kittenHealthLog) {
-        KittenHealthLogEntity entity = KittenHealthLogEntityMapper.toEntity(kittenHealthLog);
+        KittenHealthLogEntity entity = KittenHealthLogEntity.toEntity(kittenHealthLog);
         KittenHealthLogEntity saved = jpaKittenHealthLogRepository.save(entity);
-        return KittenHealthLogEntityMapper.toModel(saved);
+        return KittenHealthLogEntity.toModel(saved);
     }
 
     @Override

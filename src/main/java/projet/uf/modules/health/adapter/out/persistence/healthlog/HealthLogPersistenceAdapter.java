@@ -14,14 +14,14 @@ public class HealthLogPersistenceAdapter implements HealthLogPersistencePort {
 
     @Override
     public Optional<HealthLog> getById(Long id) {
-        return jpaHealthLogRepository.findById(id).map(HealthLogEntityMapper::toModel);
+        return jpaHealthLogRepository.findById(id).map(HealthLogEntity::toModel);
     }
 
     @Override
     public List<HealthLog> getAll() {
         return jpaHealthLogRepository.findAll()
                 .stream()
-                .map(HealthLogEntityMapper::toModel)
+                .map(HealthLogEntity::toModel)
                 .toList();
     }
 
@@ -29,15 +29,15 @@ public class HealthLogPersistenceAdapter implements HealthLogPersistencePort {
     public List<HealthLog> getByCatId(Long catId) {
         return jpaHealthLogRepository.findByCatId(catId)
                 .stream()
-                .map(HealthLogEntityMapper::toModel)
+                .map(HealthLogEntity::toModel)
                 .toList();
     }
 
     @Override
     public HealthLog save(HealthLog healthLog) {
-        HealthLogEntity entity = HealthLogEntityMapper.toEntity(healthLog);
+        HealthLogEntity entity = HealthLogEntity.toEntity(healthLog);
         HealthLogEntity saved = jpaHealthLogRepository.save(entity);
-        return HealthLogEntityMapper.toModel(saved);
+        return HealthLogEntity.toModel(saved);
     }
 
     @Override

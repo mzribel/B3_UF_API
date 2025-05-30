@@ -14,27 +14,27 @@ public class GestationHealthLogPersistenceAdapter implements GestationHealthLogP
 
     @Override
     public Optional<GestationHealthLog> getById(Long id) {
-        return jpaGestationHealthLogRepository.findById(id).map(GestationHealthLogEntityMapper::toModel);
+        return jpaGestationHealthLogRepository.findById(id).map(GestationHealthLogEntity::toModel);
     }
 
     @Override
     public List<GestationHealthLog> getByGestationId(Long gestationId) {
         return jpaGestationHealthLogRepository.findByGestationId(gestationId)
                 .stream()
-                .map(GestationHealthLogEntityMapper::toModel)
+                .map(GestationHealthLogEntity::toModel)
                 .toList();
     }
 
     @Override
     public Optional<GestationHealthLog> getByHealthLogId(Long healthLogId) {
-        return jpaGestationHealthLogRepository.findByHealthLogId(healthLogId).map(GestationHealthLogEntityMapper::toModel);
+        return jpaGestationHealthLogRepository.findByHealthLogId(healthLogId).map(GestationHealthLogEntity::toModel);
     }
 
     @Override
     public GestationHealthLog save(GestationHealthLog gestationHealthLog) {
-        GestationHealthLogEntity entity = GestationHealthLogEntityMapper.toEntity(gestationHealthLog);
+        GestationHealthLogEntity entity = GestationHealthLogEntity.toEntity(gestationHealthLog);
         GestationHealthLogEntity saved = jpaGestationHealthLogRepository.save(entity);
-        return GestationHealthLogEntityMapper.toModel(saved);
+        return GestationHealthLogEntity.toModel(saved);
     }
 
     @Override
