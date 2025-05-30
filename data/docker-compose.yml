@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:11.3
+    container_name: breeders_db
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: breeders_app
+      MARIADB_USER: root
+      MARIADB_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init2.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+volumes:
+  db_data:
