@@ -7,7 +7,7 @@ import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.cat.application.dto.CatDetailsDto;
 import projet.uf.modules.cat.application.ports.in.CatUseCase;
-import projet.uf.modules.cat.application.command.CreateCatCommand;
+import projet.uf.modules.cat.application.command.CatCommand;
 import projet.uf.modules.cat.domain.model.Cat;
 
 import java.util.List;
@@ -21,7 +21,6 @@ public class CatController {
     @GetMapping("/cats")
     public List<Cat> getAllCats() {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
-
         return catUseCase.getAll(operator);
     }
 
@@ -35,7 +34,7 @@ public class CatController {
     @ResponseStatus(HttpStatus.CREATED)
     public CatDetailsDto createCat(
             @PathVariable Long catteryId,
-            @RequestBody CreateCatCommand command
+            @RequestBody CatCommand command
     ) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.createCat(command, catteryId, operator);
@@ -48,7 +47,7 @@ public class CatController {
     }
 
     @PutMapping("/cats/{id}")
-    public Cat updateCat(@PathVariable Long id, @RequestBody CreateCatCommand command) {
+    public Cat updateCat(@PathVariable Long id, @RequestBody CatCommand command) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.updateCatById(id, command, operator);
     }

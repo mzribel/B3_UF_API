@@ -7,7 +7,7 @@ import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
 import projet.uf.modules.cat.application.dto.CatDetailsDto;
 import projet.uf.modules.cat.application.ports.in.*;
-import projet.uf.modules.cat.application.command.CreateCatCommand;
+import projet.uf.modules.cat.application.command.CatCommand;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
 
@@ -24,12 +24,12 @@ public class CatService implements
     private final CatDtoAssembler dtoAssembler;
 
     @Override
-    public CatDetailsDto createCat(CreateCatCommand command, Long createdByCatteryId, OperatorUser operator) {
+    public CatDetailsDto createCat(CatCommand command, Long createdByCatteryId, OperatorUser operator) {
         if (!catteryAccessUseCase.hasUserAccessToCattery(createdByCatteryId, operator)) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
 
-        Cat cat = CreateCatCommand.toModel(command, createdByCatteryId);
+        Cat cat = CatCommand.toModel(command, createdByCatteryId);
         Cat saved = catPersistencePort.save(cat);
 
         if (command.coat() != null) {
@@ -40,9 +40,9 @@ public class CatService implements
     }
 
     @Override
-    public Cat updateCatById(Long id, CreateCatCommand command, OperatorUser operator) {
+    public Cat updateCatById(Long id, CatCommand command, OperatorUser operator) {
         Cat cat = catAccessUseCase.getCatOrThrow(id, operator);
-        Cat updatedCat = CreateCatCommand.toModel(command, cat.getCreatedByCatteryId());
+        Cat updatedCat = CatCommand.toModel(command, cat.getCreatedByCatteryId());
         updatedCat.setId(cat.getId());
         return catPersistencePort.save(updatedCat);
     }
@@ -75,7 +75,4 @@ public class CatService implements
         }
         return catPersistencePort.getAll();
     }
-
-
-
 }

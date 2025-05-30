@@ -30,6 +30,7 @@ public class BreederController {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return breederUseCase.getById(id, operator);
     }
+
     @DeleteMapping("/breeders/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {
@@ -43,6 +44,7 @@ public class BreederController {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return breederUseCase.getCatteryBreederByCatteryId(catteryId, operator);
     }
+
     @PutMapping("/catteries/{catteryId}/breeder")
     public Breeder updateCatteryBreeder(
             @PathVariable Long catteryId,

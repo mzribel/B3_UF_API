@@ -5,7 +5,7 @@ import projet.uf.modules.cat.domain.model.Cat;
 
 import java.time.LocalDate;
 
-public record CreateCatCommand(
+public record CatCommand(
     @NotBlank(message = "Le nom du chat ne peut pas être vide")
     @NotBlank(message = "Le nom du chat ne peut pas être vide")
     @Size(max = 30, message = "Le nom du chat ne peut pas dépasser 30 caractères")
@@ -34,7 +34,7 @@ public record CreateCatCommand(
     Long litterId,
     CatCoatCommand coat
 ){
-    public static Cat toModel(CreateCatCommand command, Long createdByCatteryId) {
+    public static Cat toModel(CatCommand command, Long createdByCatteryId) {
         return new Cat(
                 command.name(),
                 command.surname(),
