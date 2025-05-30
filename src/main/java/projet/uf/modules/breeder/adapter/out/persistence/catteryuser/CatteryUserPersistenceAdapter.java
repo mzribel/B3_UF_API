@@ -6,6 +6,7 @@ import projet.uf.exceptions.ApiException;
 import projet.uf.modules.breeder.adapter.out.persistence.cattery.CatteryEntity;
 import projet.uf.modules.breeder.adapter.out.persistence.cattery.JpaCatteryRepository;
 import projet.uf.modules.breeder.application.port.out.CatteryUserPersistencePort;
+import projet.uf.modules.breeder.domain.model.Cattery;
 import projet.uf.modules.breeder.domain.model.CatteryUser;
 import projet.uf.modules.user.adapter.out.persistence.JpaUserRepository;
 import projet.uf.modules.user.adapter.out.persistence.UserEntity;
@@ -21,16 +22,16 @@ public class CatteryUserPersistenceAdapter implements CatteryUserPersistencePort
     @Override
     public List<CatteryUser> getByUserId(Long id) {
         return jpaCatteryUserRepository.findByUserId(id)
-            .stream()
-            .map(CatteryUserEntityMapper::toModel)
-            .toList();
+                .stream()
+                .map(CatteryUserEntity::toModel)
+                .toList();
     }
 
     @Override
     public List<CatteryUser> getByCatteryId(Long id) {
         return jpaCatteryUserRepository.findByCatteryId(id)
                 .stream()
-                .map(CatteryUserEntityMapper::toModel)
+                .map(CatteryUserEntity::toModel)
                 .toList();
     }
 
@@ -60,5 +61,13 @@ public class CatteryUserPersistenceAdapter implements CatteryUserPersistencePort
         }
 
         jpaCatteryUserRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Cattery> getAllCatteriesByUserId(Long userId) {
+        return jpaCatteryUserRepository.findByUserId(userId).stream()
+                .map(CatteryUserEntity::getCattery)
+                .map(CatteryEntity::toModel)
+                .toList();
     }
 }

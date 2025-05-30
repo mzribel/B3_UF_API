@@ -55,6 +55,11 @@ public class LoofCharacteristicPersistenceAdapter<
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
+    @Override
     public List<T> getAll() {
         return repository.findAll().stream().map(mapper::toModel).collect(Collectors.toList());
     }

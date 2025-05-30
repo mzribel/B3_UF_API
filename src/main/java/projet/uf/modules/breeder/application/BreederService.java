@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.model.BreederCommandMapper;
-import projet.uf.modules.breeder.application.model.UpdateCatteryBreederCommand;
+import projet.uf.modules.breeder.application.command.UpdateCatteryBreederCommand;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
-import projet.uf.modules.breeder.application.model.CreateContactBreederCommand;
+import projet.uf.modules.breeder.application.command.CreateContactBreederCommand;
 import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.domain.model.Breeder;
@@ -35,12 +34,12 @@ public class BreederService implements BreederUseCase {
         }
 
         // Vérifie l'existence d'un éleveur ayant déjà cet affixe
-        if (breederPersistencePort.existsByAffixAndCatteryId(command.getAffix(), createdByCatteryId)) {
+        if (breederPersistencePort.existsByAffixAndCatteryId(command.affix(), createdByCatteryId)) {
             throw new ApiException("La chatterie possède déjà un éleveur avec cet affixe", HttpStatus.CONFLICT);
         }
 
         // Créé l'éleveur contact
-        Breeder breeder = BreederCommandMapper.fromCreateContactCommand(command, createdByCatteryId);
+        Breeder breeder = CreateContactBreederCommand.toModel(command, createdByCatteryId);
         return breederPersistencePort.save(breeder);
     }
 
@@ -69,12 +68,12 @@ public class BreederService implements BreederUseCase {
         }
 
         // Vérifie l'existence d'un éleveur ayant déjà cet affixe
-        if (breederPersistencePort.existsByAffixAndCatteryIdExceptId(command.getAffix(), catteryId, breederId)) {
+        if (breederPersistencePort.existsByAffixAndCatteryIdExceptId(command.affix(), catteryId, breederId)) {
             throw new ApiException("La chatterie possède déjà un éleveur avec cet affixe", HttpStatus.CONFLICT);
         }
 
         // Modifie l'éleveur contact
-        Breeder updatedBreeder = BreederCommandMapper.fromCreateContactCommand(command, catteryId);
+        Breeder updatedBreeder = CreateContactBreederCommand.toModel(command, catteryId);
         updatedBreeder.setId(breederId);
         return breederPersistencePort.save(updatedBreeder);
     }
@@ -120,10 +119,10 @@ public class BreederService implements BreederUseCase {
                 ? breederPersistencePort.getById(breederId)
                 : Optional.empty();
         // Mapper le breeder depuis la commande
-        Breeder updatedBreeder = BreederCommandMapper.fromUpdateBreederCommand(command, catteryId);
+        Breeder updatedBreeder = UpdateCatteryBreederCommand.toModel(command, catteryId);
 
         if (existingBreeder.isEmpty()) {
-            if (breederPersistencePort.existsByAffixAndCatteryId(command.getAffix(), catteryId)) {
+            if (breederPersistencePort.existsByAffixAndCatteryId(command.affix(), catteryId)) {
                 throw new ApiException("La chatterie possède déjà un éleveur avec cet affixe", HttpStatus.CONFLICT);
             }
             // Cas création
@@ -133,7 +132,7 @@ public class BreederService implements BreederUseCase {
             return savedBreeder;
         } else {
             // Vérifie l'existence d'un éleveur ayant déjà cet affixe
-            if (breederPersistencePort.existsByAffixAndCatteryIdExceptId(command.getAffix(), catteryId, existingBreeder.get().getId())) {
+            if (breederPersistencePort.existsByAffixAndCatteryIdExceptId(command.affix(), catteryId, existingBreeder.get().getId())) {
                 throw new ApiException("La chatterie possède déjà un éleveur avec cet affixe", HttpStatus.CONFLICT);
             }
             // Cas mise à jour

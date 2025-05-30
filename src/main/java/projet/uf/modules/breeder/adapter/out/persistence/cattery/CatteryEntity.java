@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import projet.uf.modules.breeder.domain.model.Cattery;
 
 @Entity
 @Getter
@@ -20,4 +21,20 @@ public class CatteryEntity {
 
     @Column(name = "linked_to_breeder_id")
     private Long linkedToBreederId;
+
+    public static Cattery toModel(CatteryEntity entity) {
+        return new Cattery(
+                entity.getId(),
+                entity.getCreatedByUserId(),
+                entity.getLinkedToBreederId()
+        );
+    }
+
+    public static CatteryEntity toEntity(Cattery model) {
+        return new CatteryEntity(
+                model.getId(),
+                model.getCreatedByUserId(),
+                model.getLinkedToBreederId()
+        );
+    }
 }

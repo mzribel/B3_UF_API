@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import projet.uf.modules.breeder.adapter.out.persistence.cattery.CatteryEntity;
+import projet.uf.modules.breeder.domain.model.CatteryUser;
 import projet.uf.modules.user.adapter.out.persistence.UserEntity;
 
 @Entity
@@ -31,4 +32,15 @@ public class CatteryUserEntity {
         this.user = user;
         this.id = new CatteryUserId(cattery.getId(), user.getId());
     }
+    public static CatteryUser toModel(CatteryUserEntity entity) {
+        return new CatteryUser(
+                entity.getCattery().getId(),
+                entity.getUser().getId()
+        );
+    }
+
+    public static CatteryUserEntity toEntity(CatteryEntity cattery, UserEntity user) {
+        return new CatteryUserEntity(cattery, user);
+    }
+
 }

@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.model.CatteryDetails;
-import projet.uf.modules.breeder.application.model.CreateCatteryCommand;
+import projet.uf.modules.breeder.application.command.AddUserToCatteryCommand;
+import projet.uf.modules.breeder.application.dto.CatteryDetailsDto;
+import projet.uf.modules.breeder.application.command.CreateCatteryCommand;
+import projet.uf.modules.breeder.application.dto.UserCatteriesDto;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
 
 import java.util.List;
@@ -18,48 +20,47 @@ public class CatteryController {
     final CatteryUseCase catteryUseCase;
     private final CurrentUserProvider currentUserProvider;
 
-    @GetMapping({"/catteries/", "/catteries"})
-    public List<CatteryDetails> getAll() {
+    @GetMapping("/catteries")
+    public List<CatteryDetailsDto> getAll() {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catteryUseCase.getAll(operator);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping({"/catteries/", "/catteries"})
-    public CatteryDetails create(
-            @RequestParam(required = false, name = "userId") Long providedUserId,
+    @PostMapping("/catteries")
+    public CatteryDetailsDto create(
             @RequestBody @Valid CreateCatteryCommand command
             ) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
-        return catteryUseCase.create(providedUserId, command.name(), operator);
+        return catteryUseCase.create(command, operator);
     }
 
-    @GetMapping({"/catteries/{id}", "/catteries/{id}"})
-    public CatteryDetails getById(@PathVariable Long id) {
+    @GetMapping("/catteries/{id}")
+    public CatteryDetailsDto getById(@PathVariable Long id) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catteryUseCase.getById(id, operator);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping({"/catteries/{id}/", "/catteries/{id}"})
+    @DeleteMapping("/catteries/{id}")
     public void deleteById(@PathVariable Long id) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         catteryUseCase.deleteById(id, operator);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping({"/catteries/{id}/users/", "/catteries/{id}/users"})
+    @PostMapping( "/catteries/{id}/members")
     public void addUserToCattery(
             @PathVariable Long id,
-            @RequestParam(required = false, name = "userEmail") String userEmail,
-            @RequestParam(required = false, name = "userId") Long userId)
+            @RequestBody AddUserToCatteryCommand command
+            )
     {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
-        catteryUseCase.addUserToCattery(id, userId, userEmail, operator);
+        catteryUseCase.addUserToCattery(id, command, operator);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping({"/catteries/{catteryId}/users/{userId}/", "/catteries/{catteryId}/users/{userId}"})
+    @DeleteMapping("/catteries/{catteryId}/members/{userId}")
     public void removeUserFromCattery(
             @PathVariable Long userId,
             @PathVariable Long catteryId)
@@ -68,5 +69,9 @@ public class CatteryController {
         catteryUseCase.removeUserFromCattery(catteryId, userId, operator);
     }
 
-
+    @GetMapping("/users/{userId}/catteries")
+    public UserCatteriesDto getAllUserCatteries(@PathVariable Long userId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catteryUseCase.getUserCatteries(userId, operator);
+    }
 }

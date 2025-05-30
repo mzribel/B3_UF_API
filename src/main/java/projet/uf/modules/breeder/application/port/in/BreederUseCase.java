@@ -1,8 +1,8 @@
 package projet.uf.modules.breeder.application.port.in;
 
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.model.CreateContactBreederCommand;
-import projet.uf.modules.breeder.application.model.UpdateCatteryBreederCommand;
+import projet.uf.modules.breeder.application.command.CreateContactBreederCommand;
+import projet.uf.modules.breeder.application.command.UpdateCatteryBreederCommand;
 import projet.uf.modules.breeder.domain.model.Breeder;
 
 import java.util.List;

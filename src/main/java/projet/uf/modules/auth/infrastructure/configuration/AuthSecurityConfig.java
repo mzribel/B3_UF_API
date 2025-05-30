@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import projet.uf.modules.auth.adapters.in.rest.security.JwtAuthenticationFilter;
 import projet.uf.modules.auth.adapters.out.security.JwtService;
-import projet.uf.modules.auth.application.ports.out.UserAccessPort;
+import projet.uf.modules.user.application.port.out.UserPersistencePort;
 
 @Configuration
 @EnableWebSecurity
@@ -20,12 +20,12 @@ import projet.uf.modules.auth.application.ports.out.UserAccessPort;
 @RequiredArgsConstructor
 public class AuthSecurityConfig {
 
-    private final UserAccessPort loadUserPort;
+    private final UserPersistencePort userPersistencePort;
     private final JwtService jwtService;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(loadUserPort, jwtService);
+        return new JwtAuthenticationFilter(userPersistencePort, jwtService);
     }
 
     @Bean

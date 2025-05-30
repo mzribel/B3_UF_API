@@ -1,9 +1,13 @@
 package projet.uf.modules.cat.adapter.in.rest;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
+import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.cat.application.dto.CatDetailsDto;
 import projet.uf.modules.cat.application.ports.in.CatUseCase;
-import projet.uf.modules.cat.application.ports.in.CreateCatCommand;
+import projet.uf.modules.cat.application.command.CatCommand;
 import projet.uf.modules.cat.domain.model.Cat;
 
 import java.util.List;
@@ -12,24 +16,45 @@ import java.util.List;
 @AllArgsConstructor
 public class CatController {
     final CatUseCase catUseCase;
+    private final CurrentUserProvider currentUserProvider;
 
-    @GetMapping({"/cats/", "/cats"})
+    @GetMapping("/cats")
     public List<Cat> getAllCats() {
-        return catUseCase.getAll();
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catUseCase.getAll(operator);
     }
 
-    @PostMapping({"/cats/", "/cats"})
-    public Cat createCat(@RequestBody CreateCatCommand command) {
-        return catUseCase.createCat(command);
+    @GetMapping("/cats/{catId}")
+    public CatDetailsDto getCat(@PathVariable Long catId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catUseCase.getById(catId, operator);
     }
 
-    @GetMapping({"/cattery/{id}/cats/", "/cattery/{id}/cats"})
+    @PostMapping( "/catteries/{catteryId}/cats")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CatDetailsDto createCat(
+            @PathVariable Long catteryId,
+            @RequestBody CatCommand command
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catUseCase.createCat(command, catteryId, operator);
+    }
+
+    @GetMapping( "/catteries/{id}/cats")
     public List<Cat> getCatteryCats(@PathVariable Long id) {
-        return catUseCase.getByCatteryId(id);
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catUseCase.getByCatteryId(id, operator);
     }
 
-    @PutMapping({"/cats/{id}/", "/cats/{id}"})
-    public Cat updateCat(@PathVariable Long id, @RequestBody CreateCatCommand command) throws Exception {
-        return catUseCase.updateCat(id, command);
+    @PutMapping("/cats/{id}")
+    public Cat updateCat(@PathVariable Long id, @RequestBody CatCommand command) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catUseCase.updateCatById(id, command, operator);
+    }
+
+    @DeleteMapping( "/cats/{id}")
+    public void deleteCat(@PathVariable Long id) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        catUseCase.deleteCatById(id, operator);
     }
 }

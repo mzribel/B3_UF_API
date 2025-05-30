@@ -1,5 +1,6 @@
 package projet.uf.modules.loof_characteristic.application;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.loof_characteristic.application.mapper.LoofCharacteristicCommandMapper;
@@ -12,16 +13,12 @@ import projet.uf.modules.loof_characteristic.exception.LoofCharacteristicAlready
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 public class LoofCharacteristicService<T extends ALoofCharacteristic> implements
         LoofCharacteristicUseCase<T>
 {
     public final LoofCharacteristicPersistencePort<T> persistencePort;
     private final LoofCharacteristicCommandMapper<T> mapper;
-
-    public LoofCharacteristicService(LoofCharacteristicPersistencePort<T> persistencePort, LoofCharacteristicCommandMapper<T> mapper) {
-        this.persistencePort = persistencePort;
-        this.mapper = mapper;
-    }
 
     @Override
     public T create(CreateLoofCharacteristicCommand command) throws LoofCharacteristicAlreadyExists {
@@ -58,16 +55,6 @@ public class LoofCharacteristicService<T extends ALoofCharacteristic> implements
     @Override
     public List<T> getAll() {
         return persistencePort.getAll();
-    }
-
-    @Override
-    public List<T> getByCode(String code) {
-        return persistencePort.getByCode(code);
-    }
-
-    @Override
-    public Optional<T> getByName(String name) {
-        return persistencePort.getByName(name);
     }
 
     @Override

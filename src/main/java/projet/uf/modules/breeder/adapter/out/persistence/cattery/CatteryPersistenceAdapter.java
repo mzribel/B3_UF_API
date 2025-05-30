@@ -13,14 +13,14 @@ public class CatteryPersistenceAdapter implements CatteryPersistencePort {
 
     @Override
     public Optional<Cattery> getById(Long id) {
-        return jpaCatteryRepository.findById(id).map(CatteryEntityMapper::toModel);
+        return jpaCatteryRepository.findById(id).map(CatteryEntity::toModel);
     }
 
     @Override
     public List<Cattery> getByCreatedByUserId(Long id) {
         return jpaCatteryRepository.findByCreatedByUserId(id)
             .stream()
-            .map(CatteryEntityMapper::toModel)
+            .map(CatteryEntity::toModel)
             .toList();
     }
 
@@ -28,28 +28,33 @@ public class CatteryPersistenceAdapter implements CatteryPersistencePort {
     public List<Cattery> getAll() {
         return jpaCatteryRepository.findAll()
             .stream()
-            .map(CatteryEntityMapper::toModel)
+            .map(CatteryEntity::toModel)
             .toList();
     }
 
     @Override
     public Cattery insert(Cattery cattery) {
-        CatteryEntity entity = CatteryEntityMapper.toEntity(cattery);
+        CatteryEntity entity = CatteryEntity.toEntity(cattery);
         CatteryEntity saved = jpaCatteryRepository.save(entity);
-        return CatteryEntityMapper.toModel(saved);
+        return CatteryEntity.toModel(saved);
     }
 
     // TODO : Vérifications
     @Override
     public Cattery update(Cattery cattery) {
-        CatteryEntity entity = CatteryEntityMapper.toEntity(cattery);
+        CatteryEntity entity = CatteryEntity.toEntity(cattery);
         CatteryEntity saved = jpaCatteryRepository.save(entity);
-        return CatteryEntityMapper.toModel(saved);
+        return CatteryEntity.toModel(saved);
     }
 
     @Override
     public void deleteById(Long id) {
         jpaCatteryRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean isUserAdminOfCattery(Long userId, Long catteryId) {
+        return jpaCatteryRepository.existsByIdAndCreatedByUserId(catteryId, userId);
     }
 
     @Override

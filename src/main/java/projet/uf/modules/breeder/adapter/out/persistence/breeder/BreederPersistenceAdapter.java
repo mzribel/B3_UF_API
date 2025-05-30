@@ -14,14 +14,14 @@ public class BreederPersistenceAdapter implements BreederPersistencePort {
 
     @Override
     public Optional<Breeder> getById(Long id) {
-        return jpaBreederRepository.findById(id).map(BreederEntityMapper::toModel);
+        return jpaBreederRepository.findById(id).map(BreederEntity::toModel);
     }
 
     @Override
     public List<Breeder> getAll() {
         return jpaBreederRepository.findAll()
             .stream()
-            .map(BreederEntityMapper::toModel)
+            .map(BreederEntity::toModel)
             .toList();
     }
 
@@ -37,9 +37,9 @@ public class BreederPersistenceAdapter implements BreederPersistencePort {
 
     @Override
     public Breeder save(Breeder breeder) {
-        BreederEntity entity = BreederEntityMapper.toEntity(breeder);
+        BreederEntity entity = BreederEntity.toEntity(breeder);
         BreederEntity saved = jpaBreederRepository.save(entity);
-        return BreederEntityMapper.toModel(saved);
+        return BreederEntity.toModel(saved);
     }
 
     @Override
@@ -51,13 +51,13 @@ public class BreederPersistenceAdapter implements BreederPersistencePort {
     public List<Breeder> getContactsByCatteryId(Long catteryId) {
         return jpaBreederRepository.findAllContactsCreatedByCatteryId(catteryId)
             .stream()
-            .map(BreederEntityMapper::toModel)
+            .map(BreederEntity::toModel)
             .toList();
     }
 
     @Override
     public Optional<Breeder> getBreederLinkedToCatteryId(Long catteryId) {
         return jpaBreederRepository.findBreederLinkedToCatteryId(catteryId)
-            .map(BreederEntityMapper::toModel);
+            .map(BreederEntity::toModel);
     }
 }

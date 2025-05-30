@@ -1,6 +1,8 @@
 package projet.uf.modules.breeder.adapter.out.persistence.catteryuser;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -8,16 +10,11 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CatteryUserId implements Serializable {
     private Long catteryId;
     private Long userId;
-
-    public CatteryUserId() {}
-
-    public CatteryUserId(Long catteryId, Long userId) {
-        this.catteryId = catteryId;
-        this.userId = userId;
-    }
 
     // Obligatoire pour clé composite
     @Override

@@ -21,7 +21,9 @@ public class Breeder {
     private Long addressId;
     private Long createdByCatteryId;
     @JsonProperty("isActive")
+    @Builder.Default
     private boolean isActive = true;
+    @Builder.Default
     @JsonProperty("isDerogatory")
     private boolean isDerogatory = false;
 

@@ -13,5 +13,6 @@ public interface CatteryPersistencePort {
     Cattery update(Cattery cattery);
     void deleteById(Long id);
 
+    boolean isUserAdminOfCattery(Long userId, Long catteryId);
     boolean isBreederLinkedToAnyCattery(Long breederId);
 }

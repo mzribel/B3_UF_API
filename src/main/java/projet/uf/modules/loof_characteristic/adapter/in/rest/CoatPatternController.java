@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/loof/characteristics/coat-patterns/", "/loof/characteristics/coat-patterns"})
+@RequestMapping("/loof/characteristics/coat-patterns")
 public class CoatPatternController {
     final LoofCharacteristicUseCase<CoatPattern> coatPatternUseCase;
 
@@ -25,7 +25,7 @@ public class CoatPatternController {
         return coatPatternUseCase.getAll();
     }
 
-    @GetMapping({"/{id}/", "/{id}"})
+    @GetMapping("/{id}")
     public Optional<CoatPattern> getById(@PathVariable Long id) {
         return Optional.ofNullable(coatPatternUseCase.getById(id)
             .orElseThrow(() -> new ApiException("Aucune couleur de robe (coat color) trouvée avec l'id " + id, HttpStatus.NOT_FOUND)));
@@ -38,13 +38,13 @@ public class CoatPatternController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping({"/{id}/", "/{id}"})
+    @PutMapping("/{id}")
     public CoatPattern updateCoatPattern(@PathVariable Long id, @Valid @RequestBody CreateLoofCharacteristicCommand command) throws LoofCharacteristicAlreadyExists {
         return coatPatternUseCase.update(id, command);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping({"/{id}/", "/{id}"})
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCoatPattern(@PathVariable Long id) {
         coatPatternUseCase.deleteById(id);

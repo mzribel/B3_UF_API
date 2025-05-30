@@ -7,6 +7,7 @@ public interface LoofCharacteristicPersistencePort<T> {
     T insert(T t);
     T update(T t);
     Optional<T> getById(long id);
+    boolean existsById(Long id);
     List<T> getAll();
     List<T> getByCode(String code);
     Optional<T> getByName(String name);
