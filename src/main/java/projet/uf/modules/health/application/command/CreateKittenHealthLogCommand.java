@@ -1,4 +1,4 @@
-package projet.uf.modules.health.application.model;
+package projet.uf.modules.health.application.command;
 
 import jakarta.validation.constraints.NotNull;
 import projet.uf.modules.health.domain.model.KittenHealthLog;

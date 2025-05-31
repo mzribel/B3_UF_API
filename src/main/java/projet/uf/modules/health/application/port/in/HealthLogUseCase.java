@@ -1,9 +1,9 @@
 package projet.uf.modules.health.application.port.in;
 
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.health.application.model.CreateGestationHealthLogCommand;
-import projet.uf.modules.health.application.model.CreateHealthLogCommand;
-import projet.uf.modules.health.application.model.CreateKittenHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateGestationHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateKittenHealthLogCommand;
 import projet.uf.modules.health.domain.model.HealthLog;
 import projet.uf.modules.health.domain.model.KittenHealthLog;
 import projet.uf.modules.health.domain.model.GestationHealthLog;

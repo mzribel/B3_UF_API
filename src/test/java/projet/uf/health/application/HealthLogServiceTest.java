@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
-import projet.uf.modules.health.application.model.CreateHealthLogCommand;
-import projet.uf.modules.health.application.model.CreateKittenHealthLogCommand;
-import projet.uf.modules.health.application.port.HealthLogService;
+import projet.uf.modules.health.application.command.CreateHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateKittenHealthLogCommand;
+import projet.uf.modules.health.application.HealthLogService;
 import projet.uf.modules.health.application.port.out.HealthLogPersistencePort;
 import projet.uf.modules.health.application.port.out.KittenHealthLogPersistencePort;
 import projet.uf.modules.health.domain.model.*;
@@ -81,9 +81,7 @@ class HealthLogServiceTest {
     @Test
     void getAllHealthLogs_shouldThrowIfNotAdmin() {
         OperatorUser nonAdmin = new OperatorUser(2L, false);
-        ApiException exception = assertThrows(ApiException.class, () -> {
-            healthLogService.getAllHealthLogs(nonAdmin);
-        });
+        ApiException exception = assertThrows(ApiException.class, () -> healthLogService.getAllHealthLogs(nonAdmin));
 
         assertEquals(HttpStatus.FORBIDDEN, exception.getStatus());
     }

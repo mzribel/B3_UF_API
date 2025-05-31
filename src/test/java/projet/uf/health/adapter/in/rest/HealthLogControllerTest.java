@@ -17,9 +17,9 @@ import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.CurrentUser;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.health.adapter.in.rest.HealthLogController;
-import projet.uf.modules.health.application.model.CreateHealthLogCommand;
-import projet.uf.modules.health.application.model.CreateKittenHealthLogCommand;
-import projet.uf.modules.health.application.model.CreateGestationHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateKittenHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateGestationHealthLogCommand;
 import projet.uf.modules.health.application.port.in.HealthLogUseCase;
 import projet.uf.modules.health.domain.model.HealthLog;
 import projet.uf.modules.health.domain.model.KittenHealthLog;
@@ -264,16 +264,13 @@ public class HealthLogControllerTest {
 
         // Arrange
         CreateGestationHealthLogCommand command = new CreateGestationHealthLogCommand(
-                BigDecimal.valueOf(1000),
-                BigDecimal.valueOf(38.5),
-                "Normal",
-                "Test notes",
                 "Normal",
                 true
         );
 
-        GestationHealthLog expected = command.toModel(gestationId, healthLogId);
+        GestationHealthLog expected = command.toModel(healthLogId);
         expected.setId(1L);
+        expected.setGestationId(gestationId);
 
         when(healthLogUseCase.createGestationHealthLog(eq(healthLogId), any(CreateGestationHealthLogCommand.class), any(OperatorUser.class)))
                 .thenReturn(expected);

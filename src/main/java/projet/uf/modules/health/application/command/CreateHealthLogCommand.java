@@ -1,10 +1,11 @@
-package projet.uf.modules.health.application.model;
+package projet.uf.modules.health.application.command;
 
 import projet.uf.modules.health.domain.model.HealthLog;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record CreateHealthLogCommand(
+        // Big decimal?
         BigDecimal weightInGrams,
         BigDecimal temperatureInCelsius,
         String appetite,

@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.health.application.model.CreateGestationHealthLogCommand;
-import projet.uf.modules.health.application.model.CreateHealthLogCommand;
-import projet.uf.modules.health.application.model.CreateKittenHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateGestationHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateHealthLogCommand;
+import projet.uf.modules.health.application.command.CreateKittenHealthLogCommand;
 import projet.uf.modules.health.application.port.in.HealthLogUseCase;
 import projet.uf.modules.health.domain.model.GestationHealthLog;
 import projet.uf.modules.health.domain.model.HealthLog;
@@ -61,6 +61,7 @@ public class HealthLogController {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return healthLogUseCase.getHealthLogsByCatId(catId, operator);
     }
+
     @PostMapping("/cats/{catId}/health-logs")
     @ResponseStatus(HttpStatus.CREATED)
     public HealthLog createHealthLogForCat(

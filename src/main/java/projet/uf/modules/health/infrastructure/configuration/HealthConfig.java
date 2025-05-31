@@ -9,7 +9,9 @@ import projet.uf.modules.health.adapter.out.persistence.healthlog.HealthLogPersi
 import projet.uf.modules.health.adapter.out.persistence.healthlog.JpaHealthLogRepository;
 import projet.uf.modules.health.adapter.out.persistence.kittenhealthlog.KittenHealthLogPersistenceAdapter;
 import projet.uf.modules.health.adapter.out.persistence.kittenhealthlog.JpaKittenHealthLogRepository;
-import projet.uf.modules.health.application.port.HealthLogService;
+import projet.uf.modules.health.application.HealthLogAccessService;
+import projet.uf.modules.health.application.HealthLogService;
+import projet.uf.modules.health.application.port.in.HealthLogAccessUseCase;
 import projet.uf.modules.health.application.port.in.HealthLogUseCase;
 import projet.uf.modules.health.application.port.out.GestationHealthLogPersistencePort;
 import projet.uf.modules.health.application.port.out.HealthLogPersistencePort;
@@ -33,16 +35,26 @@ public class HealthConfig {
     }
 
     @Bean
+    public HealthLogAccessService healthLogAccessService(
+            HealthLogPersistencePort healthLogPersistencePort,
+            CatAccessUseCase catAccessUseCase
+    ) {
+        return new HealthLogAccessService(healthLogPersistencePort, catAccessUseCase);
+    }
+
+    @Bean
     public HealthLogUseCase healthLogUseCase(
             HealthLogPersistencePort healthLogPersistencePort,
             KittenHealthLogPersistencePort kittenHealthLogPersistencePort,
             GestationHealthLogPersistencePort gestationHealthLogPersistencePort,
-            CatAccessUseCase catAccessUseCase) {
+            CatAccessUseCase catAccessUseCase,
+            HealthLogAccessUseCase healthLogAccessUseCase) {
         return new HealthLogService(
                 healthLogPersistencePort,
                 kittenHealthLogPersistencePort,
                 gestationHealthLogPersistencePort,
-                catAccessUseCase
+                catAccessUseCase,
+                healthLogAccessUseCase
         );
     }
 }

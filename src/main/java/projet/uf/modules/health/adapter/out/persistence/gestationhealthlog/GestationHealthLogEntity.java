@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import projet.uf.modules.health.domain.model.GestationHealthLog;
 
-import java.math.BigDecimal;
-
 @Entity
 @Getter
 @NoArgsConstructor
@@ -24,18 +22,6 @@ public class GestationHealthLogEntity {
     @Column(name = "health_log_id", nullable = false)
     private Long healthLogId;
 
-    @Column
-    private BigDecimal weight;
-
-    @Column
-    private BigDecimal temperature;
-
-    @Column
-    private String behavior;
-
-    @Column
-    private String notes;
-
     @Column(name = "mammary_observations")
     private String mammaryObservations;
 
@@ -47,10 +33,6 @@ public class GestationHealthLogEntity {
                 .id(entity.getId())
                 .gestationId(entity.getGestationId())
                 .healthLogId(entity.getHealthLogId())
-                .weight(entity.getWeight())
-                .temperature(entity.getTemperature())
-                .behavior(entity.getBehavior())
-                .notes(entity.getNotes())
                 .mammaryObservations(entity.getMammaryObservations())
                 .kittenMovement(entity.getKittenMovement())
                 .build();
@@ -61,10 +43,6 @@ public class GestationHealthLogEntity {
                 model.getId(),
                 model.getGestationId(),
                 model.getHealthLogId(),
-                model.getWeight(),
-                model.getTemperature(),
-                model.getBehavior(),
-                model.getNotes(),
                 model.getMammaryObservations(),
                 model.getKittenMovement()
         );
