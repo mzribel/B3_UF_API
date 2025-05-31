@@ -47,14 +47,12 @@ public class CatCoatService implements CatCoatUseCase {
         CoatWhiteMarking whiteMarking = getLoofCharacteristic(catCoat.getCoatWhiteMarkingId(), loofCharacteristicsUseCase::getCoatWhiteMarkingById);
 
             return CatCoatDto.toDto(
-//                    breed.getCode(),
-//                    breed.getName(),
-                    "MCO",
-                    "Maine Coon",
+                    null,
                     color,
                     pattern,
                     effect,
-                    whiteMarking
+                    whiteMarking,
+                    null
             );
     }
     private <T> T getLoofCharacteristic(Long id, Function<Long, Optional<T>> fetcher) {

@@ -42,7 +42,7 @@ public class LitterEntity {
     @Column
     private String notes;
 
-    @Column(name = "created_by_cattery_id", insertable = false, updatable = false, nullable = false)
+    @Column(name = "created_by_cattery_id", nullable = false)
     private Long createdByCatteryId;
 
     public static Litter toModel(LitterEntity entity) {

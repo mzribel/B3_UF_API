@@ -6,11 +6,11 @@ import projet.uf.modules.breeder.adapter.out.persistence.cattery.CatteryPersiste
 import projet.uf.modules.breeder.adapter.out.persistence.cattery.JpaCatteryRepository;
 import projet.uf.modules.breeder.adapter.out.persistence.catteryuser.CatteryUserPersistenceAdapter;
 import projet.uf.modules.breeder.adapter.out.persistence.catteryuser.JpaCatteryUserRepository;
-import projet.uf.modules.breeder.application.CatteryAccessService;
+import projet.uf.modules.breeder.application.CatteryAuthorizationService;
 import projet.uf.modules.breeder.application.CatteryDtoAssembler;
 import projet.uf.modules.breeder.application.CatteryService;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
-import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
 import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryUserPersistencePort;
@@ -35,7 +35,7 @@ public class CatteryConfig {
             BreederUseCase breederUseCase,
             UserPersistencePort userPersistencePort,
             CatteryDtoAssembler catteryDtoAssembler,
-            CatteryAccessUseCase catteryAccessUseCase) {
+            CatteryAuthorizationUseCase catteryAccessUseCase) {
         return new CatteryService(catteryPersistencePort, catteryUserPersistencePort, breederUseCase, userPersistencePort, catteryDtoAssembler, catteryAccessUseCase);
     }
 
@@ -49,10 +49,10 @@ public class CatteryConfig {
     }
 
     @Bean
-    CatteryAccessService catteryAccessService(
+    CatteryAuthorizationService catteryAccessService(
             CatteryPersistencePort catteryPersistencePort,
             CatteryUserPersistencePort catteryUserPersistencePort
     ) {
-        return new CatteryAccessService(catteryPersistencePort, catteryUserPersistencePort);
+        return new CatteryAuthorizationService(catteryPersistencePort, catteryUserPersistencePort);
     }
 }

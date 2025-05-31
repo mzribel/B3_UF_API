@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.cat.application.dto.CatDetailsDto;
+import projet.uf.modules.cat.application.dto.CatPedigreeDto;
 import projet.uf.modules.cat.application.ports.in.CatUseCase;
 import projet.uf.modules.cat.application.command.CatCommand;
-import projet.uf.modules.cat.domain.model.Cat;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class CatController {
     private final CurrentUserProvider currentUserProvider;
 
     @GetMapping("/cats")
-    public List<Cat> getAllCats() {
+    public List<CatDetailsDto> getAllCats() {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.getAll(operator);
     }
@@ -28,6 +28,12 @@ public class CatController {
     public CatDetailsDto getCat(@PathVariable Long catId) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.getById(catId, operator);
+    }
+
+    @GetMapping("/cats/{catId}/pedigree")
+    public CatPedigreeDto getCatPedigree(@PathVariable Long catId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catUseCase.getPedigreeById(catId, operator);
     }
 
     @PostMapping( "/catteries/{catteryId}/cats")
@@ -41,13 +47,13 @@ public class CatController {
     }
 
     @GetMapping( "/catteries/{id}/cats")
-    public List<Cat> getCatteryCats(@PathVariable Long id) {
+    public List<CatDetailsDto> getCatteryCats(@PathVariable Long id) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.getByCatteryId(id, operator);
     }
 
     @PutMapping("/cats/{id}")
-    public Cat updateCat(@PathVariable Long id, @RequestBody CatCommand command) {
+    public CatDetailsDto updateCat(@PathVariable Long id, @RequestBody CatCommand command) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.updateCatById(id, command, operator);
     }

@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
 import projet.uf.modules.cat.application.command.LitterCommand;
-import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
-import projet.uf.modules.cat.application.ports.in.LitterAccessUseCase;
+import projet.uf.modules.cat.application.ports.in.CatAuthorizationUseCase;
+import projet.uf.modules.cat.application.ports.in.LitterAuthorizationUseCase;
 import projet.uf.modules.cat.application.ports.in.LitterUseCase;
 import projet.uf.modules.cat.application.ports.out.LitterPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
@@ -18,9 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 public class LitterService implements LitterUseCase {
     private final LitterPersistencePort litterPersistencePort;
-    private final LitterAccessUseCase litterAccessUseCase;
-    private final CatteryAccessUseCase catteryAccessUseCase;
-    private final CatAccessUseCase catAccessUseCase;
+    private final LitterAuthorizationUseCase litterAccessUseCase;
+    private final CatteryAuthorizationUseCase catteryAccessUseCase;
+    private final CatAuthorizationUseCase catAccessUseCase;
 
     @Override
     public List<Litter> getAll(OperatorUser operator) {
@@ -48,6 +48,7 @@ public class LitterService implements LitterUseCase {
         if (!catteryAccessUseCase.hasUserAccessToCattery(createdByCatteryId, operator)) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
+        System.out.println(createdByCatteryId);
         Litter litter = command.toModel(createdByCatteryId);
         return litterPersistencePort.save(litter);
     }

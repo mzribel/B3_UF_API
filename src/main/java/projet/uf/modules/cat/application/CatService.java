@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
 import projet.uf.modules.cat.application.dto.CatDetailsDto;
+import projet.uf.modules.cat.application.dto.CatPedigreeDto;
 import projet.uf.modules.cat.application.ports.in.*;
 import projet.uf.modules.cat.application.command.CatCommand;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
@@ -18,10 +19,11 @@ public class CatService implements
         CatUseCase
 {
     private final CatPersistencePort catPersistencePort;
-    private final CatteryAccessUseCase catteryAccessUseCase;
-    private final CatAccessUseCase catAccessUseCase;
+    private final CatteryAuthorizationUseCase catteryAccessUseCase;
+    private final CatAuthorizationUseCase catAccessUseCase;
     private final CatCoatUseCase catCoatUseCase;
     private final CatDtoAssembler dtoAssembler;
+    private final LitterUseCase litterUseCase;
 
     @Override
     public CatDetailsDto createCat(CatCommand command, Long createdByCatteryId, OperatorUser operator) {
@@ -30,6 +32,22 @@ public class CatService implements
         }
 
         Cat cat = CatCommand.toModel(command, createdByCatteryId);
+
+        // Crée la portée
+        if (command.litter() != null) {
+            if (command.litterId() != null) {
+                throw new ApiException("Ne pas renseigner à la fois une portée existante et une nouvelle portée", HttpStatus.BAD_REQUEST);
+            }
+            System.out.println(createdByCatteryId);
+            cat.setLitterId(litterUseCase.createLitter(command.litter(), createdByCatteryId, operator).getId());
+        }
+
+        // Récupère la portée
+        else if (command.litterId() != null) {
+            litterUseCase.getById(command.litterId(), operator); // vérifie les droits
+            cat.setLitterId(command.litterId());
+        }
+
         Cat saved = catPersistencePort.save(cat);
 
         if (command.coat() != null) {
@@ -40,11 +58,11 @@ public class CatService implements
     }
 
     @Override
-    public Cat updateCatById(Long id, CatCommand command, OperatorUser operator) {
+    public CatDetailsDto updateCatById(Long id, CatCommand command, OperatorUser operator) {
         Cat cat = catAccessUseCase.getCatOrThrow(id, operator);
         Cat updatedCat = CatCommand.toModel(command, cat.getCreatedByCatteryId());
         updatedCat.setId(cat.getId());
-        return catPersistencePort.save(updatedCat);
+        return dtoAssembler.toDetailsDto(catPersistencePort.save(updatedCat));
     }
 
     @Override
@@ -56,23 +74,39 @@ public class CatService implements
     }
 
     @Override
+    public CatPedigreeDto getPedigreeById(Long id, OperatorUser operator) {
+        Cat cat = catAccessUseCase.getCatOrThrow(id, operator);
+
+        return dtoAssembler.toPedigreeDto(cat, 3);
+    }
+
+    @Override
     public CatDetailsDto getById(Long id, OperatorUser operator) {
         return dtoAssembler.toDetailsDto(catAccessUseCase.getCatOrThrow(id, operator));
     }
 
     @Override
-    public List<Cat> getByCatteryId(Long id, OperatorUser operator) {
+    public List<CatDetailsDto> getByCatteryId(Long id, OperatorUser operator) {
         if (!catteryAccessUseCase.hasUserAccessToCattery(id, operator)) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
-        return catPersistencePort.getByCatteryId(id);
+
+        List<Cat> cats = catPersistencePort.getByCatteryId(id);
+
+        return cats.stream()
+                .map(dtoAssembler::toDetailsDto)
+                .toList();
     }
 
     @Override
-    public List<Cat> getAll(OperatorUser operator) {
+    public List<CatDetailsDto> getAll(OperatorUser operator) {
         if (!operator.isAdmin()) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
-        return catPersistencePort.getAll();
+
+        return catPersistencePort.getAll()
+                .stream()
+                .map(dtoAssembler::toDetailsDto)
+                .toList();
     }
 }

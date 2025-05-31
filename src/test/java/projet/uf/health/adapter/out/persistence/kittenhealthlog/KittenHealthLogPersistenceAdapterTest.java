@@ -31,7 +31,7 @@ public class KittenHealthLogPersistenceAdapterTest {
         Long id = 1L;
         LocalDateTime openEyesDate = LocalDateTime.now();
 
-        KittenHealthLogEntity entity = new KittenHealthLogEntity(id, 1L, openEyesDate);
+        KittenHealthLogEntity entity = new KittenHealthLogEntity(id, 1L, openEyesDate, "Kitten notes");
         when(jpaKittenHealthLogRepository.findById(id)).thenReturn(Optional.of(entity));
 
         Optional<KittenHealthLog> result = kittenHealthLogPersistenceAdapter.getById(id);
@@ -60,7 +60,7 @@ public class KittenHealthLogPersistenceAdapterTest {
         Long healthLogId = 10L;
         LocalDateTime openEyesDate = LocalDateTime.now();
 
-        KittenHealthLogEntity entity = new KittenHealthLogEntity(1L, healthLogId, openEyesDate);
+        KittenHealthLogEntity entity = new KittenHealthLogEntity(1L, healthLogId, openEyesDate, "Kitten notes");
         when(jpaKittenHealthLogRepository.findByHealthLogId(healthLogId)).thenReturn(Optional.of(entity));
 
         Optional<KittenHealthLog> result = kittenHealthLogPersistenceAdapter.getByHealthLogId(healthLogId);
@@ -88,7 +88,7 @@ public class KittenHealthLogPersistenceAdapterTest {
     void save_shouldSaveAndReturnKittenHealthLog() {
         LocalDateTime openEyesDate = LocalDateTime.now();
 
-        KittenHealthLog model = new KittenHealthLog(1L, openEyesDate);
+        KittenHealthLog model = new KittenHealthLog(1L, openEyesDate, "Kitten notes");
         KittenHealthLogEntity entity = KittenHealthLogEntity.toEntity(model);
 
         when(jpaKittenHealthLogRepository.save(any())).thenReturn(entity);

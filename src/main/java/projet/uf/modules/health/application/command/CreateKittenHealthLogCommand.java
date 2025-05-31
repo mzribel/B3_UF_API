@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 
 public record CreateKittenHealthLogCommand(
         LocalDateTime openEyesDate,
-        LocalDateTime firstWalkDate
+        String kittenNotes
     )
 {
     public KittenHealthLog toKittenHealthLog(@NotNull Long healthLogId) {
-        return new KittenHealthLog(healthLogId, firstWalkDate);
+        return new KittenHealthLog(healthLogId, openEyesDate, kittenNotes);
     }
 }

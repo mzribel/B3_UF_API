@@ -151,7 +151,7 @@ public class BreederService implements BreederUseCase {
 
     @Override
     public List<Breeder> getAll(OperatorUser operator) {
-        if (operator.isAdmin()) {
+        if (!operator.isAdmin()) {
             throw new ApiException("Accès non autorisé", HttpStatus.UNAUTHORIZED);
         }
         return breederPersistencePort.getAll();
