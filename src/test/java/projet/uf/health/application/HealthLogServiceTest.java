@@ -12,7 +12,6 @@ import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
 import projet.uf.modules.health.application.model.CreateHealthLogCommand;
 import projet.uf.modules.health.application.model.CreateKittenHealthLogCommand;
 import projet.uf.modules.health.application.port.HealthLogService;
-import projet.uf.modules.health.application.port.out.GestationHealthLogPersistencePort;
 import projet.uf.modules.health.application.port.out.HealthLogPersistencePort;
 import projet.uf.modules.health.application.port.out.KittenHealthLogPersistencePort;
 import projet.uf.modules.health.domain.model.*;
@@ -30,7 +29,6 @@ class HealthLogServiceTest {
 
     @Mock private HealthLogPersistencePort healthLogPersistencePort;
     @Mock private KittenHealthLogPersistencePort kittenHealthLogPersistencePort;
-    @Mock private GestationHealthLogPersistencePort gestationHealthLogPersistencePort;
     @Mock private CatAccessUseCase catAccessUseCase;
 
     @InjectMocks private HealthLogService healthLogService;
@@ -49,7 +47,6 @@ class HealthLogServiceTest {
                 BigDecimal.valueOf(2000), BigDecimal.valueOf(38.3), "Good", "Hydrated", "Calm", "Solid", "Normal", "RAS", LocalDateTime.now()
         );
 
-        HealthLog toSave = command.toHealthLog(catId);
         HealthLog saved = HealthLog.builder().id(1L).catId(catId).build();
 
         when(healthLogPersistencePort.save(any())).thenReturn(saved);

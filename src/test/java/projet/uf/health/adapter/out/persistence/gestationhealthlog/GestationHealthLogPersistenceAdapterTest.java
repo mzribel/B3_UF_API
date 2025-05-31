@@ -68,7 +68,7 @@ public class GestationHealthLogPersistenceAdapterTest {
         List<GestationHealthLog> result = gestationHealthLogPersistenceAdapter.getByGestationId(gestationId);
 
         assertEquals(2, result.size());
-        assertEquals(gestationId, result.get(0).getGestationId());
+        assertEquals(gestationId, result.getFirst().getGestationId());
         verify(jpaGestationHealthLogRepository).findByGestationId(gestationId);
     }
 

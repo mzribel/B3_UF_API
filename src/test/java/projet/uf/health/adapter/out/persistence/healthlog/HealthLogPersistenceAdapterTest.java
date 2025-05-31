@@ -90,7 +90,7 @@ public class HealthLogPersistenceAdapterTest {
         List<HealthLog> result = healthLogPersistenceAdapter.getByCatId(catId);
 
         assertEquals(1, result.size());
-        assertEquals(catId, result.get(0).getCatId());
+        assertEquals(catId, result.getFirst().getCatId());
         verify(jpaHealthLogRepository).findByCatId(catId);
     }
 
