@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
+import projet.uf.modules.cat.application.ports.in.CatAuthorizationUseCase;
 import projet.uf.modules.health.application.command.CreateGestationHealthLogCommand;
 import projet.uf.modules.health.application.command.CreateHealthLogCommand;
 import projet.uf.modules.health.application.command.CreateKittenHealthLogCommand;
-import projet.uf.modules.health.application.port.in.HealthLogAccessUseCase;
+import projet.uf.modules.health.application.port.in.HealthLogAuthorizationUseCase;
 import projet.uf.modules.health.application.port.in.HealthLogUseCase;
 import projet.uf.modules.health.application.port.out.GestationHealthLogPersistencePort;
 import projet.uf.modules.health.application.port.out.HealthLogPersistencePort;
@@ -24,8 +24,8 @@ public class HealthLogService implements HealthLogUseCase {
     private final HealthLogPersistencePort healthLogPersistencePort;
     private final KittenHealthLogPersistencePort kittenHealthLogPersistencePort;
     private final GestationHealthLogPersistencePort gestationHealthLogPersistencePort;
-    private final CatAccessUseCase catAccessUseCase;
-    private final HealthLogAccessUseCase healthLogAccessUseCase;
+    private final CatAuthorizationUseCase catAccessUseCase;
+    private final HealthLogAuthorizationUseCase healthLogAccessUseCase;
 
     @Override
     public HealthLog createHealthLog(Long catId, CreateHealthLogCommand command, OperatorUser operatorUser) {

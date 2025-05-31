@@ -5,15 +5,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
-import projet.uf.modules.cat.application.ports.in.LitterAccessUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
+import projet.uf.modules.cat.application.ports.in.LitterAuthorizationUseCase;
 import projet.uf.modules.cat.application.ports.out.LitterPersistencePort;
 import projet.uf.modules.cat.domain.model.Litter;
 
 @AllArgsConstructor
-public class LitterAccessService implements LitterAccessUseCase {
+public class LitterAuthorizationService implements LitterAuthorizationUseCase {
     private final LitterPersistencePort litterPersistencePort;
-    private final CatteryAccessUseCase catteryAccessUseCase;
+    private final CatteryAuthorizationUseCase catteryAccessUseCase;
 
     @Override
     public Litter getLitterOrThrow(@NotNull Long litterId, OperatorUser operator) {

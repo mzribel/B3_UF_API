@@ -5,15 +5,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
-import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
+import projet.uf.modules.cat.application.ports.in.CatAuthorizationUseCase;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
 
 @AllArgsConstructor
-public class CatAccessService implements CatAccessUseCase {
+public class CatAuthorizationService implements CatAuthorizationUseCase {
     private final CatPersistencePort catPersistencePort;
-    private final CatteryAccessUseCase catteryAccessUseCase;
+    private final CatteryAuthorizationUseCase catteryAccessUseCase;
 
     @Override
     public Cat getCatOrThrow(@NotNull Long catId, OperatorUser operator) {

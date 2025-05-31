@@ -16,11 +16,7 @@ public class Cat {
     private String surname;
     private boolean sex; // enum recommandé : Sex
 
-    private LocalDate birthDate;
-
     private Long litterId;
-    private Long originBreederId;
-    private Long currentBreederId;
 
     private Long breedId;
     private Long eyeColorId;
@@ -45,10 +41,7 @@ public class Cat {
             String name,
             String surname,
             boolean sex,
-            LocalDate birthDate,
             Long litterId,
-            Long originBreederId,
-            Long currentBreederId,
             Long breedId,
             Long eyeColorId,
             Long polyTypeId,
@@ -65,10 +58,7 @@ public class Cat {
         this.name = name;
         this.surname = surname;
         this.sex = sex;
-        this.birthDate = birthDate;
         this.litterId = litterId;
-        this.originBreederId = originBreederId;
-        this.currentBreederId = currentBreederId;
         this.breedId = breedId;
         this.eyeColorId = eyeColorId;
         this.polyTypeId = polyTypeId;

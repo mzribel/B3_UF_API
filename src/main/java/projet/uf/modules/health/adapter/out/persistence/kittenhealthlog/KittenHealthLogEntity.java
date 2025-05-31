@@ -24,11 +24,15 @@ public class KittenHealthLogEntity {
     @Column(name = "open_eyes_date")
     private LocalDateTime openEyesDate;
 
+    @Column(name = "kitten_notes")
+    private String kittenNotes;
+
     public static KittenHealthLog toModel(KittenHealthLogEntity entity) {
         return KittenHealthLog.builder()
                 .id(entity.getId())
                 .healthLogId(entity.getHealthLogId())
                 .openEyesDate(entity.getOpenEyesDate())
+                .kittenNotes(entity.getKittenNotes())
                 .build();
     }
 
@@ -36,7 +40,8 @@ public class KittenHealthLogEntity {
         return new KittenHealthLogEntity(
                 model.getId(),
                 model.getHealthLogId(),
-                model.getOpenEyesDate()
+                model.getOpenEyesDate(),
+                model.getKittenNotes()
         );
     }
 }

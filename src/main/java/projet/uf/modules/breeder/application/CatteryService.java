@@ -10,7 +10,7 @@ import projet.uf.modules.breeder.application.dto.CatteryDetailsDto;
 import projet.uf.modules.breeder.application.command.CreateCatteryCommand;
 import projet.uf.modules.breeder.application.dto.UserCatteriesDto;
 import projet.uf.modules.breeder.application.port.in.BreederUseCase;
-import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
 import projet.uf.modules.breeder.application.port.in.CatteryUseCase;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryUserPersistencePort;
@@ -38,7 +38,7 @@ public class CatteryService implements
     private final BreederUseCase breederUseCase;
     private final UserPersistencePort userPersistencePort;
     private final CatteryDtoAssembler dtoAssembler;
-    private final CatteryAccessUseCase catteryAccessUseCase;
+    private final CatteryAuthorizationUseCase catteryAccessUseCase;
 
     @Override
     @Transactional

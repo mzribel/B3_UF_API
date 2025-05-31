@@ -5,16 +5,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
 import projet.uf.modules.breeder.application.port.out.CatteryPersistencePort;
 import projet.uf.modules.breeder.application.port.out.CatteryUserPersistencePort;
 import projet.uf.modules.breeder.domain.model.Cattery;
-import projet.uf.modules.user.application.port.out.UserPersistencePort;
 
 import java.util.Objects;
 
 @AllArgsConstructor
-public class CatteryAccessService implements CatteryAccessUseCase {
+public class CatteryAuthorizationService implements CatteryAuthorizationUseCase {
     private final CatteryPersistencePort catteryPersistencePort;
     private final CatteryUserPersistencePort catteryUserPersistencePort;
 

@@ -2,13 +2,13 @@ package projet.uf.modules.cat.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
 import projet.uf.modules.cat.adapter.out.persistence.litter.JpaLitterRepository;
 import projet.uf.modules.cat.adapter.out.persistence.litter.LitterPersistenceAdapter;
-import projet.uf.modules.cat.application.LitterAccessService;
+import projet.uf.modules.cat.application.LitterAuthorizationService;
 import projet.uf.modules.cat.application.LitterService;
-import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
-import projet.uf.modules.cat.application.ports.in.LitterAccessUseCase;
+import projet.uf.modules.cat.application.ports.in.CatAuthorizationUseCase;
+import projet.uf.modules.cat.application.ports.in.LitterAuthorizationUseCase;
 import projet.uf.modules.cat.application.ports.out.LitterPersistencePort;
 
 @Configuration
@@ -19,16 +19,16 @@ public class LitterConfig {
     }
 
     @Bean
-    LitterAccessService litterAccessService(LitterPersistencePort litterPersistencePort, CatteryAccessUseCase catteryAccessUseCase) {
-        return new LitterAccessService(litterPersistencePort, catteryAccessUseCase);
+    LitterAuthorizationService litterAccessService(LitterPersistencePort litterPersistencePort, CatteryAuthorizationUseCase catteryAccessUseCase) {
+        return new LitterAuthorizationService(litterPersistencePort, catteryAccessUseCase);
     }
 
     @Bean
     LitterService litterService(
             LitterPersistencePort litterPersistencePort,
-            LitterAccessUseCase litterAccessUseCase,
-            CatteryAccessUseCase catteryAccessUseCase,
-            CatAccessUseCase catAccessUseCase
+            LitterAuthorizationUseCase litterAccessUseCase,
+            CatteryAuthorizationUseCase catteryAccessUseCase,
+            CatAuthorizationUseCase catAccessUseCase
             ) {
         return new LitterService(
                 litterPersistencePort,

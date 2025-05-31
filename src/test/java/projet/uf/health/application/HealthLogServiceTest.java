@@ -8,11 +8,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
+import projet.uf.modules.cat.application.ports.in.CatAuthorizationUseCase;
 import projet.uf.modules.health.application.command.CreateHealthLogCommand;
 import projet.uf.modules.health.application.command.CreateKittenHealthLogCommand;
 import projet.uf.modules.health.application.HealthLogService;
-import projet.uf.modules.health.application.port.in.HealthLogAccessUseCase;
+import projet.uf.modules.health.application.port.in.HealthLogAuthorizationUseCase;
 import projet.uf.modules.health.application.port.out.HealthLogPersistencePort;
 import projet.uf.modules.health.application.port.out.KittenHealthLogPersistencePort;
 import projet.uf.modules.health.domain.model.*;
@@ -30,8 +30,8 @@ class HealthLogServiceTest {
 
     @Mock private HealthLogPersistencePort healthLogPersistencePort;
     @Mock private KittenHealthLogPersistencePort kittenHealthLogPersistencePort;
-    @Mock private CatAccessUseCase catAccessUseCase;
-    @Mock private HealthLogAccessUseCase healthLogAccessUseCase;
+    @Mock private CatAuthorizationUseCase catAccessUseCase;
+    @Mock private HealthLogAuthorizationUseCase healthLogAccessUseCase;
 
     @InjectMocks private HealthLogService healthLogService;
 
@@ -67,7 +67,7 @@ class HealthLogServiceTest {
         HealthLog healthLog = HealthLog.builder().id(healthLogId).catId(catId).build();
 
         CreateKittenHealthLogCommand command = new CreateKittenHealthLogCommand(
-                LocalDateTime.now(), LocalDateTime.now().plusDays(2)
+                LocalDateTime.now(), "Kitten notes"
         );
 
         // 👇 mock utilisé réellement

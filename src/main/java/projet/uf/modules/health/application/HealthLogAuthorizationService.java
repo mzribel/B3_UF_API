@@ -5,15 +5,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
-import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
-import projet.uf.modules.health.application.port.in.HealthLogAccessUseCase;
+import projet.uf.modules.cat.application.ports.in.CatAuthorizationUseCase;
+import projet.uf.modules.health.application.port.in.HealthLogAuthorizationUseCase;
 import projet.uf.modules.health.application.port.out.HealthLogPersistencePort;
 import projet.uf.modules.health.domain.model.HealthLog;
 
 @AllArgsConstructor
-public class HealthLogAccessService implements HealthLogAccessUseCase {
+public class HealthLogAuthorizationService implements HealthLogAuthorizationUseCase {
     private final HealthLogPersistencePort healthLogPersistencePort;
-    private final CatAccessUseCase catAccessUseCase;
+    private final CatAuthorizationUseCase catAccessUseCase;
 
     @Override
     public HealthLog getHealthLogOrThrow(@NotNull Long healthLogId, @NotNull OperatorUser operator) {

@@ -28,17 +28,8 @@ public class CatEntity {
     @Builder.Default
     private boolean sex = false;
 
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
-
     @Column(name = "litter_id")
     private Long litterId;
-
-    @Column(name = "origin_breeder_id")
-    private Long originBreederId;
-
-    @Column(name = "current_breeder_id")
-    private Long currentBreederId;
 
     @Column(name = "breed_id")
     private Long breedId;
@@ -85,10 +76,7 @@ public class CatEntity {
                 entity.getName(),
                 entity.getSurname(),
                 entity.isSex(),
-                entity.getBirthDate(),
                 entity.getLitterId(),
-                entity.getOriginBreederId(),
-                entity.getCurrentBreederId(),
                 entity.getBreedId(),
                 entity.getEyeColorId(),
                 entity.getPolyTypeId(),
@@ -109,10 +97,7 @@ public class CatEntity {
                 .name(model.getName())
                 .surname(model.getSurname())
                 .sex(model.isSex())
-                .birthDate(model.getBirthDate())
                 .litterId(model.getLitterId())
-                .originBreederId(model.getOriginBreederId())
-                .currentBreederId(model.getCurrentBreederId())
                 .breedId(model.getBreedId())
                 .eyeColorId(model.getEyeColorId())
                 .polyTypeId(model.getPolyTypeId())

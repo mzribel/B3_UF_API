@@ -218,7 +218,7 @@ public class HealthLogControllerTest {
         Long healthLogId = 42L;
         CreateKittenHealthLogCommand command = new CreateKittenHealthLogCommand(
                 LocalDateTime.of(2024, 1, 1, 12, 0),
-                LocalDateTime.of(2024, 1, 1, 12, 0).plusDays(1)
+                "Kitten notes"
         );
 
         KittenHealthLog expected = new KittenHealthLog();

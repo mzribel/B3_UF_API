@@ -2,20 +2,22 @@ package projet.uf.modules.cat.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import projet.uf.modules.breeder.application.port.in.CatteryAccessUseCase;
+import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
 import projet.uf.modules.breeder.application.port.out.BreederPersistencePort;
 import projet.uf.modules.cat.adapter.out.persistence.cat.CatPersistenceAdapter;
 import projet.uf.modules.cat.adapter.out.persistence.cat.JpaCatRepository;
 import projet.uf.modules.cat.adapter.out.persistence.catcoat.CatCoatPersistenceAdapter;
 import projet.uf.modules.cat.adapter.out.persistence.catcoat.JpaCatCoatRepository;
-import projet.uf.modules.cat.application.CatAccessService;
+import projet.uf.modules.cat.application.CatAuthorizationService;
 import projet.uf.modules.cat.application.CatCoatService;
 import projet.uf.modules.cat.application.CatDtoAssembler;
 import projet.uf.modules.cat.application.CatService;
-import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
+import projet.uf.modules.cat.application.ports.in.CatAuthorizationUseCase;
 import projet.uf.modules.cat.application.ports.in.CatCoatUseCase;
+import projet.uf.modules.cat.application.ports.in.LitterUseCase;
 import projet.uf.modules.cat.application.ports.out.CatCoatPersistencePort;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
+import projet.uf.modules.cat.application.ports.out.LitterPersistencePort;
 import projet.uf.modules.loof_characteristic.application.port.in.AllLoofCharacteristicsUseCase;
 
 @Configuration
@@ -30,8 +32,8 @@ public class CatConfig {
     }
 
     @Bean
-    public CatAccessService catAccessService(CatPersistencePort catPersistencePort, CatteryAccessUseCase catteryAccessUseCase) {
-        return new CatAccessService(catPersistencePort, catteryAccessUseCase);
+    public CatAuthorizationService catAccessService(CatPersistencePort catPersistencePort, CatteryAuthorizationUseCase catteryAccessUseCase) {
+        return new CatAuthorizationService(catPersistencePort, catteryAccessUseCase);
     }
 
     @Bean
@@ -42,14 +44,30 @@ public class CatConfig {
     @Bean
     public CatDtoAssembler catDtoAssembler(
             BreederPersistencePort breederPersistencePort,
-            CatPersistencePort catPersistencePort,
-            CatCoatUseCase catCoatUseCase
+            CatCoatUseCase catCoatUseCase,
+            LitterPersistencePort litterPersistencePort,
+            CatPersistencePort catPersistencePort
     ) {
-        return new CatDtoAssembler(breederPersistencePort, catPersistencePort, catCoatUseCase);
+        return new CatDtoAssembler(
+                breederPersistencePort,
+                catCoatUseCase,
+                litterPersistencePort,
+                catPersistencePort);
     }
 
     @Bean
-    public CatService catService(CatPersistencePort catPersistencePort, CatteryAccessUseCase catteryAccessUseCase, CatDtoAssembler assembler, CatAccessUseCase catAccessUseCase, CatCoatUseCase catCoatUseCase) {
-        return new CatService(catPersistencePort, catteryAccessUseCase, catAccessUseCase, catCoatUseCase, assembler);
+    public CatService catService(CatPersistencePort catPersistencePort,
+                                 CatteryAuthorizationUseCase catteryAccessUseCase,
+                                 CatDtoAssembler assembler,
+                                 CatAuthorizationUseCase catAccessUseCase,
+                                 CatCoatUseCase catCoatUseCase,
+                                 LitterUseCase litterUseCase) {
+        return new CatService(
+                catPersistencePort,
+                catteryAccessUseCase,
+                catAccessUseCase,
+                catCoatUseCase,
+                assembler,
+                litterUseCase);
     }
 }

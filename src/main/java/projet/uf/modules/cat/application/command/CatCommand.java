@@ -13,25 +13,21 @@ public record CatCommand(
     @Size(max = 30, message = "Le surnom du chat ne peut pas dépasser 30 caractères")
     String surname,
     boolean sex,
-    @PastOrPresent(message = "Le chat doit être né à une date antérieure ou égale à aujourd'hui")
-    LocalDate birthDate,
 
     String pedigreeNo,
     String identificationNo,
 
     Boolean isNeutered,
     LocalDate neuteredDate,
-
     Boolean isDeceased,
     LocalDate deceasedDate,
-
-    Long originBreederId,
-    Long currentBreederId,
 
     Boolean isInCattery,
     String notes,
 
     Long litterId,
+    LitterCommand litter,
+
     CatCoatCommand coat
 ){
     public static Cat toModel(CatCommand command, Long createdByCatteryId) {
@@ -39,10 +35,7 @@ public record CatCommand(
                 command.name(),
                 command.surname(),
                 command.sex(),
-                command.birthDate(),
                 command.litterId(),
-                command.originBreederId(),
-                command.currentBreederId(),
                 null,
                 null,
                 null,

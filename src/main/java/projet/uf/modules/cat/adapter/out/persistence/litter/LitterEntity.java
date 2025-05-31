@@ -18,11 +18,11 @@ public class LitterEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "dam_id")
-    private Long damId;
-
     @Column(name = "sire_id")
     private Long sireId;
+
+    @Column(name = "dam_id")
+    private Long damId;
 
     @Column(name = "origin_breeder_id")
     private Long originBreederId;
@@ -42,7 +42,7 @@ public class LitterEntity {
     @Column
     private String notes;
 
-    @Column(name = "created_by_cattery_id", insertable = false, updatable = false, nullable = false)
+    @Column(name = "created_by_cattery_id", nullable = false)
     private Long createdByCatteryId;
 
     public static Litter toModel(LitterEntity entity) {
@@ -63,8 +63,8 @@ public class LitterEntity {
     public static LitterEntity toEntity(Litter model) {
         return new LitterEntity(
                 model.getId(),
-                model.getDamId(),
                 model.getSireId(),
+                model.getDamId(),
                 model.getOriginBreederId(),
                 model.getBirthDate(),
                 model.getLoofIdentificationNumber(),
