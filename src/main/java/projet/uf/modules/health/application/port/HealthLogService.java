@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
-import projet.uf.modules.cat.domain.model.Cat;
 import projet.uf.modules.health.application.model.CreateGestationHealthLogCommand;
 import projet.uf.modules.health.application.model.CreateHealthLogCommand;
 import projet.uf.modules.health.application.model.CreateKittenHealthLogCommand;

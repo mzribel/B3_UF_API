@@ -11,6 +11,6 @@ public record CreateKittenHealthLogCommand(
     )
 {
     public KittenHealthLog toKittenHealthLog(@NotNull Long healthLogId) {
-        return new KittenHealthLog(healthLogId, openEyesDate, firstWalkDate);
+        return new KittenHealthLog(healthLogId, firstWalkDate);
     }
 }
