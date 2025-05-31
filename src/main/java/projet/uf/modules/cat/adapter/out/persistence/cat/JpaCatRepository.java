@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface JpaCatRepository extends JpaRepository<CatEntity, Long> {
     List<CatEntity> findAllByCreatedByCatteryId(Long id);
+
+
+    List<CatEntity> findAllByLitterIdAndCreatedByCatteryId(Long litterId, Long catteryId);
 }

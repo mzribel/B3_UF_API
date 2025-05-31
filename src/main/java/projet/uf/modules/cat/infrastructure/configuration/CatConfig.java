@@ -12,9 +12,7 @@ import projet.uf.modules.cat.application.CatAuthorizationService;
 import projet.uf.modules.cat.application.CatCoatService;
 import projet.uf.modules.cat.application.CatDtoAssembler;
 import projet.uf.modules.cat.application.CatService;
-import projet.uf.modules.cat.application.ports.in.CatAuthorizationUseCase;
-import projet.uf.modules.cat.application.ports.in.CatCoatUseCase;
-import projet.uf.modules.cat.application.ports.in.LitterUseCase;
+import projet.uf.modules.cat.application.ports.in.*;
 import projet.uf.modules.cat.application.ports.out.CatCoatPersistencePort;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.application.ports.out.LitterPersistencePort;
@@ -61,13 +59,15 @@ public class CatConfig {
                                  CatDtoAssembler assembler,
                                  CatAuthorizationUseCase catAccessUseCase,
                                  CatCoatUseCase catCoatUseCase,
-                                 LitterUseCase litterUseCase) {
+                                 LitterAuthorizationUseCase litterAccessUseCase,
+                                 CreateLitterUseCase createLitterUseCase) {
         return new CatService(
                 catPersistencePort,
                 catteryAccessUseCase,
                 catAccessUseCase,
                 catCoatUseCase,
                 assembler,
-                litterUseCase);
+                litterAccessUseCase,
+                createLitterUseCase);
     }
 }

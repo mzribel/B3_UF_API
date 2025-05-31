@@ -6,14 +6,17 @@ import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
+import projet.uf.modules.cat.application.command.LitterCommand;
 import projet.uf.modules.cat.application.dto.CatDetailsDto;
 import projet.uf.modules.cat.application.dto.CatPedigreeDto;
 import projet.uf.modules.cat.application.ports.in.*;
 import projet.uf.modules.cat.application.command.CatCommand;
 import projet.uf.modules.cat.application.ports.out.CatPersistencePort;
 import projet.uf.modules.cat.domain.model.Cat;
+import projet.uf.modules.cat.domain.model.Litter;
 
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 public class CatService implements
@@ -24,7 +27,8 @@ public class CatService implements
     private final CatAuthorizationUseCase catAccessUseCase;
     private final CatCoatUseCase catCoatUseCase;
     private final CatDtoAssembler dtoAssembler;
-    private final LitterUseCase litterUseCase;
+    private final LitterAuthorizationUseCase litterAuthorizationUseCase;
+    private final CreateLitterUseCase createLitterUseCase;
 
     @Override
     @Transactional
@@ -40,14 +44,16 @@ public class CatService implements
             if (command.litterId() != null) {
                 throw new ApiException("Ne pas renseigner à la fois une portée existante et une nouvelle portée", HttpStatus.BAD_REQUEST);
             }
-            System.out.println(createdByCatteryId);
-            cat.setLitterId(litterUseCase.createLitter(command.litter(), createdByCatteryId, operator).getId());
+
+            cat.setLitterId(createLitterUseCase.createLitter(command.litter(), createdByCatteryId, operator).getId());
         }
 
         // Récupère la portée
         else if (command.litterId() != null) {
-            litterUseCase.getById(command.litterId(), operator); // vérifie les droits
-            cat.setLitterId(command.litterId());
+            Litter litter = litterAuthorizationUseCase.getLitterOrThrow(command.litterId(), operator);
+            if (!litter.getCreatedByCatteryId().equals(createdByCatteryId)) {
+                throw new ApiException("La portée doit faire partie de la même chatterie que le chat", HttpStatus.BAD_REQUEST);
+            }
         }
 
         Cat saved = catPersistencePort.save(cat);
@@ -82,6 +88,46 @@ public class CatService implements
         Cat cat = catAccessUseCase.getCatOrThrow(id, operator);
 
         return dtoAssembler.toPedigreeDto(cat, 3);
+    }
+
+    @Override
+    public List<CatDetailsDto> getCatsByLitterId(Long litterId, OperatorUser operator) {
+        Litter litter = litterAuthorizationUseCase.getLitterOrThrow(litterId, operator);
+
+        return catPersistencePort.getByLitterIdAndCatteryId(litterId, litter.getCreatedByCatteryId())
+                .stream()
+                .map(dtoAssembler::toDetailsDto)
+                .toList();
+    }
+
+    @Override
+    public Litter updateCatLitter(Long catId, LitterCommand command, OperatorUser operator) {
+        return null;
+    }
+
+    @Override
+    public void addKittenToLitter(Long catId, Long litterId, OperatorUser operator) {
+        Litter litter = litterAuthorizationUseCase.getLitterOrThrow(litterId, operator);
+        Cat cat = catAccessUseCase.getCatOrThrow(catId, operator);
+
+        if (!cat.getCreatedByCatteryId().equals(litter.getCreatedByCatteryId())) {
+            throw new ApiException("Le chat doit être relié à une portée de sa chatterie", HttpStatus.BAD_REQUEST);
+        }
+
+        cat.setLitterId(litterId);
+        catPersistencePort.save(cat);
+    }
+
+    @Override
+    public void removeKittenFromLitter(Long catId, Long litterId, OperatorUser operator) {
+        litterAuthorizationUseCase.getLitterOrThrow(litterId, operator);
+        Cat cat = catAccessUseCase.getCatOrThrow(catId, operator);
+
+        if (!Objects.equals(cat.getLitterId(), litterId)) {
+            throw new ApiException("Ce chat ne fait pas partie de cette portée", HttpStatus.BAD_REQUEST);
+        }
+        cat.setLitterId(null);
+        catPersistencePort.save(cat);
     }
 
     @Override

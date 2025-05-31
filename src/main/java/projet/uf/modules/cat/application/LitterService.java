@@ -7,6 +7,7 @@ import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.breeder.application.port.in.CatteryAuthorizationUseCase;
 import projet.uf.modules.cat.application.command.LitterCommand;
 import projet.uf.modules.cat.application.ports.in.CatAuthorizationUseCase;
+import projet.uf.modules.cat.application.ports.in.CreateLitterUseCase;
 import projet.uf.modules.cat.application.ports.in.LitterAuthorizationUseCase;
 import projet.uf.modules.cat.application.ports.in.LitterUseCase;
 import projet.uf.modules.cat.application.ports.out.LitterPersistencePort;
@@ -16,7 +17,7 @@ import projet.uf.modules.cat.domain.model.Litter;
 import java.util.List;
 
 @AllArgsConstructor
-public class LitterService implements LitterUseCase {
+public class LitterService implements LitterUseCase, CreateLitterUseCase {
     private final LitterPersistencePort litterPersistencePort;
     private final LitterAuthorizationUseCase litterAccessUseCase;
     private final CatteryAuthorizationUseCase catteryAccessUseCase;
@@ -76,10 +77,5 @@ public class LitterService implements LitterUseCase {
             throw new ApiException("Aucune portée associée à ce chat", HttpStatus.NOT_FOUND);
         }
         return litterPersistencePort.getById(cat.getLitterId()).orElse(null);
-    }
-
-    @Override
-    public Litter updateCatLitter(Long catId, LitterCommand command, OperatorUser operator) {
-        return null;
     }
 }

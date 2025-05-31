@@ -63,4 +63,31 @@ public class CatController {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         catUseCase.deleteCatById(id, operator);
     }
+
+    @GetMapping("/litters/{litterId}/cats")
+    public List<CatDetailsDto> getLitterCats(
+            @PathVariable Long litterId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return catUseCase.getCatsByLitterId(litterId, operator);
+    }
+
+    // TODO : à changer en PUT /cats/id
+    @PutMapping("/litters/{litterId}/cats/{catId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addCatToLitter(
+            @PathVariable Long catId,
+            @PathVariable Long litterId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        catUseCase.addKittenToLitter(catId, litterId, operator);
+    }
+
+    // TODO : à changer en PUT /cats/id
+    @DeleteMapping("/litters/{litterId}/cats/{catId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeCatFromLitter(
+            @PathVariable Long catId,
+            @PathVariable Long litterId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        catUseCase.removeKittenFromLitter(catId, litterId, operator);
+    }
 }
