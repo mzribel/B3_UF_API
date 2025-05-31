@@ -11,4 +11,5 @@ public interface CatPersistencePort {
     List<Cat> getAll();
     Cat save(Cat cat);
     void deleteById(Long id);
+    List<Cat> getByLitterIdAndCatteryId(Long litterId, Long catteryId);
 }

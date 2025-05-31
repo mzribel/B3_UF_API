@@ -11,11 +11,9 @@ public interface LitterUseCase {
     Litter getById(Long litterId, OperatorUser operator);
 
     List<Litter> getByCatteryId(Long litterId, OperatorUser operator);
-    Litter createLitter(LitterCommand command, Long createdByCatteryId, OperatorUser operator);
 
     Litter updateLitterById(Long litterId, LitterCommand command, OperatorUser operator);
     void deleteLitterById(Long litterId, OperatorUser operator);
 
     Litter getCatLitter(Long catId, OperatorUser operator);
-    Litter updateCatLitter(Long catId, LitterCommand command, OperatorUser operator);
 }

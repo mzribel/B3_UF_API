@@ -29,6 +29,9 @@ public class CatPersistenceAdapter implements CatPersistencePort {
     @Override
     public Cat save(Cat cat) {
         CatEntity catEntity = CatEntity.toEntity(cat);
+        if (cat.getId() != null) {
+            catEntity.setId(cat.getId());
+        }
         CatEntity savedCatEntity = jpaCatRepository.save(catEntity);
         return CatEntity.toModel(savedCatEntity);
     }
@@ -36,5 +39,11 @@ public class CatPersistenceAdapter implements CatPersistencePort {
     @Override
     public void deleteById(Long id) {
         jpaCatRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Cat> getByLitterIdAndCatteryId(Long litterId, Long catteryId) {
+        return jpaCatRepository.findAllByLitterIdAndCreatedByCatteryId(litterId, catteryId)
+                .stream().map(CatEntity::toModel).toList();
     }
 }

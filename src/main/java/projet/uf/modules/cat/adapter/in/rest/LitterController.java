@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.cat.application.command.LitterCommand;
+import projet.uf.modules.cat.application.ports.in.CreateLitterUseCase;
 import projet.uf.modules.cat.application.ports.in.LitterUseCase;
 import projet.uf.modules.cat.domain.model.Litter;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LitterController {
     private final LitterUseCase litterUseCase;
+    private final CreateLitterUseCase createLitterUseCase;
     private final CurrentUserProvider currentUserProvider;
 
     @GetMapping("/litters")
@@ -62,6 +64,6 @@ public class LitterController {
             @PathVariable Long catteryId,
             @RequestBody LitterCommand command) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
-        return litterUseCase.createLitter(command, catteryId, operator);
+        return createLitterUseCase.createLitter(command, catteryId, operator);
     }
 }
