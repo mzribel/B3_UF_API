@@ -24,15 +24,11 @@ public class KittenHealthLogEntity {
     @Column(name = "open_eyes_date")
     private LocalDateTime openEyesDate;
 
-    @Column(name = "first_walk_date")
-    private LocalDateTime firstWakDate;
-
     public static KittenHealthLog toModel(KittenHealthLogEntity entity) {
         return KittenHealthLog.builder()
                 .id(entity.getId())
                 .healthLogId(entity.getHealthLogId())
                 .openEyesDate(entity.getOpenEyesDate())
-                .firstWakDate(entity.getFirstWakDate())
                 .build();
     }
 
@@ -40,8 +36,7 @@ public class KittenHealthLogEntity {
         return new KittenHealthLogEntity(
                 model.getId(),
                 model.getHealthLogId(),
-                model.getOpenEyesDate(),
-                model.getFirstWakDate()
+                model.getOpenEyesDate()
         );
     }
 }

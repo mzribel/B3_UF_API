@@ -15,14 +15,9 @@ public class KittenHealthLog {
     private Long id;
     private Long healthLogId;
     private LocalDateTime openEyesDate;
-    private LocalDateTime firstWakDate;
 
-    public KittenHealthLog() {
-    }
-
-    public KittenHealthLog(Long healthLogId, LocalDateTime openEyesDate, LocalDateTime firstWakDate) {
+    public KittenHealthLog(Long healthLogId, LocalDateTime openEyesDate) {
         this.healthLogId = healthLogId;
         this.openEyesDate = openEyesDate;
-        this.firstWakDate = firstWakDate;
     }
 }

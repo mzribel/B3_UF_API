@@ -16,7 +16,6 @@ public record CreateHealthLogCommand(
         LocalDateTime date
 ) {
     public HealthLog toHealthLog(Long catId) {
-        LocalDateTime logDate = date == null ? LocalDateTime.now() : date;
         return new HealthLog(
                 catId,
                 this.weightInGrams,
@@ -27,7 +26,7 @@ public record CreateHealthLogCommand(
                 this.stoolQuality,
                 this.urineObservations,
                 this.notes,
-                this.date
+                date == null ? LocalDateTime.now() : date
         );
     }
 }

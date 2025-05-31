@@ -22,9 +22,6 @@ public class GestationHealthLog {
     private String mammaryObservations;
     private Boolean kittenMovement;
 
-    public GestationHealthLog() {
-    }
-
     public GestationHealthLog(Long gestationId, Long healthLogId, BigDecimal weight, BigDecimal temperature,
                              String behavior, String notes, String mammaryObservations, Boolean kittenMovement) {
         this.gestationId = gestationId;

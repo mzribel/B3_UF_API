@@ -28,7 +28,7 @@ public class HealthLogService implements HealthLogUseCase {
 
     @Override
     public HealthLog createHealthLog(Long catId, CreateHealthLogCommand command, OperatorUser operatorUser) {
-        Cat cat = catAccessUseCase.getCatOrThrow(catId, operatorUser);
+        catAccessUseCase.getCatOrThrow(catId, operatorUser);
         HealthLog log = command.toHealthLog(catId);
         return healthLogPersistencePort.save(log);
     }
