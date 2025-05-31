@@ -1,37 +1,33 @@
 package projet.uf.modules.health.application.port.in;
 
+import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.health.application.model.CreateGestationHealthLogCommand;
+import projet.uf.modules.health.application.model.CreateHealthLogCommand;
+import projet.uf.modules.health.application.model.CreateKittenHealthLogCommand;
 import projet.uf.modules.health.domain.model.HealthLog;
 import projet.uf.modules.health.domain.model.KittenHealthLog;
 import projet.uf.modules.health.domain.model.GestationHealthLog;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface HealthLogUseCase {
     // CREATE
-    HealthLog createHealthLog(HealthLog healthLog);
-    KittenHealthLog createKittenHealthLog(KittenHealthLog kittenHealthLog);
-    GestationHealthLog createGestationHealthLog(GestationHealthLog gestationHealthLog);
+    HealthLog createHealthLog(Long catId, CreateHealthLogCommand command, OperatorUser operatorUser);
+    KittenHealthLog createKittenHealthLog(Long healthLogId, CreateKittenHealthLogCommand command, OperatorUser operatorUser);
+    GestationHealthLog createGestationHealthLog(Long healthLogId, CreateGestationHealthLogCommand command, OperatorUser operatorUser);
 
     // READ
-    Optional<HealthLog> getHealthLogById(Long id);
-    List<HealthLog> getAllHealthLogs();
-    List<HealthLog> getHealthLogsByCatId(Long catId);
-    
-    Optional<KittenHealthLog> getKittenHealthLogById(Long id);
-    Optional<KittenHealthLog> getKittenHealthLogByHealthLogId(Long healthLogId);
-    
-    Optional<GestationHealthLog> getGestationHealthLogById(Long id);
-    List<GestationHealthLog> getGestationHealthLogsByGestationId(Long gestationId);
-    Optional<GestationHealthLog> getGestationHealthLogByHealthLogId(Long healthLogId);
+    HealthLog getHealthLogById(Long healthLogId, OperatorUser operatorUser);
+    List<HealthLog> getAllHealthLogs(OperatorUser operatorUser);
+    List<HealthLog> getHealthLogsByCatId(Long catId, OperatorUser operatorUser);
 
     // UPDATE
-    HealthLog updateHealthLog(Long id, HealthLog healthLog);
-    KittenHealthLog updateKittenHealthLog(Long id, KittenHealthLog kittenHealthLog);
-    GestationHealthLog updateGestationHealthLog(Long id, GestationHealthLog gestationHealthLog);
+    HealthLog updateHealthLog(Long healthLogId, CreateHealthLogCommand command, OperatorUser operatorUser);
+    KittenHealthLog updateKittenHealthLog(Long healthLogId, CreateKittenHealthLogCommand command, OperatorUser operatorUser);
+    GestationHealthLog updateGestationHealthLog(Long healthLogId, CreateGestationHealthLogCommand command, OperatorUser operatorUser);
 
     // DELETE
-    void deleteHealthLogById(Long id);
-    void deleteKittenHealthLogById(Long id);
-    void deleteGestationHealthLogById(Long id);
+    void deleteHealthLogById(Long healthLogId, OperatorUser operatorUser);
+    void deleteKittenHealthLogById(Long healthLogId, OperatorUser operatorUser);
+    void deleteGestationHealthLogById(Long healthLogId, OperatorUser operatorUser);
 }

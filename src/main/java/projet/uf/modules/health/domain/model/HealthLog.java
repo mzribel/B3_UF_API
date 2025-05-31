@@ -25,13 +25,9 @@ public class HealthLog {
     private String notes;
     private LocalDateTime date;
 
-    public HealthLog() {
-        this.date = LocalDateTime.now();
-    }
-
     public HealthLog(Long catId, BigDecimal weightInGrams, BigDecimal temperatureInCelsius, 
                     String appetite, String hydratation, String behavior, 
-                    String stoolQuality, String urineObservations, String notes) {
+                    String stoolQuality, String urineObservations, String notes, LocalDateTime date) {
         this.catId = catId;
         this.weightInGrams = weightInGrams;
         this.temperatureInCelsius = temperatureInCelsius;
@@ -41,6 +37,6 @@ public class HealthLog {
         this.stoolQuality = stoolQuality;
         this.urineObservations = urineObservations;
         this.notes = notes;
-        this.date = LocalDateTime.now();
+        this.date = date != null ? date : LocalDateTime.now();
     }
 }

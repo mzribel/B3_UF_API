@@ -2,6 +2,7 @@ package projet.uf.modules.health.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
 import projet.uf.modules.health.adapter.out.persistence.gestationhealthlog.GestationHealthLogPersistenceAdapter;
 import projet.uf.modules.health.adapter.out.persistence.gestationhealthlog.JpaGestationHealthLogRepository;
 import projet.uf.modules.health.adapter.out.persistence.healthlog.HealthLogPersistenceAdapter;
@@ -35,11 +36,13 @@ public class HealthConfig {
     public HealthLogUseCase healthLogUseCase(
             HealthLogPersistencePort healthLogPersistencePort,
             KittenHealthLogPersistencePort kittenHealthLogPersistencePort,
-            GestationHealthLogPersistencePort gestationHealthLogPersistencePort) {
+            GestationHealthLogPersistencePort gestationHealthLogPersistencePort,
+            CatAccessUseCase catAccessUseCase) {
         return new HealthLogService(
                 healthLogPersistencePort,
                 kittenHealthLogPersistencePort,
-                gestationHealthLogPersistencePort
+                gestationHealthLogPersistencePort,
+                catAccessUseCase
         );
     }
 }

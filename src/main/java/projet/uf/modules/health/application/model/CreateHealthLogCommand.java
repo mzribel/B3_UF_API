@@ -1,25 +1,33 @@
 package projet.uf.modules.health.application.model;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import projet.uf.modules.health.domain.model.HealthLog;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class CreateHealthLogCommand {
-    @NotNull
-    private Long catId;
-    
-    private BigDecimal weightInGrams;
-    private BigDecimal temperatureInCelsius;
-    private String appetite;
-    private String hydratation;
-    private String behavior;
-    private String stoolQuality;
-    private String urineObservations;
-    private String notes;
+public record CreateHealthLogCommand(
+        BigDecimal weightInGrams,
+        BigDecimal temperatureInCelsius,
+        String appetite,
+        String hydratation,
+        String behavior,
+        String stoolQuality,
+        String urineObservations,
+        String notes,
+        LocalDateTime date
+) {
+    public HealthLog toHealthLog(Long catId) {
+        LocalDateTime logDate = date == null ? LocalDateTime.now() : date;
+        return new HealthLog(
+                catId,
+                this.weightInGrams,
+                this.temperatureInCelsius,
+                this.appetite,
+                this.hydratation,
+                this.behavior,
+                this.stoolQuality,
+                this.urineObservations,
+                this.notes,
+                this.date
+        );
+    }
 }

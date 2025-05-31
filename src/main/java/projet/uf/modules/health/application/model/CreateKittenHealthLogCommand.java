@@ -1,19 +1,16 @@
 package projet.uf.modules.health.application.model;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import projet.uf.modules.health.domain.model.KittenHealthLog;
 
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class CreateKittenHealthLogCommand {
-    @NotNull
-    private Long healthLogId;
-    
-    private LocalDateTime openEyesDate;
-    private LocalDateTime firstWakDate;
+public record CreateKittenHealthLogCommand(
+        LocalDateTime openEyesDate,
+        LocalDateTime firstWalkDate
+    )
+{
+    public KittenHealthLog toKittenHealthLog(@NotNull Long healthLogId) {
+        return new KittenHealthLog(healthLogId, openEyesDate, firstWalkDate);
+    }
 }

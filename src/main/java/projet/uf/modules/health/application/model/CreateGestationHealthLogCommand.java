@@ -1,26 +1,32 @@
 package projet.uf.modules.health.application.model;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import projet.uf.modules.health.domain.model.GestationHealthLog;
 
 import java.math.BigDecimal;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class CreateGestationHealthLogCommand {
-    @NotNull
-    private Long gestationId;
-    
-    @NotNull
-    private Long healthLogId;
-    
-    private BigDecimal weight;
-    private BigDecimal temperature;
-    private String behavior;
-    private String notes;
-    private String mammaryObservations;
-    private Boolean kittenMovement;
+public record CreateGestationHealthLogCommand(
+        BigDecimal weight,
+        BigDecimal temperature,
+        String behavior,
+        String notes,
+        String mammaryObservations,
+        Boolean kittenMovement
+)
+{
+        public GestationHealthLog toModel(
+                @NotNull Long gestationId,
+                @NotNull Long healthLogId
+        ) {
+                return new GestationHealthLog(
+                        gestationId,
+                        healthLogId,
+                        this.weight,
+                        this.temperature,
+                        this.behavior,
+                        this.notes,
+                        this.mammaryObservations,
+                        this.kittenMovement
+                );
+        }
 }

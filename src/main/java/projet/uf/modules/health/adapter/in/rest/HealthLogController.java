@@ -4,120 +4,129 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
+import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.health.application.model.CreateGestationHealthLogCommand;
 import projet.uf.modules.health.application.model.CreateHealthLogCommand;
 import projet.uf.modules.health.application.model.CreateKittenHealthLogCommand;
-import projet.uf.modules.health.application.model.HealthLogCommandMapper;
 import projet.uf.modules.health.application.port.in.HealthLogUseCase;
 import projet.uf.modules.health.domain.model.GestationHealthLog;
 import projet.uf.modules.health.domain.model.HealthLog;
 import projet.uf.modules.health.domain.model.KittenHealthLog;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
 public class HealthLogController {
     private final HealthLogUseCase healthLogUseCase;
+    private final CurrentUserProvider currentUserProvider;
 
-    // HealthLog endpoints
-    @GetMapping({"/health-logs/", "/health-logs"})
+    // HEALTH LOGS
+
+    @GetMapping("/health-logs")
     public List<HealthLog> getAllHealthLogs() {
-        return healthLogUseCase.getAllHealthLogs();
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return healthLogUseCase.getAllHealthLogs(operator);
     }
 
-    @GetMapping({"/health-logs/{id}/", "/health-logs/{id}"})
-    public Optional<HealthLog> getHealthLogById(@PathVariable Long id) {
-        return healthLogUseCase.getHealthLogById(id);
+    @GetMapping("/health-logs/{healthLogId}")
+    public HealthLog getHealthLog(
+            @PathVariable Long healthLogId
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return healthLogUseCase.getHealthLogById(healthLogId, operator);
     }
 
-    @GetMapping({"/cats/{catId}/health-logs/", "/cats/{catId}/health-logs"})
-    public List<HealthLog> getHealthLogsByCatId(@PathVariable Long catId) {
-        return healthLogUseCase.getHealthLogsByCatId(catId);
+    @PutMapping("/health-logs/{healthLogId}")
+    public HealthLog updateHealthLog(
+            @PathVariable Long healthLogId,
+            @Valid @RequestBody CreateHealthLogCommand command
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return healthLogUseCase.updateHealthLog(healthLogId, command, operator);
     }
 
-    @PostMapping({"/health-logs/", "/health-logs"})
-    @ResponseStatus(HttpStatus.CREATED)
-    public HealthLog createHealthLog(@RequestBody @Valid CreateHealthLogCommand command) {
-        HealthLog healthLog = HealthLogCommandMapper.fromCreateHealthLogCommand(command);
-        return healthLogUseCase.createHealthLog(healthLog);
-    }
-
-    @PutMapping({"/health-logs/{id}/", "/health-logs/{id}"})
-    public HealthLog updateHealthLog(@PathVariable Long id, @RequestBody @Valid CreateHealthLogCommand command) {
-        HealthLog healthLog = HealthLogCommandMapper.fromCreateHealthLogCommand(command);
-        return healthLogUseCase.updateHealthLog(id, healthLog);
-    }
-
-    @DeleteMapping({"/health-logs/{id}/", "/health-logs/{id}"})
+    @DeleteMapping("/health-logs/{healthLogId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteHealthLog(@PathVariable Long id) {
-        healthLogUseCase.deleteHealthLogById(id);
+    public void deleteHealthLog(
+            @PathVariable Long healthLogId
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        healthLogUseCase.deleteHealthLogById(healthLogId, operator);
     }
 
-    // KittenHealthLog endpoints
-    @GetMapping({"/kitten-health-logs/{id}/", "/kitten-health-logs/{id}"})
-    public Optional<KittenHealthLog> getKittenHealthLogById(@PathVariable Long id) {
-        return healthLogUseCase.getKittenHealthLogById(id);
+    @GetMapping("/cats/{catId}/health-logs")
+    public List<HealthLog> getHealthLogsByCat(@PathVariable Long catId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return healthLogUseCase.getHealthLogsByCatId(catId, operator);
     }
-
-    @GetMapping({"/health-logs/{healthLogId}/kitten-health-log/", "/health-logs/{healthLogId}/kitten-health-log"})
-    public Optional<KittenHealthLog> getKittenHealthLogByHealthLogId(@PathVariable Long healthLogId) {
-        return healthLogUseCase.getKittenHealthLogByHealthLogId(healthLogId);
-    }
-
-    @PostMapping({"/kitten-health-logs/", "/kitten-health-logs"})
+    @PostMapping("/cats/{catId}/health-logs")
     @ResponseStatus(HttpStatus.CREATED)
-    public KittenHealthLog createKittenHealthLog(@RequestBody @Valid CreateKittenHealthLogCommand command) {
-        KittenHealthLog kittenHealthLog = HealthLogCommandMapper.fromCreateKittenHealthLogCommand(command);
-        return healthLogUseCase.createKittenHealthLog(kittenHealthLog);
+    public HealthLog createHealthLogForCat(
+            @PathVariable Long catId,
+            @RequestBody @Valid CreateHealthLogCommand command) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return healthLogUseCase.createHealthLog(catId, command, operator);
     }
 
-    @PutMapping({"/kitten-health-logs/{id}/", "/kitten-health-logs/{id}"})
-    public KittenHealthLog updateKittenHealthLog(@PathVariable Long id, @RequestBody @Valid CreateKittenHealthLogCommand command) {
-        KittenHealthLog kittenHealthLog = HealthLogCommandMapper.fromCreateKittenHealthLogCommand(command);
-        return healthLogUseCase.updateKittenHealthLog(id, kittenHealthLog);
-    }
+    // GESTATION LOGS
 
-    @DeleteMapping({"/kitten-health-logs/{id}/", "/kitten-health-logs/{id}"})
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteKittenHealthLog(@PathVariable Long id) {
-        healthLogUseCase.deleteKittenHealthLogById(id);
-    }
-
-    // GestationHealthLog endpoints
-    @GetMapping({"/gestation-health-logs/{id}/", "/gestation-health-logs/{id}"})
-    public Optional<GestationHealthLog> getGestationHealthLogById(@PathVariable Long id) {
-        return healthLogUseCase.getGestationHealthLogById(id);
-    }
-
-    @GetMapping({"/gestations/{gestationId}/health-logs/", "/gestations/{gestationId}/health-logs"})
-    public List<GestationHealthLog> getGestationHealthLogsByGestationId(@PathVariable Long gestationId) {
-        return healthLogUseCase.getGestationHealthLogsByGestationId(gestationId);
-    }
-
-    @GetMapping({"/health-logs/{healthLogId}/gestation-health-log/", "/health-logs/{healthLogId}/gestation-health-log"})
-    public Optional<GestationHealthLog> getGestationHealthLogByHealthLogId(@PathVariable Long healthLogId) {
-        return healthLogUseCase.getGestationHealthLogByHealthLogId(healthLogId);
-    }
-
-    @PostMapping({"/gestation-health-logs/", "/gestation-health-logs"})
+    @PostMapping("/health-logs/{healthLogId}/gestation")
     @ResponseStatus(HttpStatus.CREATED)
-    public GestationHealthLog createGestationHealthLog(@RequestBody @Valid CreateGestationHealthLogCommand command) {
-        GestationHealthLog gestationHealthLog = HealthLogCommandMapper.fromCreateGestationHealthLogCommand(command);
-        return healthLogUseCase.createGestationHealthLog(gestationHealthLog);
+    public GestationHealthLog createGestationHealthLog(
+            @PathVariable Long healthLogId,
+            @RequestBody @Valid CreateGestationHealthLogCommand command
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return healthLogUseCase.createGestationHealthLog(healthLogId, command, operator);
     }
 
-    @PutMapping({"/gestation-health-logs/{id}/", "/gestation-health-logs/{id}"})
-    public GestationHealthLog updateGestationHealthLog(@PathVariable Long id, @RequestBody @Valid CreateGestationHealthLogCommand command) {
-        GestationHealthLog gestationHealthLog = HealthLogCommandMapper.fromCreateGestationHealthLogCommand(command);
-        return healthLogUseCase.updateGestationHealthLog(id, gestationHealthLog);
+    @PutMapping("/health-logs/{healthLogId}/gestation")
+    public GestationHealthLog updateGestationHealthLog(
+            @PathVariable Long healthLogId,
+            @RequestBody @Valid CreateGestationHealthLogCommand command
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return healthLogUseCase.updateGestationHealthLog(healthLogId, command, operator);
     }
 
-    @DeleteMapping({"/gestation-health-logs/{id}/", "/gestation-health-logs/{id}"})
+    @DeleteMapping("/health-logs/{healthLogId}/gestation")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteGestationHealthLog(@PathVariable Long id) {
-        healthLogUseCase.deleteGestationHealthLogById(id);
+    public void deleteGestationHealthLog(
+            @PathVariable Long healthLogId
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        healthLogUseCase.deleteGestationHealthLogById(healthLogId, operator);
+    }
+
+    // KITTEN LOGS
+
+    @PostMapping("/health-logs/{healthLogId}/kitten")
+    @ResponseStatus(HttpStatus.CREATED)
+    public KittenHealthLog createKittenHealthLog(
+            @PathVariable Long healthLogId,
+            @RequestBody @Valid CreateKittenHealthLogCommand command
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return healthLogUseCase.createKittenHealthLog(healthLogId, command, operator);
+    }
+
+    @PutMapping("/health-logs/{healthLogId}/kitten")
+    public KittenHealthLog updateGestationHealthLog(
+            @PathVariable Long healthLogId,
+            @RequestBody @Valid CreateKittenHealthLogCommand command
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return healthLogUseCase.updateKittenHealthLog(healthLogId, command, operator);
+    }
+
+    @DeleteMapping("/health-logs/{healthLogId}/kitten")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteKittenHealthLog(
+            @PathVariable Long healthLogId
+    ) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        healthLogUseCase.deleteKittenHealthLogById(healthLogId, operator);
     }
 }
