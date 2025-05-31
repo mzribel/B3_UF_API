@@ -12,6 +12,7 @@ import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
 import projet.uf.modules.health.application.command.CreateHealthLogCommand;
 import projet.uf.modules.health.application.command.CreateKittenHealthLogCommand;
 import projet.uf.modules.health.application.HealthLogService;
+import projet.uf.modules.health.application.port.in.HealthLogAccessUseCase;
 import projet.uf.modules.health.application.port.out.HealthLogPersistencePort;
 import projet.uf.modules.health.application.port.out.KittenHealthLogPersistencePort;
 import projet.uf.modules.health.domain.model.*;
@@ -30,6 +31,7 @@ class HealthLogServiceTest {
     @Mock private HealthLogPersistencePort healthLogPersistencePort;
     @Mock private KittenHealthLogPersistencePort kittenHealthLogPersistencePort;
     @Mock private CatAccessUseCase catAccessUseCase;
+    @Mock private HealthLogAccessUseCase healthLogAccessUseCase;
 
     @InjectMocks private HealthLogService healthLogService;
 
@@ -68,8 +70,8 @@ class HealthLogServiceTest {
                 LocalDateTime.now(), LocalDateTime.now().plusDays(2)
         );
 
-        when(healthLogPersistencePort.getById(healthLogId)).thenReturn(Optional.of(healthLog));
-        when(catAccessUseCase.hasUserAccessToCat(catId, operator)).thenReturn(false);
+        // 👇 mock utilisé réellement
+        when(healthLogAccessUseCase.getHealthLogOrThrow(healthLogId, operator)).thenReturn(healthLog);
         when(kittenHealthLogPersistencePort.save(any())).thenAnswer(i -> i.getArgument(0));
 
         KittenHealthLog result = healthLogService.createKittenHealthLog(healthLogId, command, operator);
@@ -91,8 +93,7 @@ class HealthLogServiceTest {
         Long id = 5L;
         HealthLog log = HealthLog.builder().id(id).catId(999L).build();
 
-        when(healthLogPersistencePort.getById(id)).thenReturn(Optional.of(log));
-        when(catAccessUseCase.hasUserAccessToCat(999L, operator)).thenReturn(false);
+        when(healthLogAccessUseCase.getHealthLogOrThrow(id, operator)).thenReturn(log);
 
         HealthLog result = healthLogService.getHealthLogById(id, operator);
 
@@ -120,17 +121,25 @@ class HealthLogServiceTest {
         Long id = 4L;
         Long catId = 100L;
 
+        // Entité existante simulée
         HealthLog existing = HealthLog.builder().id(id).catId(catId).build();
+
+        // Commande mise à jour
         CreateHealthLogCommand command = new CreateHealthLogCommand(
-                BigDecimal.valueOf(1900), BigDecimal.valueOf(38.1), "Normal", "Hydrated", "Active", "Normal", "Normal", "Updated", LocalDateTime.now()
+                BigDecimal.valueOf(1900),
+                BigDecimal.valueOf(38.1),
+                "Normal", "Hydrated", "Active", "Normal", "Normal",
+                "Updated", LocalDateTime.now()
         );
 
-        when(healthLogPersistencePort.getById(id)).thenReturn(Optional.of(existing));
-        when(catAccessUseCase.hasUserAccessToCat(catId, operator)).thenReturn(true);
-        when(healthLogPersistencePort.save(any())).thenAnswer(i -> i.getArgument(0));
+        // Mocks nécessaires
+        when(healthLogAccessUseCase.getHealthLogOrThrow(id, operator)).thenReturn(existing);
+        when(healthLogPersistencePort.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
+        // Appel de la méthode testée
         HealthLog result = healthLogService.updateHealthLog(id, command, operator);
 
+        // Vérifications
         assertEquals(id, result.getId());
         assertEquals(catId, result.getCatId());
         verify(healthLogPersistencePort).save(any());
@@ -144,10 +153,9 @@ class HealthLogServiceTest {
         HealthLog log = HealthLog.builder().id(id).catId(catId).build();
 
         when(healthLogPersistencePort.getById(id)).thenReturn(Optional.of(log));
-        when(catAccessUseCase.hasUserAccessToCat(catId, operator)).thenReturn(true);
+        when(healthLogAccessUseCase.hasUserAccessToHealthLog(id, operator)).thenReturn(true);
 
         healthLogService.deleteHealthLogById(id, operator);
-
         verify(healthLogPersistencePort).deleteById(id);
     }
 }

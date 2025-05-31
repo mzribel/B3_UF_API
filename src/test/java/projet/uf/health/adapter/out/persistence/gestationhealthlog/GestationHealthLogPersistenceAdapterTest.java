@@ -10,7 +10,6 @@ import projet.uf.modules.health.adapter.out.persistence.gestationhealthlog.Gesta
 import projet.uf.modules.health.adapter.out.persistence.gestationhealthlog.JpaGestationHealthLogRepository;
 import projet.uf.modules.health.domain.model.GestationHealthLog;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +29,7 @@ public class GestationHealthLogPersistenceAdapterTest {
     void getById_shouldReturnGestationHealthLog_whenExists() {
         Long id = 1L;
         GestationHealthLogEntity entity = new GestationHealthLogEntity(
-                id, 10L, 20L,
-                BigDecimal.valueOf(1200), BigDecimal.valueOf(38.3),
-                "Calm", "Healthy", "Normal", true
+                id, 10L, 20L, "Normal", true
         );
 
         when(jpaGestationHealthLogRepository.findById(id)).thenReturn(Optional.of(entity));
@@ -59,9 +56,9 @@ public class GestationHealthLogPersistenceAdapterTest {
     void getByGestationId_shouldReturnGestationHealthLogs() {
         Long gestationId = 10L;
         GestationHealthLogEntity e1 = new GestationHealthLogEntity(1L, gestationId, 101L,
-                BigDecimal.TEN, BigDecimal.ONE, "Normal", "Notes", "OK", true);
+                "OK", true);
         GestationHealthLogEntity e2 = new GestationHealthLogEntity(2L, gestationId, 102L,
-                BigDecimal.TEN, BigDecimal.ONE, "Normal", "Notes", "OK", true);
+                "OK", true);
 
         when(jpaGestationHealthLogRepository.findByGestationId(gestationId)).thenReturn(List.of(e1, e2));
 
@@ -76,9 +73,7 @@ public class GestationHealthLogPersistenceAdapterTest {
     void getByHealthLogId_shouldReturnGestationHealthLog_whenExists() {
         Long healthLogId = 20L;
         GestationHealthLogEntity entity = new GestationHealthLogEntity(
-                1L, 10L, healthLogId,
-                BigDecimal.valueOf(1500), BigDecimal.valueOf(38.6),
-                "Active", "Fine", "Ok", false
+                1L, 10L, healthLogId, "Ok", false
         );
 
         when(jpaGestationHealthLogRepository.findByHealthLogId(healthLogId)).thenReturn(Optional.of(entity));
@@ -104,9 +99,7 @@ public class GestationHealthLogPersistenceAdapterTest {
     @Test
     void save_shouldReturnSavedGestationHealthLog() {
         GestationHealthLog model = new GestationHealthLog(
-                10L, 20L,
-                BigDecimal.valueOf(1300), BigDecimal.valueOf(38.2),
-                "Calm", "All good", "Normal", true
+                10L, 20L,"Normal", true
         );
         GestationHealthLogEntity entity = GestationHealthLogEntity.toEntity(model);
         when(jpaGestationHealthLogRepository.save(any())).thenReturn(entity);
