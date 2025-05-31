@@ -6,8 +6,8 @@ import projet.uf.modules.cat.domain.model.Litter;
 import java.time.LocalDate;
 
 public record LitterCommand(
-        Long damId,
         Long sireId,
+        Long damId,
         Long originBreederId,
         LocalDate birthDate,
         String loofIdentificationNumber,
@@ -17,8 +17,8 @@ public record LitterCommand(
 ) {
     public Litter toModel(@NotNull Long catteryId) {
         return new Litter(
-                this.damId,
                 this.sireId,
+                this.damId,
                 this.originBreederId,
                 this.birthDate,
                 this.loofIdentificationNumber,

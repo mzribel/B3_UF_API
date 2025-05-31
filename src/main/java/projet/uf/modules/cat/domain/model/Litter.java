@@ -13,8 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Litter {
     private Long id;
-    private Long damId;
     private Long sireId;
+    private Long damId;
     private Long originBreederId;
     private LocalDate birthDate;
     private String loofIdentificationNumber;
@@ -25,8 +25,8 @@ public class Litter {
 
     // Constructeur sans ID pour la création d'une portée
     public Litter(
-            Long damId,
             Long sireId,
+            Long damId,
             Long originBreederId,
             LocalDate birthDate,
             String loofIdentificationNumber,
@@ -35,8 +35,8 @@ public class Litter {
             String notes,
             Long createdByCatteryId
     ) {
-        this.damId = damId;
         this.sireId = sireId;
+        this.damId = damId;
         this.originBreederId = originBreederId;
         this.birthDate = birthDate;
         this.loofIdentificationNumber = loofIdentificationNumber;
@@ -44,11 +44,5 @@ public class Litter {
         this.kittenCount = kittenCount;
         this.notes = notes;
         this.createdByCatteryId = createdByCatteryId;
-
-    }
-
-    // TODO : le virer de là
-    public Litter() {
-
     }
 }

@@ -1,5 +1,6 @@
 package projet.uf.modules.cat.application;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
@@ -26,6 +27,7 @@ public class CatService implements
     private final LitterUseCase litterUseCase;
 
     @Override
+    @Transactional
     public CatDetailsDto createCat(CatCommand command, Long createdByCatteryId, OperatorUser operator) {
         if (!catteryAccessUseCase.hasUserAccessToCattery(createdByCatteryId, operator)) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
@@ -58,6 +60,7 @@ public class CatService implements
     }
 
     @Override
+    @Transactional
     public CatDetailsDto updateCatById(Long id, CatCommand command, OperatorUser operator) {
         Cat cat = catAccessUseCase.getCatOrThrow(id, operator);
         Cat updatedCat = CatCommand.toModel(command, cat.getCreatedByCatteryId());
@@ -66,6 +69,7 @@ public class CatService implements
     }
 
     @Override
+    @Transactional
     public void deleteCatById(Long id, OperatorUser operator) {
         if (!catAccessUseCase.hasUserAccessToCat(id, operator)) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);

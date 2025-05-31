@@ -64,7 +64,7 @@ public class CatDtoAssembler {
         Cat cat = catPersistencePort.getById(catId).orElse(null);
         if (cat == null) return null;
 
-        return toPedigreeDto(cat, ascendanceLevel-1);
+        return toPedigreeDto(cat, ascendanceLevel);
     }
 
     private BreederSummaryDto getBreederSummaryDto(Litter litter) {

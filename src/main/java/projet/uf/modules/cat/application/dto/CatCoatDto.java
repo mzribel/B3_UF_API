@@ -64,8 +64,9 @@ public record CatCoatDto(
 
         return Stream.of(
                         breed.getCode(),
-                        (color.getCode() + effect.getCode()),
-                        pattern.getCode(),
+                        (color.getCode()
+                                + (effect != null ? effect.getCode() : "")),
+                        pattern != null ? pattern.getCode() : null,
                         whiteMarking != null ? whiteMarking.getCode() : null
                 )
                 .filter(s -> s != null && !s.isBlank())
