@@ -19,7 +19,7 @@ public class ExceptionControllerAdvice {
     // this way you don't need to annotate on the exception directly
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<Object> handleApiException(ApiException ex, HttpServletRequest request) {
-        return buildErrorResponse(ex.status, ex.getMessage(), request.getRequestURI());
+        return buildErrorResponse(ex.getStatus(), ex.getMessage(), request.getRequestURI());
     }
 
     // default handler, in case the exception is not catch by any other catch method

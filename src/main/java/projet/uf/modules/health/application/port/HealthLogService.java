@@ -61,9 +61,9 @@ public class HealthLogService implements HealthLogUseCase {
     @Override
     public HealthLog getHealthLogById(Long healthLogId, OperatorUser operatorUser) {
         HealthLog healthLog = healthLogPersistencePort.getById(healthLogId)
-                .orElseThrow(() -> new ApiException("Entrée de santé introuvable", HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new ApiException("Entrée de santé introuvable", HttpStatus.NOT_FOUND));
 
-        if (catAccessUseCase.hasUserAccessToCat(healthLog.getCatId(), operatorUser)) {
+        if (!catAccessUseCase.hasUserAccessToCat(healthLog.getCatId(), operatorUser)) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
 

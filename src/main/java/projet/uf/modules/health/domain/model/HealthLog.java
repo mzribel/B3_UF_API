@@ -1,9 +1,6 @@
 package projet.uf.modules.health.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class HealthLog {
     private Long id;
     private Long catId;
@@ -25,8 +23,8 @@ public class HealthLog {
     private String notes;
     private LocalDateTime date;
 
-    public HealthLog(Long catId, BigDecimal weightInGrams, BigDecimal temperatureInCelsius, 
-                    String appetite, String hydratation, String behavior, 
+    public HealthLog(Long catId, BigDecimal weightInGrams, BigDecimal temperatureInCelsius,
+                    String appetite, String hydratation, String behavior,
                     String stoolQuality, String urineObservations, String notes, LocalDateTime date) {
         this.catId = catId;
         this.weightInGrams = weightInGrams;

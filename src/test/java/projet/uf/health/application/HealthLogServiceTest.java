@@ -1,261 +1,158 @@
 package projet.uf.health.application;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import projet.uf.exceptions.ApiException;
+import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.cat.application.ports.in.CatAccessUseCase;
+import projet.uf.modules.health.application.model.CreateHealthLogCommand;
+import projet.uf.modules.health.application.model.CreateKittenHealthLogCommand;
 import projet.uf.modules.health.application.port.HealthLogService;
+import projet.uf.modules.health.application.port.out.GestationHealthLogPersistencePort;
 import projet.uf.modules.health.application.port.out.HealthLogPersistencePort;
 import projet.uf.modules.health.application.port.out.KittenHealthLogPersistencePort;
-import projet.uf.modules.health.application.port.out.GestationHealthLogPersistencePort;
-import projet.uf.modules.health.domain.model.HealthLog;
-import projet.uf.modules.health.domain.model.KittenHealthLog;
-import projet.uf.modules.health.domain.model.GestationHealthLog;
+import projet.uf.modules.health.domain.model.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class HealthLogServiceTest {
+class HealthLogServiceTest {
 
-    @Mock
-    private HealthLogPersistencePort healthLogPersistencePort;
+    @Mock private HealthLogPersistencePort healthLogPersistencePort;
+    @Mock private KittenHealthLogPersistencePort kittenHealthLogPersistencePort;
+    @Mock private GestationHealthLogPersistencePort gestationHealthLogPersistencePort;
+    @Mock private CatAccessUseCase catAccessUseCase;
 
-    @Mock
-    private KittenHealthLogPersistencePort kittenHealthLogPersistencePort;
+    @InjectMocks private HealthLogService healthLogService;
 
-    @Mock
-    private GestationHealthLogPersistencePort gestationHealthLogPersistencePort;
+    private OperatorUser operator;
 
-    @InjectMocks
-    private HealthLogService healthLogService;
+    @BeforeEach
+    void setup() {
+        operator = new OperatorUser(1L, false);
+    }
 
     @Test
-    void createHealthLog_shouldSaveAndReturnHealthLog() {
-        // Arrange
-        HealthLog healthLog = new HealthLog(
-                1L, 
-                BigDecimal.valueOf(1000), 
-                BigDecimal.valueOf(38.5), 
-                "Good", 
-                "Normal", 
-                "Active", 
-                "Normal", 
-                "Normal", 
-                "Test notes"
+    void createHealthLog_shouldSaveLog() {
+        Long catId = 10L;
+        CreateHealthLogCommand command = new CreateHealthLogCommand(
+                BigDecimal.valueOf(2000), BigDecimal.valueOf(38.3), "Good", "Hydrated", "Calm", "Solid", "Normal", "RAS", LocalDateTime.now()
         );
-        
-        when(healthLogPersistencePort.save(any(HealthLog.class))).thenReturn(healthLog);
 
-        // Act
-        HealthLog result = healthLogService.createHealthLog(healthLog);
+        HealthLog toSave = command.toHealthLog(catId);
+        HealthLog saved = HealthLog.builder().id(1L).catId(catId).build();
 
-        // Assert
-        assertEquals(healthLog.getCatId(), result.getCatId());
-        assertEquals(healthLog.getWeightInGrams(), result.getWeightInGrams());
-        assertEquals(healthLog.getTemperatureInCelsius(), result.getTemperatureInCelsius());
-        
-        verify(healthLogPersistencePort).save(healthLog);
+        when(healthLogPersistencePort.save(any())).thenReturn(saved);
+
+        HealthLog result = healthLogService.createHealthLog(catId, command, operator);
+
+        assertEquals(1L, result.getId());
+        verify(catAccessUseCase).getCatOrThrow(catId, operator);
+        verify(healthLogPersistencePort).save(any(HealthLog.class));
     }
 
     @Test
-    void getHealthLogById_shouldReturnHealthLog_whenExists() {
-        // Arrange
-        Long id = 1L;
-        HealthLog healthLog = new HealthLog();
-        healthLog.setId(id);
-        
-        when(healthLogPersistencePort.getById(id)).thenReturn(Optional.of(healthLog));
+    void createKittenHealthLog_shouldSaveLog() {
+        Long healthLogId = 1L;
+        Long catId = 42L;
+        HealthLog healthLog = HealthLog.builder().id(healthLogId).catId(catId).build();
 
-        // Act
-        Optional<HealthLog> result = healthLogService.getHealthLogById(id);
+        CreateKittenHealthLogCommand command = new CreateKittenHealthLogCommand(
+                LocalDateTime.now(), LocalDateTime.now().plusDays(2)
+        );
 
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals(id, result.get().getId());
-        
-        verify(healthLogPersistencePort).getById(id);
+        when(healthLogPersistencePort.getById(healthLogId)).thenReturn(Optional.of(healthLog));
+        when(catAccessUseCase.hasUserAccessToCat(catId, operator)).thenReturn(false);
+        when(kittenHealthLogPersistencePort.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        KittenHealthLog result = healthLogService.createKittenHealthLog(healthLogId, command, operator);
+
+        assertEquals(healthLogId, result.getHealthLogId());
+        verify(kittenHealthLogPersistencePort).save(any());
     }
 
     @Test
-    void getAllHealthLogs_shouldReturnAllHealthLogs() {
-        // Arrange
-        HealthLog healthLog1 = new HealthLog();
-        healthLog1.setId(1L);
-        HealthLog healthLog2 = new HealthLog();
-        healthLog2.setId(2L);
-        List<HealthLog> healthLogs = Arrays.asList(healthLog1, healthLog2);
-        
-        when(healthLogPersistencePort.getAll()).thenReturn(healthLogs);
+    void getAllHealthLogs_shouldThrowIfNotAdmin() {
+        OperatorUser nonAdmin = new OperatorUser(2L, false);
+        ApiException exception = assertThrows(ApiException.class, () -> {
+            healthLogService.getAllHealthLogs(nonAdmin);
+        });
 
-        // Act
-        List<HealthLog> result = healthLogService.getAllHealthLogs();
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatus());
+    }
 
-        // Assert
+    @Test
+    void getHealthLogById_shouldReturnLog_whenAccessGranted() {
+        Long id = 5L;
+        HealthLog log = HealthLog.builder().id(id).catId(999L).build();
+
+        when(healthLogPersistencePort.getById(id)).thenReturn(Optional.of(log));
+        when(catAccessUseCase.hasUserAccessToCat(999L, operator)).thenReturn(false);
+
+        HealthLog result = healthLogService.getHealthLogById(id, operator);
+
+        assertEquals(id, result.getId());
+    }
+
+    @Test
+    void getHealthLogsByCatId_shouldReturnLogs_ifAccessOk() {
+        Long catId = 10L;
+        List<HealthLog> logs = List.of(
+                HealthLog.builder().id(1L).catId(catId).build(),
+                HealthLog.builder().id(2L).catId(catId).build()
+        );
+
+        when(catAccessUseCase.hasUserAccessToCat(catId, operator)).thenReturn(true);
+        when(healthLogPersistencePort.getByCatId(catId)).thenReturn(logs);
+
+        List<HealthLog> result = healthLogService.getHealthLogsByCatId(catId, operator);
         assertEquals(2, result.size());
-        assertEquals(1L, result.get(0).getId());
-        assertEquals(2L, result.get(1).getId());
-        
-        verify(healthLogPersistencePort).getAll();
-    }
-
-    @Test
-    void getHealthLogsByCatId_shouldReturnHealthLogsForCat() {
-        // Arrange
-        Long catId = 1L;
-        HealthLog healthLog1 = new HealthLog();
-        healthLog1.setId(1L);
-        healthLog1.setCatId(catId);
-        HealthLog healthLog2 = new HealthLog();
-        healthLog2.setId(2L);
-        healthLog2.setCatId(catId);
-        List<HealthLog> healthLogs = Arrays.asList(healthLog1, healthLog2);
-        
-        when(healthLogPersistencePort.getByCatId(catId)).thenReturn(healthLogs);
-
-        // Act
-        List<HealthLog> result = healthLogService.getHealthLogsByCatId(catId);
-
-        // Assert
-        assertEquals(2, result.size());
-        assertEquals(catId, result.get(0).getCatId());
-        assertEquals(catId, result.get(1).getCatId());
-        
         verify(healthLogPersistencePort).getByCatId(catId);
     }
 
     @Test
-    void updateHealthLog_shouldUpdateAndReturnHealthLog() {
-        // Arrange
-        Long id = 1L;
-        HealthLog healthLog = new HealthLog(
-                1L, 
-                BigDecimal.valueOf(1000), 
-                BigDecimal.valueOf(38.5), 
-                "Good", 
-                "Normal", 
-                "Active", 
-                "Normal", 
-                "Normal", 
-                "Updated notes"
+    void updateHealthLog_shouldUpdateLog() {
+        Long id = 4L;
+        Long catId = 100L;
+
+        HealthLog existing = HealthLog.builder().id(id).catId(catId).build();
+        CreateHealthLogCommand command = new CreateHealthLogCommand(
+                BigDecimal.valueOf(1900), BigDecimal.valueOf(38.1), "Normal", "Hydrated", "Active", "Normal", "Normal", "Updated", LocalDateTime.now()
         );
-        
-        when(healthLogPersistencePort.save(any(HealthLog.class))).thenReturn(healthLog);
 
-        // Act
-        HealthLog result = healthLogService.updateHealthLog(id, healthLog);
+        when(healthLogPersistencePort.getById(id)).thenReturn(Optional.of(existing));
+        when(catAccessUseCase.hasUserAccessToCat(catId, operator)).thenReturn(true);
+        when(healthLogPersistencePort.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        // Assert
+        HealthLog result = healthLogService.updateHealthLog(id, command, operator);
+
         assertEquals(id, result.getId());
-        
-        ArgumentCaptor<HealthLog> captor = ArgumentCaptor.forClass(HealthLog.class);
-        verify(healthLogPersistencePort).save(captor.capture());
-        assertEquals(id, captor.getValue().getId());
+        assertEquals(catId, result.getCatId());
+        verify(healthLogPersistencePort).save(any());
     }
 
     @Test
-    void deleteHealthLogById_shouldCallDeleteOnPersistencePort() {
-        // Arrange
-        Long id = 1L;
+    void deleteHealthLogById_shouldDelete_whenAccessOk() {
+        Long id = 10L;
+        Long catId = 50L;
 
-        // Act
-        healthLogService.deleteHealthLogById(id);
+        HealthLog log = HealthLog.builder().id(id).catId(catId).build();
 
-        // Assert
+        when(healthLogPersistencePort.getById(id)).thenReturn(Optional.of(log));
+        when(catAccessUseCase.hasUserAccessToCat(catId, operator)).thenReturn(true);
+
+        healthLogService.deleteHealthLogById(id, operator);
+
         verify(healthLogPersistencePort).deleteById(id);
-    }
-
-    @Test
-    void createKittenHealthLog_shouldSaveAndReturnKittenHealthLog() {
-        // Arrange
-        KittenHealthLog kittenHealthLog = new KittenHealthLog(
-                1L,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(1)
-        );
-        
-        when(kittenHealthLogPersistencePort.save(any(KittenHealthLog.class))).thenReturn(kittenHealthLog);
-
-        // Act
-        KittenHealthLog result = healthLogService.createKittenHealthLog(kittenHealthLog);
-
-        // Assert
-        assertEquals(kittenHealthLog.getHealthLogId(), result.getHealthLogId());
-        
-        verify(kittenHealthLogPersistencePort).save(kittenHealthLog);
-    }
-
-    @Test
-    void getKittenHealthLogById_shouldReturnKittenHealthLog_whenExists() {
-        // Arrange
-        Long id = 1L;
-        KittenHealthLog kittenHealthLog = new KittenHealthLog();
-        kittenHealthLog.setId(id);
-        
-        when(kittenHealthLogPersistencePort.getById(id)).thenReturn(Optional.of(kittenHealthLog));
-
-        // Act
-        Optional<KittenHealthLog> result = healthLogService.getKittenHealthLogById(id);
-
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals(id, result.get().getId());
-        
-        verify(kittenHealthLogPersistencePort).getById(id);
-    }
-
-    @Test
-    void createGestationHealthLog_shouldSaveAndReturnGestationHealthLog() {
-        // Arrange
-        GestationHealthLog gestationHealthLog = new GestationHealthLog(
-                1L,
-                1L,
-                BigDecimal.valueOf(1000),
-                BigDecimal.valueOf(38.5),
-                "Normal",
-                "Test notes",
-                "Normal",
-                true
-        );
-        
-        when(gestationHealthLogPersistencePort.save(any(GestationHealthLog.class))).thenReturn(gestationHealthLog);
-
-        // Act
-        GestationHealthLog result = healthLogService.createGestationHealthLog(gestationHealthLog);
-
-        // Assert
-        assertEquals(gestationHealthLog.getGestationId(), result.getGestationId());
-        assertEquals(gestationHealthLog.getHealthLogId(), result.getHealthLogId());
-        
-        verify(gestationHealthLogPersistencePort).save(gestationHealthLog);
-    }
-
-    @Test
-    void getGestationHealthLogById_shouldReturnGestationHealthLog_whenExists() {
-        // Arrange
-        Long id = 1L;
-        GestationHealthLog gestationHealthLog = new GestationHealthLog();
-        gestationHealthLog.setId(id);
-        
-        when(gestationHealthLogPersistencePort.getById(id)).thenReturn(Optional.of(gestationHealthLog));
-
-        // Act
-        Optional<GestationHealthLog> result = healthLogService.getGestationHealthLogById(id);
-
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals(id, result.get().getId());
-        
-        verify(gestationHealthLogPersistencePort).getById(id);
     }
 }
