@@ -1,5 +1,6 @@
 package projet.uf.modules.breeder.adapter.in.rest;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Eleveurs", description = "Gestion des informations des éleveurs physiques")
 public class BreederController {
     final BreederUseCase breederUseCase;
     private final CurrentUserProvider currentUserProvider;

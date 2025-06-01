@@ -2,12 +2,15 @@ package projet.uf.modules.auth.application;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import projet.uf.modules.auth.adapters.in.rest.dto.AuthenticatedUserDto;
+import projet.uf.modules.auth.adapters.out.security.JwtService;
 import projet.uf.modules.auth.application.ports.in.LoginCommand;
 import projet.uf.modules.auth.application.ports.in.RegisterCommand;
 import projet.uf.modules.auth.application.ports.out.PasswordEncoder;
 import projet.uf.modules.auth.exception.UserAlreadyExistsException;
 import projet.uf.modules.auth.exception.WeakPasswordException;
 import projet.uf.modules.auth.exception.WrongCredentialsException;
+import projet.uf.modules.user.application.dto.UserDto;
 import projet.uf.modules.user.application.port.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
 import projet.uf.modules.auth.application.ports.in.AuthUseCase;
@@ -17,9 +20,10 @@ public class AuthService implements AuthUseCase
 {
     private final PasswordEncoder passwordEncoder;
     private final UserPersistencePort userPersistencePort;
+    final JwtService jwtService;
 
     @Override
-    public User register(RegisterCommand command) {
+    public AuthenticatedUserDto register(RegisterCommand command) {
         if (userPersistencePort.existsByEmail(command.email())) {
             throw new UserAlreadyExistsException("Un utilisateur avec cette adresse email existe déjà", HttpStatus.CONFLICT);
         }
@@ -28,11 +32,16 @@ public class AuthService implements AuthUseCase
         }
 
         User user = RegisterCommand.toModel(command, passwordEncoder.encode(command.password()));
-        return userPersistencePort.save(user);
+        User saved = userPersistencePort.save(user);
+
+        return new AuthenticatedUserDto(
+                UserDto.toDto(saved),
+                jwtService.generateToken(saved)
+        );
     }
 
     @Override
-    public User login(LoginCommand command) {
+    public AuthenticatedUserDto login(LoginCommand command) {
         User user = userPersistencePort.getByEmail(command.email())
                 .orElseThrow(() -> new WrongCredentialsException("Email ou mot de passe invalide", HttpStatus.BAD_REQUEST));
 
@@ -40,6 +49,9 @@ public class AuthService implements AuthUseCase
             throw new WrongCredentialsException("Email ou mot de passe invalide", HttpStatus.BAD_REQUEST);
         }
 
-        return user;
+        return new AuthenticatedUserDto(
+                UserDto.toDto(user),
+                jwtService.generateToken(user)
+        );
     }
 }

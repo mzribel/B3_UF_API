@@ -1,5 +1,6 @@
 package projet.uf.modules.breeder.adapter.in.rest;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Eleveurs", description = "Gestion des informations d'une chatterie applicative")
 public class CatteryController {
     final CatteryUseCase catteryUseCase;
     private final CurrentUserProvider currentUserProvider;

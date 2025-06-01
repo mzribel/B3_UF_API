@@ -1,5 +1,6 @@
 package projet.uf.modules.loof_characteristic.adapter.in.rest;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/loof/characteristics/breeds")
+@Tag(name = "Caractéristiques LOOF", description = "Gestion des caractéristiques légales du LOOF")
 public class BreedController {
     final LoofCharacteristicUseCase<Breed> breedUseCase;
 

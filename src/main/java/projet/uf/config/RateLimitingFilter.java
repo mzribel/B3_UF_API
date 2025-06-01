@@ -29,8 +29,15 @@ public class RateLimitingFilter implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String ip = getClientIp(httpRequest);
+        String path = httpRequest.getRequestURI();
 
+        // 🛡️ Ignorer les routes Swagger et docs
+        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        String ip = getClientIp(httpRequest);
         Bucket bucket = buckets.computeIfAbsent(ip, k -> createNewBucket());
 
         if (bucket.tryConsume(1)) {

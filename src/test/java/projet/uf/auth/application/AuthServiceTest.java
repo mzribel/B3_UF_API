@@ -6,6 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import projet.uf.modules.auth.adapters.in.rest.dto.AuthenticatedUserDto;
 import projet.uf.modules.auth.application.ports.in.LoginCommand;
 import projet.uf.modules.auth.application.ports.out.PasswordEncoder;
 import projet.uf.modules.auth.application.AuthService;
@@ -16,12 +17,9 @@ import projet.uf.modules.auth.exception.WrongCredentialsException;
 import projet.uf.modules.user.application.port.out.UserPersistencePort;
 import projet.uf.modules.user.domain.model.User;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,12 +47,11 @@ public class AuthServiceTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
-        User result = authService.register(command);
+        AuthenticatedUserDto result = authService.register(command);
 
         // Assert
-        assertEquals(command.email(), result.getEmail());
-        assertEquals(encodedPassword, result.getPassword());
-        assertEquals(command.displayName(), result.getDisplayName());
+        assertEquals(command.email(), result.userDto().email());
+        assertEquals(command.displayName(), result.userDto().displayName());
 
         // Vérifier que le User passé à save contient bien le mot de passe encodé
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
@@ -100,12 +97,11 @@ public class AuthServiceTest {
         when(passwordEncoder.matches(rawPassword, encodedPassword)).thenReturn(true);
 
         // Act
-        User result = authService.login(command);
+        AuthenticatedUserDto result = authService.login(command);
 
         // Assert
-        assertEquals(user.getEmail(), result.getEmail());
-        assertEquals(user.getPassword(), result.getPassword());
-        assertEquals(user.getDisplayName(), result.getDisplayName());
+        assertEquals(user.getEmail(), result.userDto().email());
+        assertEquals(user.getDisplayName(), result.userDto().displayName());
     }
 
     @Test

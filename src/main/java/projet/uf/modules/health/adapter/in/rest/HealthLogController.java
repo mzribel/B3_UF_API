@@ -1,5 +1,6 @@
 package projet.uf.modules.health.adapter.in.rest;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Santé des chats", description = "Gestion des entrées journalières de santé des chats")
 public class HealthLogController {
     private final HealthLogUseCase healthLogUseCase;
     private final CurrentUserProvider currentUserProvider;

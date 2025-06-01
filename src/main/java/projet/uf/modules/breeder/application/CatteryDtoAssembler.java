@@ -24,9 +24,10 @@ public class CatteryDtoAssembler {
                 .orElse(new User(cattery.getCreatedByUserId())); // ou exception
 
         // Membres (filtre les absents si user supprimé par exemple)
-        List<User> members = catteryUserPersistencePort.getByCatteryId(cattery.getId()).stream()
+        List<UserDto> members = catteryUserPersistencePort.getByCatteryId(cattery.getId()).stream()
                 .map(cu -> userPersistencePort.getById(cu.getUserId()))
                 .flatMap(Optional::stream)
+                .map(UserDto::toDto)
                 .toList();
 
         Breeder breeder =

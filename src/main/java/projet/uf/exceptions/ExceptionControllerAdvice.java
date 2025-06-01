@@ -9,10 +9,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
@@ -45,12 +41,7 @@ public class ExceptionControllerAdvice {
     }
 
     private ResponseEntity<Object> buildErrorResponse(HttpStatus status, String message, String path) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("status", status.value());
-        body.put("error", status.getReasonPhrase());
-        body.put("message", message);
-        body.put("path", path);
-        body.put("timestamp", Instant.now().toString());
-        return ResponseEntity.status(status).body(body);
+        ApiError apiError = ApiError.from(status, message, path);
+        return ResponseEntity.status(status).body(apiError);
     }
 }

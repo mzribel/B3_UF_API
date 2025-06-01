@@ -1,5 +1,6 @@
 package projet.uf.modules.user.adapter.in.rest;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Utilisateurs", description = "Gestion des utilisateurs de l'application")
 public class UserController {
     final UserUseCase userUseCase;
     private final CurrentUserProvider currentUserProvider;

@@ -1,5 +1,6 @@
 package projet.uf.modules.cat.adapter.in.rest;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Chats", description = "Gestion des chats d'une chatterie")
 public class CatController {
     final CatUseCase catUseCase;
     private final CurrentUserProvider currentUserProvider;
