@@ -76,4 +76,10 @@ public class CatteryController {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catteryUseCase.getUserCatteries(userId, operator);
     }
+
+    @PatchMapping("/catteries/{catteryId}/members/{userId}/promote")
+    public void promoteUserAdminOfCattery(@PathVariable Long userId, @PathVariable Long catteryId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        catteryUseCase.promoteUserAdminOfCattery(userId, operator, catteryId);
+    }
 }

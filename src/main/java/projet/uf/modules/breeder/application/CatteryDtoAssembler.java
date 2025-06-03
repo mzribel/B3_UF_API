@@ -27,7 +27,7 @@ public class CatteryDtoAssembler {
         List<UserDto> members = catteryUserPersistencePort.getByCatteryId(cattery.getId()).stream()
                 .map(cu -> userPersistencePort.getById(cu.getUserId()))
                 .flatMap(Optional::stream)
-                .map(UserDto::toDto)
+                .map(UserDto::fromUser)
                 .toList();
 
         Breeder breeder =
@@ -37,7 +37,7 @@ public class CatteryDtoAssembler {
 
         return new CatteryDetailsDto(
                 cattery.getId(),
-                UserDto.toDto(createdBy),
+                UserDto.fromUser(createdBy),
                 breeder,
                 members
         );
