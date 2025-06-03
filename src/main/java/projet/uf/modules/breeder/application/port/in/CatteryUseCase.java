@@ -24,6 +24,9 @@ public interface CatteryUseCase {
     void addUserToCattery(Long catteryId, AddUserToCatteryCommand command, OperatorUser operator);
     // REMOVE USER
     void removeUserFromCattery(Long catteryId, Long userIdToRemove, OperatorUser operator);
+    // PROMOTE TO ADMIN
+    void promoteUserAdminOfCattery(Long userId, OperatorUser operator, Long catteryId);
 
     UserCatteriesDto getUserCatteries(Long userId, OperatorUser operator);
+
 }

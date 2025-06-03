@@ -139,6 +139,41 @@ public class CatteryService implements
     }
 
     @Override
+    public void promoteUserAdminOfCattery(Long userId, OperatorUser operator, Long catteryId) {
+        Cattery cattery = catteryAccessUseCase.getCatteryOrThrow(catteryId, operator);
+        if (!operator.isAdmin() && !Objects.equals(operator.getId(), cattery.getCreatedByUserId())) {
+            throw new ApiException("Seul l'administrateur de la chatterie peut modifier l'administrateur de cette chatterie", HttpStatus.FORBIDDEN);
+        }
+
+        // Récupère l'utilisateur
+        User newAdmin = userPersistencePort.getById(userId).orElseThrow(()-> new ApiException("Utilisateur introuvable", HttpStatus.BAD_REQUEST));
+
+        // ERR: Utilisateur est déjà admin
+        if (newAdmin.getId().equals(cattery.getCreatedByUserId())) {
+            throw new ApiException("L'utilisateur est déjà admin de cette chatterie", HttpStatus.FORBIDDEN);
+        }
+        // ERR: L'utilisateur n'est pas membre de la chatterie
+        if (!catteryUserPersistencePort.isUserMemberOfCattery(catteryId, userId)) {
+            throw new ApiException("Un utilisateur doit d'abord être membre de la chatterie pour pouvoir en devenir administrateur", HttpStatus.BAD_REQUEST);
+        }
+
+        // Enregistre si l'administrateur actuel passe son rôle à un utilisateur
+        boolean isDemotingSelf = Objects.equals(operator.getId(), cattery.getCreatedByUserId()) &&
+                !Objects.equals(operator.getId(), userId) &&
+                !catteryUserPersistencePort.isUserMemberOfCattery(catteryId, operator.getId());
+
+        // Met à jour la chatterie avec le nouvel admin
+        cattery.setCreatedByUserId(newAdmin.getId());
+        catteryPersistencePort.update(cattery);
+
+        // Retire le nouveau membre des utilisateurs
+        catteryUserPersistencePort.removeUserFromCattery(catteryId, userId);
+        if (isDemotingSelf) {
+            catteryUserPersistencePort.addUserToCattery(catteryId, operator.getId());
+        }
+    }
+
+    @Override
     public UserCatteriesDto getUserCatteries(Long id, OperatorUser operator) {
         if (!operator.isAdmin() && !Objects.equals(id, operator.getId())) {
             throw new ApiException("Accès non autorisé", HttpStatus.FORBIDDEN);
