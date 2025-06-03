@@ -1,7 +1,7 @@
 package projet.uf.modules.breeder.application.command;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import projet.uf.modules.breeder.domain.model.Breeder;
 
@@ -9,8 +9,11 @@ public record CreateContactBreederCommand (
         @Size(max = 30, message = "Le nom de l'éleveur ne peut pas dépasser 30 caractères")
         String name,
         String siret,
-        @NotNull(message = "L'affixe de l'éleveur ne peut pas être vide")
         @NotBlank(message = "L'affixe de l'éleveur ne peut pas être vide")
+        @Pattern(
+                regexp = Breeder.affixRegex,
+                message = "Format de l'affixe invalide"
+        )
         String affix,
         boolean isAffixPrefix,
         boolean isActive,

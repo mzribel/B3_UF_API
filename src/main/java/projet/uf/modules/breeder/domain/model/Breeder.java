@@ -27,10 +27,12 @@ public class Breeder {
     @JsonProperty("isDerogatory")
     private boolean isDerogatory = false;
 
+    public static final String affixRegex = "^[A-Za-zÀ-ÖØ-öø-ÿ@\\-' *]{1,30}$";
+
     public Breeder(String name, String siret, String affix, boolean isAffixPrefix, Long ownerId, Long addressId, Long createdByCatteryId, boolean isActive, boolean isDerogatory) {
-        this.name = name;
-        this.siret = siret;
-        this.affix = affix;
+        this.name = name != null ? name.trim() : null;
+        this.siret = siret != null ? siret.trim() : null;
+        this.affix = formatAffix(affix);
         this.isAffixPrefix = isAffixPrefix;
         this.ownerId = ownerId;
         this.addressId = addressId;
@@ -38,8 +40,20 @@ public class Breeder {
         this.isActive = isActive;
         this.isDerogatory = isDerogatory;
     }
+
     public Breeder(String name, Long createdByCatteryId) {
-        this.name = name;
+        this.name = name.trim();
         this.createdByCatteryId = createdByCatteryId;
+    }
+
+    public boolean isValidAffix(String affix) {
+        return affix.matches(affixRegex);
+    }
+    private String formatAffix(String affix) {
+        if (affix == null || affix.isEmpty()) { return null; }
+        if (!this.isValidAffix(affix)) {
+            throw new IllegalArgumentException("Format de l'affixe invalide");
+        }
+        return affix.trim().replaceAll("\\s{2,}", " ").toUpperCase();
     }
 }
