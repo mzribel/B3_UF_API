@@ -8,8 +8,8 @@ public class UserDtoFactory {
         if (currentUser.isAdmin()) {
             return new AdminUserDto(
                     user.getId(),
-                    user.getDisplayName(),
                     user.getEmail(),
+                    user.getDisplayName(),
                     user.isAdmin()
             );
         } else {
