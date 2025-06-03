@@ -1,8 +1,13 @@
 package projet.uf.modules.notification.application.port.in;
 
 import projet.uf.modules.auth.application.model.OperatorUser;
+import projet.uf.modules.notification.domain.NotifScheduled;
+
+import java.util.List;
 
 public interface NotificationUseCase {
-    void registerToken(String token, OperatorUser operatorUser);
-    void sendNotificationToToken(String title, String body, OperatorUser operator);
+    void registerFcmToken(FcmTokenCommand command, OperatorUser operatorUser);
+    void sendNotificationToUser(NotificationCommand command, Long userId, OperatorUser operator);
+    NotifScheduled registerScheduledNotification(ScheduledNotificationCommand command, Long userId, OperatorUser operator);
+    List<NotifScheduled> getScheduledNotificationsForUser(Long userId, OperatorUser operator);
 }
