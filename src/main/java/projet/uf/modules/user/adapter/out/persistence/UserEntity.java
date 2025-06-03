@@ -26,13 +26,13 @@ public class UserEntity {
     private String displayName;
 
     @Column(name = "is_admin")
-    private boolean isAdmin;
+    private boolean admin;
 
     public UserEntity(String email, String password, String displayName, boolean isAdmin) {
         this.email = email;
         this.password = password;
         this.displayName = displayName;
-        this.isAdmin = isAdmin;
+        this.admin = isAdmin;
     }
 
     public UserEntity(String email, String password, String displayName) {

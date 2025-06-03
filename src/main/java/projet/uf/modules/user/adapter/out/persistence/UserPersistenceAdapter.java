@@ -43,7 +43,6 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     @Override
     public void deleteById(Long id) {
-        // TODO : condition de suppression (ex : existence préalable)
         jpaUserRepository.deleteById(id);
     }
 
@@ -52,5 +51,13 @@ public class UserPersistenceAdapter implements UserPersistencePort {
         UserEntity userEntity = UserEntity.toEntity(user);
         UserEntity saved = jpaUserRepository.save(userEntity);
         return UserEntity.toModel(saved);
+    }
+
+    @Override
+    public List<User> getAllAdminUsers() {
+        return jpaUserRepository.findAllByAdmin(true)
+                .stream()
+                .map(UserEntity::toModel)
+                .toList();
     }
 }

@@ -35,7 +35,7 @@ public class AuthService implements AuthUseCase
         User saved = userPersistencePort.save(user);
 
         return new AuthenticatedUserDto(
-                UserDto.toDto(saved),
+                UserDto.fromUser(saved),
                 jwtService.generateToken(saved)
         );
     }
@@ -50,7 +50,7 @@ public class AuthService implements AuthUseCase
         }
 
         return new AuthenticatedUserDto(
-                UserDto.toDto(user),
+                UserDto.fromUser(user),
                 jwtService.generateToken(user)
         );
     }

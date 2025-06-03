@@ -20,4 +20,6 @@ public interface UserPersistencePort {
 
     // Sauvegarde
     User save(User user);
+
+    List<User> getAllAdminUsers();
 }
