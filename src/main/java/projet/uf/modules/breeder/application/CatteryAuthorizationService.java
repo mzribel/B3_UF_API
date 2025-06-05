@@ -33,7 +33,7 @@ public class CatteryAuthorizationService implements CatteryAuthorizationUseCase 
 
     @Override
     public boolean hasUserAccessToCattery(Long catteryId, OperatorUser operator) {
-        if (!catteryUserPersistencePort.getByCatteryId(catteryId).isEmpty()) {
+        if (catteryUserPersistencePort.getByCatteryId(catteryId).isEmpty()) {
             throw  new ApiException("Chatterie introuvable", HttpStatus.BAD_REQUEST);
         }
 

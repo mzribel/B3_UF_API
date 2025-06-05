@@ -18,5 +18,5 @@ import org.springframework.context.annotation.Configuration;
                 @Server(url = "http://localhost:8080", description = "Serveur local")
         }
 )
-public class OpenApiConfig {
+public class  OpenApiConfig {
 }
