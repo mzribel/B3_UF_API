@@ -2,6 +2,8 @@ package projet.uf.modules.cat.application;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
@@ -67,6 +69,7 @@ public class CatService implements
 
     @Override
     @Transactional
+    @CacheEvict(value = "pedigree", key = "#id")
     public CatDetailsDto updateCatById(Long id, CatCommand command, OperatorUser operator) {
         Cat cat = catAccessUseCase.getCatOrThrow(id, operator);
         Cat updatedCat = CatCommand.toModel(command, cat.getCreatedByCatteryId());
@@ -131,6 +134,7 @@ public class CatService implements
     }
 
     @Override
+    @Cacheable(value = "cats", key = "#id")
     public CatDetailsDto getById(Long id, OperatorUser operator) {
         return dtoAssembler.toDetailsDto(catAccessUseCase.getCatOrThrow(id, operator));
     }
@@ -149,6 +153,7 @@ public class CatService implements
     }
 
     @Override
+    @Cacheable(value = "cats:all")
     public List<CatDetailsDto> getAll(OperatorUser operator) {
         if (!operator.isAdmin()) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
