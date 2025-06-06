@@ -14,6 +14,8 @@ import projet.uf.modules.auth.adapters.in.rest.security.JwtAuthenticationFilter;
 import projet.uf.modules.auth.adapters.out.security.JwtService;
 import projet.uf.modules.user.application.port.out.UserPersistencePort;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -35,9 +37,9 @@ public class AuthSecurityConfig {
             .cors(cors -> cors
                 .configurationSource(request -> {
                     var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                    corsConfig.setAllowedOrigins(java.util.List.of("http://localhost:5173"));
-                    corsConfig.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-                    corsConfig.setAllowedHeaders(java.util.List.of("*"));
+                    corsConfig.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8081"));
+                    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+                    corsConfig.setAllowedHeaders(List.of("*"));
                     corsConfig.setAllowCredentials(true);
                     return corsConfig;
                 })
