@@ -2,6 +2,7 @@ package projet.uf.modules.cat.adapter.in.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
@@ -32,6 +33,7 @@ public class CatController {
         return catUseCase.getById(catId, operator);
     }
 
+    @Cacheable(value = "pedigree", key = "#catId")
     @GetMapping("/cats/{catId}/pedigree")
     public CatPedigreeDto getCatPedigree(@PathVariable Long catId) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());

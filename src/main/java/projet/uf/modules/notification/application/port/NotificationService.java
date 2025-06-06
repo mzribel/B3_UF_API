@@ -27,8 +27,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class NotificationService implements NotificationUseCase {
     public final NotifUserSettingsPersistencePort settingsPersistencePort;
-    public final NotifSentLogPersistencePort sentLogsPersistencePort;
-    public final NotifTypePersistencePort typePersistencePort;
     public final NotifScheduledPersistencePort scheduledPersistencePort;
     public final UserPersistencePort userPersistencePort;
 
@@ -74,7 +72,6 @@ public class NotificationService implements NotificationUseCase {
 //        notificationpersistencePort.save(model);
 //    }
 
-    @Override
     public void registerFcmToken(FcmTokenCommand command, OperatorUser operatorUser) {
         User user = userPersistencePort.getById(operatorUser.getId())
                 .orElseThrow(() -> new ApiException("Utilisateur introuvable", HttpStatus.BAD_REQUEST));
@@ -86,15 +83,14 @@ public class NotificationService implements NotificationUseCase {
         settingsPersistencePort.save(settings);
     }
 
-    @Override
     public void sendNotificationToUser(NotificationCommand command, Long userId, OperatorUser operator) {
         if (!operator.isAdmin()) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
-        User user = userPersistencePort.getById(operator.getId())
+        User user = userPersistencePort.getById(userId)
                 .orElseThrow(() -> new ApiException("Utilisateur introuvable", HttpStatus.BAD_REQUEST));
 
-        Optional<NotifUserSettings> settings = settingsPersistencePort.getSettingsByUserId(user.getId());
+        Optional<NotifUserSettings> settings = settingsPersistencePort.getSettingsByUserId(userId);
         if(settings.isEmpty() || settings.get().getFcmToken() == null) {
             throw new ApiException("L'utilisateur n'a pas renseigné de token FCM valide", HttpStatus.BAD_REQUEST);
         }
@@ -122,7 +118,6 @@ public class NotificationService implements NotificationUseCase {
         return scheduledPersistencePort.save(scheduled);
     }
 
-    @Override
     public List<NotifScheduled> getScheduledNotificationsForUser(Long userId, OperatorUser operator) {
         if (!operator.isAdmin() || !Objects.equals(userId, operator.getId())) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
@@ -143,11 +138,25 @@ public class NotificationService implements NotificationUseCase {
     }
 
     private void sendScheduledNotification(NotifScheduled notifScheduled) {
+        if (notifScheduled.getUserId() == null) {
+            System.out.println("wtf");
+            scheduledPersistencePort.markSent(notifScheduled.getId());
+            return;
+        }
 
+        Optional<NotifUserSettings> settings = settingsPersistencePort.getSettingsByUserId(notifScheduled.getUserId());
+        if(settings.isEmpty() || settings.get().getFcmToken() == null) {
+            throw new ApiException("L'utilisateur n'a pas renseigné de token FCM valide", HttpStatus.BAD_REQUEST);
+        }
+        if(!settings.get().isEnabled()) {
+            throw new ApiException("L'utilisateur n'accepte pas les notifications", HttpStatus.BAD_REQUEST);
+        }
+        sendNotification(settings.get().getFcmToken(), notifScheduled.getTitle(), notifScheduled.getDescription());
         scheduledPersistencePort.markSent(notifScheduled.getId());
     }
 
     private void sendNotification(String token, String title, String description) {
+        System.out.println("Sending notification !!");
         Message message = Message.builder()
                 .setToken(token)
                 .setNotification(Notification.builder()
@@ -161,5 +170,15 @@ public class NotificationService implements NotificationUseCase {
         } catch (FirebaseMessagingException e) {
             throw new ApiException("Impossible d'envoyer le message : "+e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public void registerToken(String token, OperatorUser operatorUser) {
+
+    }
+
+    @Override
+    public void sendNotificationToToken(String title, String body, OperatorUser operator) {
+
     }
 }
