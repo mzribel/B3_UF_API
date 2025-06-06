@@ -87,10 +87,10 @@ public class NotificationService implements NotificationUseCase {
         if (!operator.isAdmin()) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
-        User user = userPersistencePort.getById(operator.getId())
+        User user = userPersistencePort.getById(userId)
                 .orElseThrow(() -> new ApiException("Utilisateur introuvable", HttpStatus.BAD_REQUEST));
 
-        Optional<NotifUserSettings> settings = settingsPersistencePort.getSettingsByUserId(user.getId());
+        Optional<NotifUserSettings> settings = settingsPersistencePort.getSettingsByUserId(userId);
         if(settings.isEmpty() || settings.get().getFcmToken() == null) {
             throw new ApiException("L'utilisateur n'a pas renseigné de token FCM valide", HttpStatus.BAD_REQUEST);
         }
