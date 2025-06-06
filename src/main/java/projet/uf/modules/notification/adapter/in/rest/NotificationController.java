@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import projet.uf.modules.auth.adapters.in.rest.security.CurrentUserProvider;
 import projet.uf.modules.auth.application.model.OperatorUser;
 import projet.uf.modules.notification.application.port.NotificationService;
+import projet.uf.modules.notification.application.port.in.FcmTokenCommand;
 import projet.uf.modules.notification.application.port.in.NotificationBody;
+import projet.uf.modules.notification.application.port.in.NotificationCommand;
 
 @RestController
 @AllArgsConstructor
@@ -16,16 +18,18 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final CurrentUserProvider currentUserProvider;
 
-    @PostMapping("/users/me/notifications/test")
-    public void notifications(@Valid @RequestBody NotificationBody notification) {
+    @PostMapping("/users/{userId}/notifications/test")
+    public void notifications(
+            @PathVariable Long userId,
+            @Valid @RequestBody NotificationCommand notification) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
-        notificationService.sendNotificationToToken(notification.title(), notification.message(), operator);
+        notificationService.sendNotificationToUser(notification, userId, operator);
     }
 
     @PostMapping("/users/me/notifications/token")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void saveFcmToken(@RequestBody @Valid @NotNull String token) {
+    public void saveFcmToken(@RequestBody @Valid @NotNull FcmTokenCommand token) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
-        notificationService.registerToken(token, operator);
+        notificationService.registerFcmToken(token, operator);
     }
 }
