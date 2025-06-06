@@ -1,6 +1,7 @@
 package projet.uf.modules.cat.application;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
@@ -24,6 +25,7 @@ public class LitterService implements LitterUseCase, CreateLitterUseCase {
     private final CatAuthorizationUseCase catAccessUseCase;
 
     @Override
+    @Cacheable(value = "litters:all")
     public List<Litter> getAll(OperatorUser operator) {
         if (!operator.isAdmin()) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
@@ -31,6 +33,7 @@ public class LitterService implements LitterUseCase, CreateLitterUseCase {
         return litterPersistencePort.getAll();
     }
 
+    @Cacheable(value = "litters", key = "#litterId")
     @Override
     public Litter getById(Long litterId, OperatorUser operator) {
         return litterAccessUseCase.getLitterOrThrow(litterId, operator);

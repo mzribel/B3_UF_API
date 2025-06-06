@@ -1,6 +1,8 @@
 package projet.uf.modules.loof_characteristic.application;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.loof_characteristic.application.mapper.LoofCharacteristicCommandMapper;
@@ -21,6 +23,7 @@ public class LoofCharacteristicService<T extends ALoofCharacteristic> implements
     private final LoofCharacteristicCommandMapper<T> mapper;
 
     @Override
+    @CacheEvict(value = "loof-characteristics:all", allEntries = true)
     public T create(CreateLoofCharacteristicCommand command) throws LoofCharacteristicAlreadyExists {
         if (persistencePort.existsByName(command.name())) {
             throw new LoofCharacteristicAlreadyExists("Une caractéristique avec ce nom existe déjà", HttpStatus.CONFLICT);
@@ -29,6 +32,7 @@ public class LoofCharacteristicService<T extends ALoofCharacteristic> implements
         return persistencePort.insert(entity);
     }
 
+    @CacheEvict(value = "loof-characteristics", key = "#id")
     public T update(Long id, CreateLoofCharacteristicCommand command) throws LoofCharacteristicAlreadyExists {
         T entity = persistencePort.getById(id)
                 .orElseThrow(() -> new ApiException("Aucun élément trouvé avec l'id " + id, HttpStatus.BAD_REQUEST));
@@ -48,16 +52,19 @@ public class LoofCharacteristicService<T extends ALoofCharacteristic> implements
     }
 
     @Override
+    @Cacheable(value = "loof-characteristics", key = "#id")
     public Optional<T> getById(Long id) {
         return persistencePort.getById(id);
     }
 
     @Override
+    @Cacheable(value = "loof-characteristics:all")
     public List<T> getAll() {
         return persistencePort.getAll();
     }
 
     @Override
+    @CacheEvict(value = "loof-characteristics", key = "#id")
     public void deleteById(Long id) {
         persistencePort.deleteById(id);
     }

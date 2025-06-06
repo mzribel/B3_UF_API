@@ -2,6 +2,8 @@ package projet.uf.modules.breeder.application;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import projet.uf.exceptions.ApiException;
 import projet.uf.modules.auth.application.model.OperatorUser;
@@ -44,11 +46,13 @@ public class BreederService implements BreederUseCase {
     }
 
     @Override
+    @CacheEvict(value = "breeders:all", allEntries = true)
     public Breeder createEmptyCatteryBreeder(String name, Long createdByCatteryId) {
         Breeder breeder = new Breeder(name, createdByCatteryId);
         return breederPersistencePort.save(breeder);
     }
 
+    @CacheEvict(value = {"breeders", "breeders:all"}, key = "#breederId", allEntries = true)
     public Breeder updateContactBreeder(Long breederId, Long catteryId, CreateContactBreederCommand command, OperatorUser operator) {
         // Récupère la chatterie source
         Cattery cattery = catteryPersistencePort.getById(catteryId)
@@ -103,6 +107,7 @@ public class BreederService implements BreederUseCase {
     }
 
     @Transactional
+    @CacheEvict(value = {"breeders", "breeders:all"}, allEntries = true)
     public Breeder updateCatteryBreeder(Long catteryId, UpdateCatteryBreederCommand command, OperatorUser operator) {
         // Récupère la chatterie source
         Cattery cattery = catteryPersistencePort.getById(catteryId)
@@ -142,6 +147,7 @@ public class BreederService implements BreederUseCase {
     }
 
     @Override
+    @Cacheable(value = "breeders", key = "#id")
     public Breeder getById(Long id, OperatorUser operator) {
         if (!operator.isAdmin()) {
             throw new ApiException("Accès non autorisé", HttpStatus.UNAUTHORIZED);
@@ -150,6 +156,7 @@ public class BreederService implements BreederUseCase {
     }
 
     @Override
+    @Cacheable(value = "breeders:all")
     public List<Breeder> getAll(OperatorUser operator) {
         if (!operator.isAdmin()) {
             throw new ApiException("Accès non autorisé", HttpStatus.UNAUTHORIZED);
@@ -158,6 +165,7 @@ public class BreederService implements BreederUseCase {
     }
 
     @Override
+    @CacheEvict(value = {"breeders", "breeders:all"}, key = "#breederId", allEntries = true)
     public void deleteById(Long breederId, OperatorUser operator) {
         if (!operator.isAdmin()) {
             throw new ApiException("Accès non autorisé", HttpStatus.UNAUTHORIZED);
