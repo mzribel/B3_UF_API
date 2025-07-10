@@ -31,7 +31,7 @@ public class RateLimitingFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String path = httpRequest.getRequestURI();
 
-        // 🛡️ Ignorer les routes Swagger et docs
+        // Ignorer les routes Swagger et docs
         if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
             chain.doFilter(request, response);
             return;

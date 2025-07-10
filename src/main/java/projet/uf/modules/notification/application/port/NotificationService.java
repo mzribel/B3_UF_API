@@ -119,7 +119,7 @@ public class NotificationService implements NotificationUseCase {
     }
 
     public List<NotifScheduled> getScheduledNotificationsForUser(Long userId, OperatorUser operator) {
-        if (!operator.isAdmin() || !Objects.equals(userId, operator.getId())) {
+        if (!operator.isAdmin() && !Objects.equals(userId, operator.getId())) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
         return scheduledPersistencePort.getScheduledNotificationsByUserId(userId);
