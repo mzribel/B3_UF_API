@@ -11,6 +11,10 @@ import projet.uf.modules.notification.application.port.NotificationService;
 import projet.uf.modules.notification.application.port.in.FcmTokenCommand;
 import projet.uf.modules.notification.application.port.in.NotificationBody;
 import projet.uf.modules.notification.application.port.in.NotificationCommand;
+import projet.uf.modules.notification.application.port.in.ScheduledNotificationCommand;
+import projet.uf.modules.notification.domain.NotifScheduled;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -31,5 +35,20 @@ public class NotificationController {
     public void saveFcmToken(@RequestBody @Valid @NotNull FcmTokenCommand token) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         notificationService.registerFcmToken(token, operator);
+    }
+
+    @GetMapping("/users/{userId}/notifications/scheduled")
+    public List<NotifScheduled> getScheduledNotifications(@PathVariable Long userId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return notificationService.getScheduledNotificationsForUser(userId, operator);
+    }
+
+    @PostMapping("/users/{userId}/notifications/scheduled")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public NotifScheduled scheduleNotification(
+            @RequestBody @Valid @NotNull ScheduledNotificationCommand command,
+            @PathVariable Long userId) {
+        OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
+        return notificationService.registerScheduledNotification(command, userId, operator);
     }
 }

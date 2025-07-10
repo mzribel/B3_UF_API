@@ -22,7 +22,9 @@ public class CacheConfig {
                 "loof-characteristics:all",
                 "pedigree",
                 "cats",
-                "cats:all"
+                "cats:all",
+                "litters",
+                "litters:all"
         );
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .expireAfterWrite(10, TimeUnit.MINUTES)
