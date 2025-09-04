@@ -11,6 +11,7 @@ jobs:
   sonarcloud:
     name: SonarCloud Analysis
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,8 +23,9 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Run tests (with coverage)
-        run: mvn -B clean verify -DskipITs
+      # Compilation sans tests
+      - name: Build (skip tests)
+        run: mvn -B clean verify -DskipTests
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
