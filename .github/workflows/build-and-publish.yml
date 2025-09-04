@@ -46,6 +46,9 @@ jobs:
           report_paths: |
             **/target/surefire-reports/*.xml
             **/target/failsafe-reports/*.xml
+          check_name: |
+            "Surefire Tests"
+            "Failsafe Tests"
           detailed_summary: true
           include_passed: true
 
