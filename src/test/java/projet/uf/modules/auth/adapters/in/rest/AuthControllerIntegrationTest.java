@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(AuthConfiguration.class)
 @SpringBootTest(properties = "spring.profiles.active=test")
 @ActiveProfiles("test")
-public class AuthControllerIntegrationTest {
+public class AuthControllerIT {
     @Autowired
     private JpaUserRepository userRepository;
 
