@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class JpaCatRepositoryTest {
+class JpaCatRepositoryT {
 
     @Container
     static MariaDBContainer<?> db = new MariaDBContainer<>("mariadb:11.4");
