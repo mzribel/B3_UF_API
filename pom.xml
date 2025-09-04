@@ -23,9 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.resources.encoding>UTF-8</maven.resources.encoding>
 
-		<properties>
-			<sonar.organization>mzribel-1</sonar.organization>
-		</properties>
+		<sonar.organization>mzribel-1</sonar.organization>
 	</properties>
 
 	<dependencies>
