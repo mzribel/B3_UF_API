@@ -11,6 +11,10 @@ jobs:
   test:
     name: Maven tests (JUnit + JaCoCo)
     runs-on: ubuntu-latest
+    
+    permissions:
+      checks: write     # nécessaire pour publier les checks (rapports JUnit, annotations)
+      contents: read    # lecture du dépôt (obligatoire pour checkout, etc.)
 
     steps:
       - name: Checkout
