@@ -1,4 +1,4 @@
-package projet.uf.modules.auth.adapter.out.security;
+package projet.uf.modules.auth.adapters.out.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -6,7 +6,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import projet.uf.modules.auth.adapters.out.security.JwtService;
 import projet.uf.modules.user.domain.model.User;
 
 import java.nio.charset.StandardCharsets;

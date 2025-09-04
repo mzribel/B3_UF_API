@@ -40,6 +40,11 @@ public class ExceptionControllerAdvice {
         return buildErrorResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Unsupported content type: " + ex.getContentType(), request.getRequestURI());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), request.getRequestURI());
+    }
+
     private ResponseEntity<Object> buildErrorResponse(HttpStatus status, String message, String path) {
         ApiError apiError = ApiError.from(status, message, path);
         return ResponseEntity.status(status).body(apiError);

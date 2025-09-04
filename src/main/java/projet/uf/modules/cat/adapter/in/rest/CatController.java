@@ -1,6 +1,7 @@
 package projet.uf.modules.cat.adapter.in.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class CatController {
     @ResponseStatus(HttpStatus.CREATED)
     public CatDetailsDto createCat(
             @PathVariable Long catteryId,
-            @RequestBody CatCommand command
+            @RequestBody @Valid CatCommand command
     ) {
         OperatorUser operator = OperatorUser.fromCurrentUser(currentUserProvider.getCurrentUser());
         return catUseCase.createCat(command, catteryId, operator);

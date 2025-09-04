@@ -35,8 +35,4 @@ class AuthSecurityConfigTest {
         // Assert
         assertNotNull(filter);
     }
-
-    // Note: Testing the filterChain method is challenging because HttpSecurity is not easy to mock
-    // In a real-world scenario, this would be better tested with an integration test
-    // that verifies the security configuration works as expected
 }
