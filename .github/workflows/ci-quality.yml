@@ -2,9 +2,9 @@ name: CI (Quality & Security)
 
 on:
   push:
-    branches: [ dev, fix/*, feature/* ]
+    branches: [ dev, prod, main ]
   pull_request:
-    branches: [ dev ]
+    branches: [ dev, prod, main ]
   workflow_dispatch:
 
 jobs:
