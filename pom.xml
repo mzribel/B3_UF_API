@@ -199,9 +199,9 @@
 						</goals>
 						<configuration>
 							<includes>
-								<include>**/*IT.*</include>
-								<include>**/*ITCase.*</include>
-								<include>**/*IntegrationTest.*</include>
+								<include>**/*IT.class</include>
+								<include>**/*ITCase.class</include>
+								<include>**/*IntegrationTest.class</include>
 							</includes>
 							<reportsDirectory>${project.build.directory}/failsafe-reports</reportsDirectory>
 							<useFile>true</useFile>
