@@ -13,7 +13,6 @@ import projet.uf.modules.auth.infrastructure.configuration.AuthConfiguration;
 import projet.uf.modules.user.adapter.out.persistence.JpaUserRepository;
 import projet.uf.modules.user.adapter.out.persistence.UserEntity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,17 +38,17 @@ public class AuthControllerIT {
         """;
 
         mockMvc.perform(post("/auth/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isBadRequest());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     void login_shouldReturn400_whenBodyIsEmpty() throws Exception {
         mockMvc.perform(post("/auth/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(""))
-            .andExpect(status().isBadRequest());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -61,9 +60,9 @@ public class AuthControllerIT {
         """;
 
         mockMvc.perform(post("/auth/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isBadRequest());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -103,9 +102,9 @@ public class AuthControllerIT {
         """;
 
         mockMvc.perform(post("/auth/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isConflict());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isConflict());
     }
 
     @Test
@@ -123,12 +122,12 @@ public class AuthControllerIT {
         """;
 
         mockMvc.perform(post("/auth/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.token").exists())
-            .andExpect(jsonPath("$.user.email").value("login@test.fr"))
-            .andExpect(jsonPath("$.user.displayName").value("Login Test"));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").exists())
+                .andExpect(jsonPath("$.user.email").value("login@test.fr"))
+                .andExpect(jsonPath("$.user.displayName").value("Login Test"));
     }
 
     @Test
@@ -142,9 +141,9 @@ public class AuthControllerIT {
         """;
 
         mockMvc.perform(post("/auth/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isBadRequest());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -159,9 +158,9 @@ public class AuthControllerIT {
         """, longName);
 
         mockMvc.perform(post("/auth/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isBadRequest());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
     }
 
 }
