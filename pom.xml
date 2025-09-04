@@ -22,6 +22,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.resources.encoding>UTF-8</maven.resources.encoding>
+
+		<properties>
+			<sonar.organization>mzribel-1</sonar.organization>
+		</properties>
 	</properties>
 
 	<dependencies>
@@ -227,6 +231,11 @@
 						<nonFilteredFileExtension>yml</nonFilteredFileExtension>
 					</nonFilteredFileExtensions>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.11.0.3922</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
