@@ -1,4 +1,4 @@
-package projet.uf.modules.auth.adapter.in.rest.security;
+package projet.uf.modules.auth.adapters.in.rest.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import projet.uf.modules.auth.adapters.in.rest.security.JwtAuthenticationFilter;
 import projet.uf.modules.auth.adapters.out.security.HeaderAuthenticationToken;
 import projet.uf.modules.auth.adapters.out.security.JwtService;
 import projet.uf.modules.auth.application.model.CurrentUser;
@@ -124,7 +123,7 @@ class JwtAuthenticationFilterTest {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assertNotNull(authentication);
-        assertTrue(authentication instanceof HeaderAuthenticationToken);
+        assertInstanceOf(HeaderAuthenticationToken.class, authentication);
 
         CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
         assertEquals(1L, currentUser.id());
@@ -148,7 +147,7 @@ class JwtAuthenticationFilterTest {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assertNotNull(authentication);
-        assertTrue(authentication instanceof HeaderAuthenticationToken);
+        assertInstanceOf(HeaderAuthenticationToken.class, authentication);
 
         CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
         assertEquals(2L, currentUser.id());
@@ -156,5 +155,111 @@ class JwtAuthenticationFilterTest {
 
         assertTrue(authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ADMIN")));
+    }
+
+    @Test
+    void doFilterInternal_shouldContinueChain_whenNoAuthHeader() throws ServletException, IOException {
+        // Arrange
+        when(request.getHeader("Authorization")).thenReturn(null);
+
+        // Act
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        // Assert
+        verify(filterChain).doFilter(request, response);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    @Test
+    void doFilterInternal_shouldContinueChain_whenHeaderNotStartsWithBearer() throws ServletException, IOException {
+        // Arrange
+        when(request.getHeader("Authorization")).thenReturn("Basic some-basic-token");
+
+        // Act
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        // Assert
+        verify(filterChain).doFilter(request, response);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    @Test
+    void doFilterInternal_shouldContinueChain_whenInvalidToken() throws ServletException, IOException {
+        // Arrange
+        when(request.getHeader("Authorization")).thenReturn("Bearer invalid-token");
+        doThrow(new RuntimeException("Invalid token")).when(jwtService).extractUsername(any());
+
+        // Act
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        // Assert
+        verify(filterChain).doFilter(request, response);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    @Test
+    void doFilterInternal_shouldContinueChain_whenUserNotFound() throws ServletException, IOException {
+        // Arrange
+        when(request.getHeader("Authorization")).thenReturn("Bearer valid-token");
+        when(jwtService.extractUsername(anyString())).thenReturn("user@example.com");
+        when(userPersistencePort.getByEmail(anyString())).thenReturn(Optional.empty());
+
+        // Act
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        // Assert
+        verify(filterChain).doFilter(request, response);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    @Test
+    void doFilterInternal_shouldSetAuthentication_whenTokenValidAndUserExists() throws ServletException, IOException {
+        // Arrange
+        when(request.getHeader("Authorization")).thenReturn("Bearer valid-token");
+        when(jwtService.extractUsername(anyString())).thenReturn("user@example.com");
+
+        User user = new User(1L, "user@example.com", "encoded-password", "Test User", false);
+        when(userPersistencePort.getByEmail(anyString())).thenReturn(Optional.of(user));
+
+        // Act
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        // Assert
+        verify(filterChain).doFilter(request, response);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        assertNotNull(authentication);
+        assertInstanceOf(HeaderAuthenticationToken.class, authentication);
+
+        CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
+        assertEquals(1L, currentUser.id());
+        assertFalse(currentUser.isAdmin());
+    }
+
+    @Test
+    void doFilterInternal_shouldSetAdminAuthentication_whenUserIsAdmin() throws ServletException, IOException {
+        // Arrange
+        when(request.getHeader("Authorization")).thenReturn("Bearer admin-valid-token");
+        when(jwtService.extractUsername(anyString())).thenReturn("admin@example.com");
+
+        User adminUser = new User(2L, "admin@example.com", "encoded-password", "Admin User", true);
+        when(userPersistencePort.getByEmail(anyString())).thenReturn(Optional.of(adminUser));
+
+        // Act
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        // Assert
+        verify(filterChain).doFilter(request, response);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        assertNotNull(authentication);
+        assertInstanceOf(HeaderAuthenticationToken.class, authentication);
+
+        CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
+        assertEquals(2L, currentUser.id());
+        assertTrue(currentUser.isAdmin());
+
+        assertTrue(authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ADMIN")));
     }
 }
