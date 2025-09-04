@@ -185,6 +185,9 @@
 								<include>**/*ITCase.java</include>
 								<include>**/*IntegrationTest.java</include>
 							</includes>
+							<reportsDirectory>${project.build.directory}/failsafe-reports</reportsDirectory>
+							<useFile>true</useFile>
+							<printSummary>true</printSummary>
 						</configuration>
 					</execution>
 				</executions>
