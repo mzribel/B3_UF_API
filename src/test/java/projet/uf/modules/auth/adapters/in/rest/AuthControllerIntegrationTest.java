@@ -1,4 +1,4 @@
-package projet.uf.modules.auth.adapter.in.rest;
+package projet.uf.modules.auth.adapters.in.rest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

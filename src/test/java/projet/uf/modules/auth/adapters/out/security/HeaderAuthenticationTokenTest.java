@@ -1,8 +1,7 @@
-package projet.uf.modules.auth.adapter.out.security;
+package projet.uf.modules.auth.adapters.out.security;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
-import projet.uf.modules.auth.adapters.out.security.HeaderAuthenticationToken;
 import projet.uf.modules.auth.application.model.CurrentUser;
 
 import java.util.Collection;
