@@ -140,10 +140,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME=uf-api:dev
+          IMAGE_NAME=ghcr.io/${{ github.repository }}/uf-api:dev
           docker build -t $IMAGE_NAME .
 
       - name: Push Docker image
         run: |
-          IMAGE_NAME=uf-api:dev
+          IMAGE_NAME=ghcr.io/${{ github.repository }}/uf-api:dev
           docker push $IMAGE_NAME
