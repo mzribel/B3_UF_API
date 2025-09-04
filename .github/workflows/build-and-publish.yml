@@ -8,13 +8,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    name: Maven tests (JUnit + JaCoCo)
+  unit-tests:
+    name: Unit tests (Surefire + JaCoCo)
     runs-on: ubuntu-latest
-    
+
     permissions:
-      checks: write     # nécessaire pour publier les checks (rapports JUnit, annotations)
-      contents: read    # lecture du dépôt (obligatoire pour checkout, etc.)
+      checks: write
+      contents: read
 
     steps:
       - name: Checkout
@@ -27,28 +27,22 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Build & test (fail fast)
-        run: mvn -B -DskipITs=false -Dmaven.test.failure.ignore=false clean verify
+      - name: Run unit tests
+        run: mvn -B -DskipITs=true test
 
-      - name: Upload surefire & failsafe reports
+      - name: Upload surefire reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: junit-reports
-          path: |
-            **/target/surefire-reports/*.xml
-            **/target/failsafe-reports/*.xml
+          name: surefire-reports
+          path: target/surefire-reports/*.xml
 
-      - name: Publish JUnit summary in PR
+      - name: Publish JUnit summary (Surefire)
         if: always()
         uses: mikepenz/action-junit-report@v4
         with:
-          report_paths: |
-            **/target/surefire-reports/*.xml
-            **/target/failsafe-reports/*.xml
-          check_name: |
-            "Surefire Tests"
-            "Failsafe Tests"
+          report_paths: target/surefire-reports/*.xml
+          check_name: "Surefire Tests"
           detailed_summary: true
           include_passed: true
 
@@ -61,12 +55,49 @@ jobs:
             **/target/site/jacoco/*
             **/target/jacoco*.exec
 
+  integration-tests:
+    name: Integration tests (Failsafe)
+    runs-on: ubuntu-latest
+    needs: unit-tests
+
+    permissions:
+      checks: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Temurin JDK 21 with Maven cache
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Run integration tests
+        run: mvn -B failsafe:integration-test failsafe:verify
+
+      - name: Upload failsafe reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failsafe-reports
+          path: target/failsafe-reports/*.xml
+
+      - name: Publish JUnit summary (Failsafe)
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: target/failsafe-reports/*.xml
+          check_name: "Failsafe Tests"
+          detailed_summary: true
+          include_passed: true
+
   package:
     name: Package JAR (artifact)
-    needs: [test]
     runs-on: ubuntu-latest
-#    if: ${{ needs.test.result == 'success' }}
-    if: always()
+    needs: [unit-tests, integration-tests]
 
     steps:
       - uses: actions/checkout@v4
@@ -75,11 +106,12 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
+
       - name: Package
         run: mvn -B -DskipTests package
+
       - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
           name: uf-api-jar
           path: target/*.jar
-
