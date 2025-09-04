@@ -76,6 +76,10 @@ jobs:
           java-version: '21'
           cache: maven
 
+      # On compile/package sans exécuter les tests
+      - name: Build without tests
+        run: mvn -B clean package -DskipTests
+
       - name: Run integration tests
         run: mvn -B failsafe:integration-test failsafe:verify
 
