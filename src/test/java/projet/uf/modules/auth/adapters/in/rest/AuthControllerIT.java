@@ -5,15 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import projet.uf.exceptions.ExceptionControllerAdvice;
 import projet.uf.modules.auth.application.ports.out.PasswordEncoder;
-import projet.uf.modules.auth.exception.WeakPasswordException;
 import projet.uf.modules.auth.infrastructure.configuration.AuthConfiguration;
 import projet.uf.modules.user.adapter.out.persistence.JpaUserRepository;
 import projet.uf.modules.user.adapter.out.persistence.UserEntity;
@@ -26,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(AuthConfiguration.class)
 @SpringBootTest(properties = "spring.profiles.active=test")
 @ActiveProfiles("test")
-public class AuthControllerIntegrationTest {
+public class AuthControllerIT {
     @Autowired
     private JpaUserRepository userRepository;
 
@@ -34,19 +29,6 @@ public class AuthControllerIntegrationTest {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private MockMvc mockMvc;
-
-    @Test
-    void globalExceptionHandler_shouldReturn400_forWeakPasswordException() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/auth/register");
-
-        ExceptionControllerAdvice handler = new ExceptionControllerAdvice();
-        WeakPasswordException ex = new WeakPasswordException("Password is too weak", HttpStatus.BAD_REQUEST);
-
-        ResponseEntity<Object> response = handler.handleApiException(ex, request);
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
 
     @Test
     void login_shouldReturn400_whenEmailIsMissing() throws Exception {

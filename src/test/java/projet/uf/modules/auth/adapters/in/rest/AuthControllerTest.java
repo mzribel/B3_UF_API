@@ -6,20 +6,26 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean; // <— nouveau
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import projet.uf.exceptions.ExceptionControllerAdvice;
 import projet.uf.modules.auth.adapters.in.rest.dto.AuthenticatedUserDto;
 import projet.uf.modules.auth.adapters.in.rest.security.JwtAuthenticationFilter;
 import projet.uf.modules.auth.adapters.out.security.JwtService;
 import projet.uf.modules.auth.application.ports.in.AuthUseCase;
 import projet.uf.modules.auth.application.ports.in.LoginCommand;
+import projet.uf.modules.auth.exception.WeakPasswordException;
 import projet.uf.modules.user.application.dto.UserDto;
 import projet.uf.modules.user.application.port.out.UserPersistencePort;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +54,19 @@ public class AuthControllerTest {
     AuthenticationManager authenticationManager;     // si injecté quelque part
     @MockitoBean
     JwtService jwtService;                            // si utilisé
+
+    @Test
+    void globalExceptionHandler_shouldReturn400_forWeakPasswordException() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setRequestURI("/auth/register");
+
+        ExceptionControllerAdvice handler = new ExceptionControllerAdvice();
+        WeakPasswordException ex = new WeakPasswordException("Password is too weak", HttpStatus.BAD_REQUEST);
+
+        ResponseEntity<Object> response = handler.handleApiException(ex, request);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
 
     @Test
     void whenValidLoginCommand_thenReturnsAuthenticatedUserDto() throws Exception {
