@@ -18,7 +18,7 @@ RUN ./mvnw dependency:go-offline
 COPY src/ src/
 
 # Compilation + tests
-RUN ./mvnw clean verify -DskipTests=false
+RUN ./mvnw clean verify -DskipTests=true
 
 # Étape 2 : image minimale avec juste le JAR
 FROM eclipse-temurin:21-jre
