@@ -12,8 +12,7 @@ import projet.uf.modules.auth.application.ports.out.PasswordEncoder;
 import projet.uf.modules.auth.infrastructure.configuration.AuthConfiguration;
 import projet.uf.modules.user.application.port.out.UserPersistencePort;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthConfigurationTest {
@@ -37,6 +36,6 @@ class AuthConfigurationTest {
 
         // Assert
         assertNotNull(authUseCase);
-        assertTrue(authUseCase instanceof AuthService);
+        assertInstanceOf(AuthService.class, authUseCase);
     }
 }

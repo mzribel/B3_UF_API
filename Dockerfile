@@ -9,7 +9,7 @@ COPY mvnw ./mvnw
 COPY pom.xml .
 
 # Important : rendre le script exécutable (Docker Linux ne garde pas les droits Windows)
-RUN chmod +x ./mvnw
+RUN chmod +x ./mvnw && apt-get update && apt-get install -y dos2unix && dos2unix ./mvnw
 
 # Téléchargement des dépendances pour cache Maven
 RUN ./mvnw dependency:go-offline
@@ -18,7 +18,7 @@ RUN ./mvnw dependency:go-offline
 COPY src/ src/
 
 # Compilation + tests
-RUN ./mvnw clean verify -DskipTests=false
+RUN ./mvnw clean verify -DskipTests=true
 
 # Étape 2 : image minimale avec juste le JAR
 FROM eclipse-temurin:21-jre

@@ -24,8 +24,7 @@ public class CatteryAuthorizationService implements CatteryAuthorizationUseCase 
 
         if (!operator.isAdmin()
                 && !Objects.equals(operator.getId(), cattery.getCreatedByUserId())
-                && catteryUserPersistencePort.isUserMemberOfCattery(catteryId, operator.getId())
-        ) {
+                && !catteryUserPersistencePort.isUserMemberOfCattery(catteryId, operator.getId())) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
         return cattery;
@@ -33,13 +32,19 @@ public class CatteryAuthorizationService implements CatteryAuthorizationUseCase 
 
     @Override
     public boolean hasUserAccessToCattery(Long catteryId, OperatorUser operator) {
-        if (catteryUserPersistencePort.getByCatteryId(catteryId).isEmpty()) {
-            throw  new ApiException("Chatterie introuvable", HttpStatus.BAD_REQUEST);
+        // 1) Admin : accès immédiat
+        if (operator.isAdmin()) {
+            return true;
         }
 
-        return (operator.isAdmin()
-                || catteryPersistencePort.isUserAdminOfCattery(operator.getId(), catteryId)
-                || catteryUserPersistencePort.isUserMemberOfCattery(operator.getId(), catteryId)
-        );
+        // 2) Existence via le port "cattery"
+        var catteryOpt = catteryPersistencePort.getById(catteryId);
+        if (catteryOpt.isEmpty()) {
+            throw new ApiException("Chatterie introuvable", HttpStatus.BAD_REQUEST);
+        }
+
+        // 3) Règles d'accès
+        return catteryPersistencePort.isUserAdminOfCattery(operator.getId(), catteryId)
+                || catteryUserPersistencePort.isUserMemberOfCattery(operator.getId(), catteryId);
     }
 }

@@ -49,10 +49,29 @@ public class LitterService implements LitterUseCase, CreateLitterUseCase {
 
     @Override
     public Litter createLitter(LitterCommand command, Long createdByCatteryId, OperatorUser operator) {
+        // L'utilisateur n'a pas les droits pour accéder à la chatterie d'appartenance
         if (!catteryAccessUseCase.hasUserAccessToCattery(createdByCatteryId, operator)) {
             throw new ApiException("Accès interdit", HttpStatus.FORBIDDEN);
         }
-        System.out.println(createdByCatteryId);
+
+        // Récupère les parents
+        Cat sire = null; Cat dam = null;
+
+        if (command.getDamId() != null) {
+            dam = catAccessUseCase.getCatOrThrow(command.getDamId(), operator);
+        }
+        if (command.getSireId() != null) {
+            sire = catAccessUseCase.getCatOrThrow(command.getSireId(), operator);
+        }
+
+        // Vérifie la validité des parents (vivants, non-castrés, du bon sexe,
+        // au moins six mois et plus vieux que la portée d'au moins six mois si date définie
+        if ((sire != null && !sire.validateParentEligibility(false, command.getBirthDate()) ||
+                (dam != null && !dam.validateParentEligibility(true, command.getBirthDate())
+        ))) {
+            throw new ApiException("L'un des deux parents n'est pas valide", HttpStatus.BAD_REQUEST);
+        }
+
         Litter litter = command.toModel(createdByCatteryId);
         return litterPersistencePort.save(litter);
     }

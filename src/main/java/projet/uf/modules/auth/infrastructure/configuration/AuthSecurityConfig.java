@@ -36,16 +36,6 @@ public class AuthSecurityConfig {
         return http
             .csrf(AbstractHttpConfigurer::disable)
             .cors(Customizer.withDefaults())
-//             .cors(cors -> cors
-//                 .configurationSource(request -> {
-//                     var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-//                     corsConfig.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8081"));
-//                     corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-//                     corsConfig.setAllowedHeaders(List.of("*"));
-//                     corsConfig.setAllowCredentials(true);
-//                     return corsConfig;
-//                 })
-//             )
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/auth/**", "/error").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()

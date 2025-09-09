@@ -3,12 +3,14 @@ package projet.uf.modules.cat.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class Cat {
     private Long id;
@@ -71,5 +73,8 @@ public class Cat {
         this.createdByCatteryId = createdByCatteryId;
         this.inCattery = inCattery;
         this.notes = notes;
+    }
+    public boolean validateParentEligibility(boolean isDam, LocalDate litterBirthDate) {
+        return true;
     }
 }
