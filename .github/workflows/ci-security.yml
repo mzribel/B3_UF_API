@@ -2,7 +2,7 @@ name: CI (Quality & Security)
 
 on:
   push:
-    branches: [ dev, prod, main, feature/*, fix/* ]
+    branches: [ dev, prod, main ]
   pull_request:
   workflow_dispatch:
 
