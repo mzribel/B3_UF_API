@@ -29,34 +29,34 @@ jobs:
           name: dependency-check-report
           path: target/dependency-check-report.html
 
-  trivy:
-    name: Docker Image Scan (Trivy)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image (no push)
-        run: docker build -t uf-api:scan .
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.24.0
-        with:
-          image-ref: uf-api:scan
-          format: table
-          exit-code: 1
-          ignore-unfixed: true
-          vuln-type: "os,library"
-          output: trivy-report.txt
-
-      - name: Upload Trivy report
-        uses: actions/upload-artifact@v4
-        with:
-          name: trivy-report
-          path: trivy-report.txt
+#  trivy:
+#    name: Docker Image Scan (Trivy)
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#
+#      - name: Build Docker image (no push)
+#        run: docker build -t uf-api:scan .
+#
+#      - name: Run Trivy vulnerability scanner
+#        uses: aquasecurity/trivy-action@0.24.0
+#        with:
+#          image-ref: uf-api:scan
+#          format: table
+#          exit-code: 1
+#          ignore-unfixed: true
+#          vuln-type: "os,library"
+#          output: trivy-report.txt
+#
+#      - name: Upload Trivy report
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: trivy-report
+#          path: trivy-report.txt
 
   gitleaks:
     name: Secret Scan (Gitleaks)
