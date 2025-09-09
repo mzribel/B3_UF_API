@@ -74,4 +74,7 @@ public class Cat {
         this.inCattery = inCattery;
         this.notes = notes;
     }
+    public boolean validateParentEligibility(boolean isDam, LocalDate litterBirthDate) {
+        return true;
+    }
 }

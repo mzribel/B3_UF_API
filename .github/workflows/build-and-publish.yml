@@ -1,4 +1,4 @@
-name: CI (dev) — Build • Tests • Rapports
+name: CI (Tests, Build, Publish, JaCoCo)
 
 on:
   push:

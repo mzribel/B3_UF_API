@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 public record CatCommand(
     @NotBlank(message = "Le nom du chat ne peut pas être vide")
-    @NotBlank(message = "Le nom du chat ne peut pas être vide")
     @Size(max = 30, message = "Le nom du chat ne peut pas dépasser 30 caractères")
     String name,
     @Size(max = 30, message = "Le surnom du chat ne peut pas dépasser 30 caractères")

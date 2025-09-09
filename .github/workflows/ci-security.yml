@@ -1,4 +1,4 @@
-name: Security Scan
+name: CI (Quality & Security)
 
 on:
   push:
@@ -47,7 +47,7 @@ jobs:
         with:
           image-ref: uf-api:scan
           format: table
-          exit-code: 0
+          exit-code: 1
           ignore-unfixed: true
           vuln-type: "os,library"
           output: trivy-report.txt
